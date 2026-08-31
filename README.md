@@ -14,7 +14,7 @@ Figma
 Getting Started
 
 
-Open shafiqeffendy.xyz in your browser to view the portfolio.
+Open (https://www.shafiqeffendy.xyz/) in your browser to view the portfolio.
 
 License
 
