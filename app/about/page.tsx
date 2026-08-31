@@ -27,11 +27,11 @@ export default function AboutPage() {
         <StaggerReveal className="m-0">
           <div className="about-banner stagger-line stagger-line--1">
             <Image
-              alt="Shafiq Efféndy working on a laptop at a Google developer event"
+              alt="Shafiq Efféndy traveling in Shirakawa, Gifu, Japan"
               fill
               priority
               sizes="(max-width: 720px) 100vw, 660px"
-              src="/profile.jpg"
+              src="/Profile.jpg"
             />
           </div>
         </StaggerReveal>
