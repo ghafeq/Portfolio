@@ -1,4 +1,4 @@
-Shafiq Efféndy — Portfolio
+#Shafiq Efféndy's  Portfolio
 
 My personal portfolio as a self taught Product Designer.
 
@@ -6,24 +6,15 @@ For the past three years, I’ve worked across the entire product pipeline, from
 
 This portfolio is a collection of my work, experiments, and the things I’ve built along the way.
 
-Built With
+#Built With
 Next.js
 TypeScript
 Tailwind CSS
 Figma
 Getting Started
 
-Clone the repository and install the dependencies:
 
-npm install
-
-
-Run the development server:
-
-npm run dev
-
-
-Open http://localhost:3000 in your browser to view the portfolio.
+Open shafiqeffendy.xyz in your browser to view the portfolio.
 
 License
 
