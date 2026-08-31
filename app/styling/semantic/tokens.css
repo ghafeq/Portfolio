@@ -21,6 +21,9 @@
   /* ─── Borders ─── */
   --layer-1-border: var(--gray-20);
   --layer-1-border-hover: var(--gray-20-hover);
+  /* One step darker, for borders that have to hold their own — a dashed
+     outline at --layer-1-border all but disappears against white. */
+  --layer-1-border-strong: var(--gray-30);
   --layer-1-border-focus: var(--blue-60);
   --layer-2-border: transparent;
   --layer-2-border-hover: transparent;
@@ -91,6 +94,15 @@ h1, h2, h3, h4, h5, h6, p, span, a, li, input, textarea {
 button {
   font-family: var(--font-family-serif);
   letter-spacing: 0%;
+}
+
+.display {
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-display);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0%;
+  line-height: var(--lh-auto);
+  color: var(--text-primary);
 }
 
 .intro {

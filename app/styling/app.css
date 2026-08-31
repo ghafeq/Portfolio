@@ -742,6 +742,180 @@
   object-fit: cover;
 }
 
+/* Long-form sections. Bigger than the gaps inside a section, so the reader can
+   see where one argument ends. */
+.case-study-section {
+  display: block;
+  margin-top: var(--spacing-8);
+}
+
+/* .body-01 sets line-height to auto, which is too tight once a paragraph runs
+   past a couple of lines, so the reading measure gets the taller step. */
+.case-study-copy {
+  color: var(--text-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-3);
+  font-weight: var(--fw-regular);
+  letter-spacing: 0%;
+  line-height: var(--lh-2);
+}
+
+.case-study-subhead {
+  color: var(--text-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-3);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0%;
+  line-height: var(--lh-1);
+}
+
+.case-study-quote {
+  border-left: var(--border-width-focused) solid var(--layer-1-border);
+  color: var(--text-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-3);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0%;
+  line-height: var(--lh-auto);
+  padding-left: var(--spacing-5);
+}
+
+.case-study-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* A fixed label column, so the tags read as one gutter and the claims all start
+   at the same left edge no matter how wide each tag is. Stacked below 640px,
+   where the two columns leave the claim too narrow to read. */
+.case-study-claim {
+  align-items: baseline;
+  display: grid;
+  gap: var(--spacing-3);
+  grid-template-columns: minmax(0, 8.5rem) minmax(0, 1fr);
+}
+
+.case-study-claim-label {
+  color: var(--text-secondary);
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-5);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0%;
+  line-height: var(--lh-1);
+}
+
+.case-study-list-bulleted {
+  list-style: disc;
+  padding-left: var(--spacing-6);
+}
+
+.case-study-list-bulleted li {
+  display: list-item;
+}
+
+/* ─── Case study media ─────────────────────────────────────────────────── */
+
+/* Illustrations read wider than the 660px measure, so they break out of the
+   wrapper symmetrically. .case-study clips the x axis, so the viewport-based
+   width can never open a horizontal scrollbar. */
+.case-study {
+  overflow-x: clip;
+}
+
+/* <main> is not the whole page: the top navigation sits above it, on the body
+   background. Matching the body to the case study keeps the two from meeting
+   in a seam, and keys off the page itself so every case study gets it. */
+body:has(.case-study) {
+  background: var(--white);
+}
+
+.case-study-media {
+  --case-study-media-width: min(1080px, calc(100vw - var(--spacing-6) * 2));
+  margin-block: var(--spacing-7);
+  margin-inline: calc((100% - var(--case-study-media-width)) / 2);
+  width: var(--case-study-media-width);
+}
+
+/* Media that belongs at the reading measure rather than broken out — an
+   embedded demo reads as part of the text, not as an illustration beside it. */
+.case-study-media-measure {
+  --case-study-media-width: 100%;
+}
+
+.case-study-media-figure {
+  margin: 0;
+}
+
+/* A hairline rather than the elevation the frame carried on grey: on white the
+   shadow alone leaves an illustration with no edge at all. */
+.case-study-media-frame {
+  background: var(--app-layer-background);
+  border: var(--border-width-1) solid var(--layer-1-border);
+  border-radius: var(--radius-normal);
+  overflow: hidden;
+  width: 100%;
+}
+
+/* Sized from the file's own pixels, so a wide illustration keeps its ratio
+   instead of being cropped to a frame. */
+.case-study-media-frame img {
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+.case-study-media-caption {
+  color: var(--text-secondary);
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-6);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0%;
+  line-height: var(--lh-1);
+  margin-top: var(--spacing-4);
+}
+
+/* A slot held open for artwork that is still being made. Dashed and labelled,
+   so it reads as reserved rather than as a broken image. */
+.case-study-placeholder {
+  align-items: center;
+  aspect-ratio: 16 / 9;
+  /* Reads as a well cut into the page, which needs the fill a step darker than
+     the white behind it. */
+  background: var(--app-layer-background);
+  border: var(--border-width-1) dashed var(--layer-1-border-strong);
+  border-radius: var(--radius-normal);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  justify-content: center;
+  padding: var(--spacing-6);
+  text-align: center;
+  width: 100%;
+}
+
+.case-study-placeholder-icon {
+  align-items: center;
+  background: var(--layer-1-background);
+  border-radius: var(--radius-pill);
+  color: var(--gray-80);
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-3);
+}
+
+.case-study-placeholder-label {
+  color: var(--text-secondary);
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-5);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0%;
+  line-height: var(--lh-auto);
+}
+
 /* ─── Cursor pet ───────────────────────────────────────────────────────── */
 
 /* Position, size and background-position are written each frame by CursorPet;
@@ -897,6 +1071,25 @@
     align-items: flex-start;
     flex-direction: column;
     gap: var(--spacing-3);
+  }
+
+  .case-study-claim {
+    gap: var(--spacing-2);
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: start;
+  }
+
+  /* A dense table shrunk to phone width loses its labels, so it pans inside
+     its own frame instead. */
+  .case-study-media-scroll .case-study-media-frame {
+    overflow-x: auto;
+  }
+
+  /* max-width: none beats the preflight cap, which would otherwise shrink the
+     image straight back to the frame's width. */
+  .case-study-media-scroll .case-study-media-frame img {
+    max-width: none;
+    width: 640px;
   }
 }
 

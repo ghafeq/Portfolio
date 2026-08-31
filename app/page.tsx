@@ -27,7 +27,7 @@ const introduction = [
 
 const work = [
   {
-    href: "/case-study-1",
+    href: "/cekap",
     title: "CEKAP",
     description:
       "Smart Flight Companion. A calm, checkpoint-based support layer for stressed travellers at KLIA",
