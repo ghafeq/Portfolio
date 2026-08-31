@@ -1,0 +1,170 @@
+/* ───────────────────────────────────────────────────────────────────────────
+   Semantic tokens — meaning, not raw values. Every value here resolves to a
+   foundation token; no literal colours or sizes below this line.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* ─── Backgrounds ─── */
+  --app-layer-background: var(--gray-10);
+  --layer-1-background: var(--white);
+  --layer-1-background-hover: var(--gray-20-hover);
+  /* NOTE: this previously had two declarations; the second won, so the value
+     in effect was the -hover ramp. Kept as-is so the refactor changes nothing
+     visually — see the handover note about moving it to --warm-gray-10. */
+  --layer-2-background: var(--gray-20);
+  --layer-2-background-hover: var(--gray-30-hover);
+  --danger-solid-background: var(--red-60);
+  --danger-subtle-background: var(--red-10);
+  --success-solid-background: var(--green-60);
+  --success-subtle-background: var(--green-10);
+
+  /* ─── Borders ─── */
+  --layer-1-border: var(--gray-20);
+  --layer-1-border-hover: var(--gray-20-hover);
+  --layer-1-border-focus: var(--blue-60);
+  --layer-2-border: transparent;
+  --layer-2-border-hover: transparent;
+  --layer-2-border-focus: var(--blue-60);
+
+  /* ─── Text ─── */
+  --text-primary: var(--gray-90);
+  --text-primary-hover: var(--gray-90-hover);
+  --text-secondary: var(--gray-50);
+  --text-disabled: var(--gray-30);
+  --text-danger: var(--red-60);
+  --text-on-solid: var(--white);
+
+  /* ─── Links ─── */
+  --link-enabled: var(--blue-60);
+  --link-hover: var(--blue-80-hover);
+  --link-disabled: var(--gray-50);
+
+  /* ─── Spacing ─── */
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.38rem;
+  --spacing-3: 0.63rem;
+  --spacing-4: 0.75rem;
+  --spacing-5: 1rem;
+  --spacing-6: 1.5rem;
+  --spacing-7: 2rem;
+  --spacing-8: 5rem;
+  --spacing-9: 7.5rem;
+
+  /* ─── Border widths ─── */
+  --border-width-1: 1px;
+  --border-width-focused: 1.5px;
+
+  /* ─── Radii ─── */
+  --radius-0: 0rem;
+  --radius-normal: 6px;
+  --radius-pill: 999px;
+
+  /* ─── Elevation ─── */
+  --shadow-sm: 0 2px 4px 0 var(--warm-gray-10, var(--warm-gray-20));
+  --shadow-md: 0 4px 8px 0 var(--warm-gray-10, var(--warm-gray-20));
+
+  /* ─── Motion ─── */
+  --motion-duration-instant: 0ms;
+  --motion-duration-fast: 120ms;
+  --motion-duration-normal: 180ms;
+  --motion-duration-slow: 320ms;
+  --motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --motion-ease-emphasized: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --motion-ease-linear: linear;
+  --motion-transition-colors:
+    color var(--motion-duration-fast) var(--motion-ease-standard),
+    background-color var(--motion-duration-fast) var(--motion-ease-standard),
+    border-color var(--motion-duration-fast) var(--motion-ease-standard);
+  --motion-transition-transform: transform var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Typography scale. Property order is identical in every class: family, size,
+   weight, letter-spacing, line-height, then colour where the style carries one.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+h1, h2, h3, h4, h5, h6, p, span, a, li, input, textarea {
+  font-family: var(--font-family-sans);
+  letter-spacing: 0%;
+}
+
+button {
+  font-family: var(--font-family-serif);
+  letter-spacing: 0%;
+}
+
+.intro {
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-1);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0%;
+  line-height: var(--lh-2);
+  color: var(--text-primary);
+}
+
+.link {
+  font-family: var(--font-family-serif);
+  font-size: var(--fs-2);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0%;
+  line-height: var(--lh-auto);
+}
+
+.title-01 {
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-3);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0%;
+  line-height: var(--lh-auto);
+}
+
+.title-02 {
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-2);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0%;
+  line-height: var(--lh-auto);
+}
+
+.body-01 {
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-3);
+  font-weight: var(--fw-regular);
+  letter-spacing: 0%;
+  line-height: var(--lh-auto);
+  color: var(--text-primary);
+}
+
+.body-02 {
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-4);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0%;
+  line-height: var(--lh-1);
+  color: var(--text-primary);
+}
+
+.label-01 {
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-5);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0%;
+  line-height: var(--lh-auto);
+}
+
+.label-02 {
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-6);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0%;
+  line-height: var(--lh-auto);
+}
+
+.caption {
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-7);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0%;
+  line-height: var(--lh-auto);
+  color: var(--text-secondary);
+}

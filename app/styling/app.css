@@ -1,0 +1,939 @@
+/* ───────────────────────────────────────────────────────────────────────────
+   Component styles. One section per component, each section holding its own
+   base rule, states and modifiers. Motion primitives, keyframes and media
+   queries live at the bottom.
+
+   Every value resolves to a semantic token — no literal colours or sizes.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* ─── Link ─────────────────────────────────────────────────────────────── */
+
+.link-component {
+  align-items: center;
+  color: var(--link-enabled);
+  display: inline-flex;
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-5);
+  font-weight: var(--fw-medium);
+  gap: var(--spacing-2);
+  min-height: 1.5rem;
+  padding: 0;
+  text-decoration-line: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.2em;
+  transition: var(--motion-transition-colors), var(--motion-transition-transform);
+}
+
+.link-component:hover {
+  color: var(--link-hover);
+}
+
+.link-component:focus-visible {
+  border-radius: var(--radius-normal);
+  outline: 3px solid var(--layer-1-border-focus);
+  outline-offset: 3px;
+}
+
+.link-component[data-state="loading"] {
+  cursor: wait;
+}
+
+.link-component[data-state="disabled"] {
+  color: var(--link-disabled);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.link-component-standalone {
+  color: var(--text-primary);
+  text-decoration-line: none;
+}
+
+.link-component-standalone[data-state="enabled"] {
+  color: var(--text-primary);
+}
+
+.link-component-standalone[data-state="enabled"]:hover {
+  color: var(--link-hover);
+}
+
+.link-component-standalone[data-state="enabled"]:active {
+  transform: translateY(1px);
+}
+
+.link-component-standalone[data-state="loading"] {
+  color: var(--text-secondary);
+  cursor: wait;
+}
+
+.link-component-standalone[data-state="loading"]:hover {
+  color: var(--text-secondary);
+}
+
+.link-component-standalone[data-state="disabled"] {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.link-component-standalone[data-state="disabled"]:hover {
+  color: var(--text-disabled);
+}
+
+.link-spinner {
+  animation: spin var(--motion-duration-slow) var(--motion-ease-linear) infinite;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  border-right-color: transparent;
+  height: 0.875rem;
+  width: 0.875rem;
+}
+
+/* ─── Card ─────────────────────────────────────────────────────────────── */
+
+.card {
+  align-items: flex-start;
+  background: var(--layer-1-background);
+  border-radius: var(--radius-normal);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+  grid-column: span 1;
+  grid-row: span 1;
+  justify-self: stretch;
+  padding: var(--spacing-5);
+  transition: var(--motion-transition-colors), var(--motion-transition-transform);
+}
+
+.card-icon {
+  align-items: flex-start;
+  background: var(--layer-2-background);
+  color: var(--gray-80);
+  border: 0;
+  border-radius: var(--radius-pill);
+  display: flex;
+  gap: 0;
+  padding: var(--spacing-3);
+}
+
+/* .stagger-line blockifies its element, which would flatten the icon chip. */
+.card-icon.stagger-line {
+  display: flex;
+}
+
+.card-content {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.card-title {
+  color: var(--text-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-2);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0%;
+  line-height: var(--lh-auto);
+}
+
+.card-description {
+  color: var(--text-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-4);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0%;
+  line-height: var(--lh-1);
+}
+
+.card-link {
+  color: inherit;
+  text-decoration: none;
+  transition: var(--motion-transition-colors), var(--motion-transition-transform);
+}
+
+.card-link:hover {
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+.card-link:focus-visible {
+  outline: 3px solid var(--layer-1-border-focus);
+  outline-offset: 3px;
+}
+
+/* Quiet cards sit flat on the page; the surface only appears on hover. */
+.card-quiet {
+  /* background: transparent; */
+  box-shadow: none;
+  transition:
+    var(--motion-transition-colors),
+    box-shadow var(--motion-duration-fast) var(--motion-ease-standard);
+}
+
+.card-quiet:hover {
+  /* background: var(--layer-1-background); */
+  box-shadow: var(--shadow-sm);
+}
+
+/* ─── Card deck ────────────────────────────────────────────────────────── */
+
+/* The cards live in a normal 2x2 grid — that is the spread (hovered) state.
+   At rest each one is transformed back into a single overlapping fan, so only
+   transform animates and the grid never reflows.
+
+   Guarded to pointer devices at >= 640px: below that the grid is one column,
+   and on touch there is no hover, so the cards would be stuck overlapping with
+   their text unreadable. */
+@media (min-width: 640px) and (hover: hover) {
+  .card-deck {
+    /* Height of one card row. The fan occupies a single row, so the second
+       row's worth of height is pulled back to close the gap beneath it.
+       Tied to card content height — retune if the copy grows. */
+    --deck-row-height: 10.75rem;
+    margin-bottom: calc(-1 * (var(--deck-row-height) + var(--spacing-6)));
+    transition: margin-bottom var(--motion-duration-slow) var(--motion-ease-emphasized);
+  }
+
+  .card-deck > * {
+    box-shadow: var(--shadow-sm);
+    /* Undo this card's grid cell, then fan it out from the first one.
+
+       (100% + gap) is one grid column: the card's own width plus the gap.
+       Dividing that by 3 spreads four cards across exactly two columns plus a
+       gap — the full container width — so the fan always fills the wrapper
+       rather than stopping short of it.
+
+       The same expression means the right thing in both axes: in translateX
+       100% is the card's width, in translateY it is the card's height, which
+       is what the row offset needs. */
+    transform:
+      translateX(calc(
+        var(--deck-fan) * (100% + var(--spacing-6)) / 3
+        - var(--deck-col) * (100% + var(--spacing-6))
+      ))
+      translateY(calc(-1 * var(--deck-row) * (100% + var(--spacing-6))));
+    transition:
+      transform var(--motion-duration-slow) var(--motion-ease-emphasized),
+      box-shadow var(--motion-duration-fast) var(--motion-ease-standard);
+    z-index: calc(10 - var(--deck-index));
+  }
+
+  /* Row/column of each cell, and its place in the fan. The first card sits
+     rightmost and on top, as in the reference. */
+  .card-deck > *:nth-child(1) { --deck-index: 0; --deck-col: 0; --deck-row: 0; --deck-fan: 3; }
+  .card-deck > *:nth-child(2) { --deck-index: 1; --deck-col: 1; --deck-row: 0; --deck-fan: 2; }
+  .card-deck > *:nth-child(3) { --deck-index: 2; --deck-col: 0; --deck-row: 1; --deck-fan: 1; }
+  .card-deck > *:nth-child(4) { --deck-index: 3; --deck-col: 1; --deck-row: 1; --deck-fan: 0; }
+
+  /* Hovering anywhere on the group returns every card to its grid cell. */
+  .card-deck:hover {
+    margin-bottom: 0;
+  }
+
+  .card-deck:hover > * {
+    transform: none;
+  }
+}
+
+/* ─── Tabs ─────────────────────────────────────────────────────────────── */
+
+.tabs {
+  width: 100%;
+}
+
+.tabs-list {
+  display: flex;
+  gap: var(--spacing-5);
+  overflow: visible;
+}
+
+.tabs-tab {
+  background: transparent;
+  border: 0;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--fs-2);
+  font-weight: var(--fw-regular);
+  letter-spacing: 0%;
+  line-height: var(--lh-auto);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.tabs-tab:hover {
+  color: var(--text-primary-hover);
+}
+
+.tabs-tab:focus-visible {
+  border-radius: var(--radius-normal);
+  outline: 3px solid var(--layer-1-border-focus);
+  outline-offset: 2px;
+}
+
+.tabs-tab:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.tabs-tab[aria-selected="true"] {
+  animation: tab-select var(--motion-duration-normal) var(--motion-ease-standard) both;
+  border: 0;
+  color: var(--text-primary);
+  font-weight: var(--fw-medium);
+}
+
+.tabs-panel {
+  padding-top: var(--spacing-5);
+}
+
+/* ─── Tag ──────────────────────────────────────────────────────────────── */
+
+.tag {
+  align-items: center;
+  animation: tag-enter var(--motion-duration-normal) var(--motion-ease-emphasized) both;
+  border: var(--border-width-1) solid transparent;
+  border-radius: var(--radius-pill);
+  display: inline-flex;
+  font-size: var(--fs-6);
+  font-weight: var(--fw-semibold);
+  gap: var(--spacing-2);
+  line-height: 1;
+  max-width: 100%;
+  min-height: 1.75rem;
+  padding: 0 var(--spacing-3);
+}
+
+.tag-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
+.tag-small {
+  font-size: var(--fs-7);
+  min-height: 1.5rem;
+  padding-inline: var(--spacing-2);
+}
+
+.tag-neutral {
+  background: var(--gray-10);
+  border-color: var(--gray-10);
+  color: var(--gray-80);
+}
+
+.tag-info {
+  background: var(--blue-10);
+  color: var(--link-enabled);
+}
+
+.tag-success {
+  background: var(--success-subtle-background);
+  color: var(--green-60);
+}
+
+.tag-warning {
+  background: var(--yellow-10);
+  color: var(--yellow-70);
+}
+
+.tag-danger {
+  background: var(--danger-subtle-background);
+  color: var(--text-danger);
+}
+
+.tag-remove {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  color: currentColor;
+  cursor: pointer;
+  display: inline-flex;
+  height: 1.125rem;
+  justify-content: center;
+  margin-right: -0.25rem;
+  padding: 0;
+  width: 1.125rem;
+}
+
+.tag-remove:hover {
+  background: rgb(23 32 42 / 0.1);
+}
+
+.tag-remove:focus-visible {
+  outline: 2px solid var(--layer-1-border-focus);
+  outline-offset: 1px;
+}
+
+/* ─── Tile ─────────────────────────────────────────────────────────────── */
+
+.tile {
+  background: var(--layer-1-background);
+  border-radius: var(--radius-normal);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  justify-self: stretch;
+  overflow: hidden;
+  transition: var(--motion-transition-colors), var(--motion-transition-transform);
+}
+
+.tile-banner {
+  aspect-ratio: 660 / 289;
+  background: var(--layer-2-background);
+  flex: 0 0 auto;
+  position: relative;
+  width: 100%;
+}
+
+.tile-banner-art {
+  display: block;
+  height: 100%;
+  /* Contains the mockups' z-indexes (which reach 10 on hover) so they cannot
+     stack above .tile-tag, which follows this element in the DOM. */
+  isolation: isolate;
+  position: relative;
+  width: 100%;
+}
+
+.tile-banner-art :is(img, video, svg, picture) {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.tile-tag {
+  position: absolute;
+  right: var(--spacing-4);
+  top: var(--spacing-4);
+  z-index: 1;
+}
+
+.tile-info-tag {
+  left: var(--spacing-4);
+  position: absolute;
+  top: var(--spacing-4);
+  z-index: 1;
+}
+
+.tile-content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: var(--spacing-5);
+}
+
+.tile-title {
+  color: var(--text-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-3);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0%;
+  line-height: var(--lh-auto);
+  margin: 0;
+}
+
+.tile-description {
+  color: var(--text-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-4);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0%;
+  line-height: var(--lh-1);
+  margin: 0;
+}
+
+.tile-link {
+  color: inherit;
+  text-decoration: none;
+  /* Longer and more emphasized than the shared transform token, so the lift
+     reads as a smooth swell rather than a 120ms snap. */
+  transition:
+    var(--motion-transition-colors),
+    transform var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.tile-link:hover {
+  transform: translateY(-2px) scale(1.02);
+}
+
+.tile-link:focus-visible {
+  outline: 3px solid var(--layer-1-border-focus);
+  outline-offset: 3px;
+}
+
+/* ─── Tooltip ──────────────────────────────────────────────────────────── */
+
+/* The wrapper is the hover target, not the trigger, so the pointer can drift
+   onto the tooltip without flicker. transition-delay is set only in the shown
+   rule, so leaving snaps the delay to 0 and the exit plays immediately.
+   Placement is expressed as variables, so one transform serves every variant. */
+.tooltip-wrap {
+  --tooltip-in-duration: 150ms;
+  --tooltip-out-duration: 50ms;
+  --tooltip-in-ease: ease-out;
+  --tooltip-out-ease: ease-out;
+  --tooltip-delay: 80ms;
+  --tooltip-scale: 0.98;
+  --tooltip-left: 50%;
+  --tooltip-tx: -50%;
+  --tooltip-ty: 0;
+  --tooltip-top: auto;
+  --tooltip-bottom: calc(100% + 8px);
+  --tooltip-origin: 50% 100%;
+  display: inline-block;
+  position: relative;
+}
+
+.tooltip-trigger {
+  display: contents;
+}
+
+.tooltip {
+  background: var(--layer-1-background);
+  border-radius: 8px;
+  bottom: var(--tooltip-bottom);
+  color: var(--text-primary);
+  font-size: var(--fs-6);
+  font-weight: var(--fw-medium);
+  left: var(--tooltip-left);
+  opacity: 0;
+  padding: 8px 12px;
+  pointer-events: none;
+  position: absolute;
+  top: var(--tooltip-top);
+  transform: translate(var(--tooltip-tx), var(--tooltip-ty)) scale(var(--tooltip-scale));
+  transform-origin: var(--tooltip-origin);
+  white-space: nowrap;
+  z-index: 5;
+  /* Literal shadow kept from the reference: a three-layer tooltip elevation the
+     semantic --shadow-* tokens do not cover. */
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 0.06),
+    0 2px 6px 0 rgb(0 0 0 / 0.05),
+    0 4px 42px 0 rgb(0 0 0 / 0.06);
+  transition:
+    opacity var(--tooltip-out-duration) var(--tooltip-out-ease),
+    transform var(--tooltip-out-duration) var(--tooltip-out-ease);
+}
+
+/* Direct child only, so a nested tooltip does not also fire its ancestor's. */
+.tooltip-wrap:hover > .tooltip,
+.tooltip-trigger:focus-within + .tooltip {
+  opacity: 1;
+  transform: translate(var(--tooltip-tx), var(--tooltip-ty)) scale(1);
+  transition-delay: var(--tooltip-delay);
+  transition-duration: var(--tooltip-in-duration);
+  transition-timing-function: var(--tooltip-in-ease);
+}
+
+/* Below the trigger, for triggers close to a clipping top edge. */
+.tooltip-below {
+  --tooltip-bottom: auto;
+  --tooltip-top: calc(100% + 8px);
+  --tooltip-origin: 50% 0;
+}
+
+/* Below and left-aligned, for triggers close to a clipping left edge — a
+   centred tooltip wider than its trigger would overhang and be cut off. */
+.tooltip-below-start {
+  --tooltip-bottom: auto;
+  --tooltip-top: calc(100% + 8px);
+  --tooltip-left: 0;
+  --tooltip-tx: 0;
+  --tooltip-origin: 0 0;
+}
+
+/* Centred inside the trigger, for triggers that clip their own overflow. */
+.tooltip-center {
+  --tooltip-bottom: auto;
+  --tooltip-top: 50%;
+  --tooltip-ty: -50%;
+  --tooltip-origin: 50% 50%;
+}
+
+/* A tag's own tooltip wins over the banner's while it is hovered. */
+.tile-banner:hover:has(.tooltip-wrap:hover) > .tooltip {
+  opacity: 0;
+  transition-delay: 0s;
+}
+
+/* ─── Device mockups ───────────────────────────────────────────────────── */
+
+/* A fanned arc of phone screens. Each is placed by the --x/--y/--rotation/
+   --scale set on it, so the arrangement lives in the component rather than
+   being repeated per index here. Screens are taller than the banner and clip
+   at its lower edge, as in the reference. */
+.device-mockups {
+  display: block;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.device-mockup {
+  aspect-ratio: 2758 / 5639;
+  display: block;
+  height: 122%;
+  left: var(--x);
+  position: absolute;
+  top: var(--y);
+  transform:
+    translate(-50%, -50%)
+    rotate(var(--rotation))
+    scale(var(--scale));
+  transition: transform var(--motion-duration-slow) var(--motion-ease-emphasized);
+  z-index: var(--depth);
+}
+
+/* Beats .tile-banner-art :is(img, ...), which would otherwise crop each phone. */
+.device-mockups .device-mockup img {
+  object-fit: contain;
+}
+
+/* Hovering one screen grows it a little and lifts it clear of its neighbours. */
+.device-mockup:hover {
+  transform:
+    translate(-50%, -50%)
+    rotate(var(--rotation))
+    scale(calc(var(--scale) * 1.08));
+  z-index: 10;
+}
+
+/* ─── Top navigation ───────────────────────────────────────────────────── */
+
+/* padding-block rather than the `padding: 24px 0` shorthand, so the wrapper's
+   horizontal padding utilities still apply. */
+.top-navigation {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding-block: var(--spacing-6);
+}
+
+.top-navigation-logo {
+  align-items: center;
+  color: var(--text-primary);
+  display: inline-flex;
+  flex: 0 0 auto;
+  height: 2.25rem;
+  justify-content: center;
+  overflow: hidden;
+  text-decoration: none;
+  width: 2.25rem;
+}
+
+.top-navigation-logo :is(img, svg, picture, video) {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.top-navigation-logo:focus-visible {
+  outline: 3px solid var(--layer-1-border-focus);
+  outline-offset: 4px;
+}
+
+.top-navigation-links {
+  align-items: center;
+  display: flex;
+  gap: var(--spacing-6);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.top-navigation-link {
+  color: var(--text-secondary);
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-4);
+  font-weight: var(--fw-regular);
+  letter-spacing: 0%;
+  line-height: var(--lh-auto);
+  text-decoration: none;
+  transition: var(--motion-transition-colors);
+}
+
+.top-navigation-link:hover {
+  color: var(--text-primary);
+}
+
+.top-navigation-link:focus-visible {
+  border-radius: var(--radius-normal);
+  outline: 3px solid var(--layer-1-border-focus);
+  outline-offset: 4px;
+}
+
+.top-navigation-link[aria-current="page"] {
+  color: var(--text-primary);
+}
+
+/* ─── About page ───────────────────────────────────────────────────────── */
+
+.about-banner {
+  aspect-ratio: 4 / 3;
+  background: var(--layer-2-background);
+  border-radius: var(--radius-normal);
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+/* The source is portrait, so bias the crop upward to keep the subject in frame. */
+.about-banner img {
+  object-fit: cover;
+  object-position: center 28%;
+}
+
+/* width is capped so the fixed 660px never overflows its padded container. */
+.about-elsewhere {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  max-width: 100%;
+  width: 660px;
+}
+
+.about-elsewhere-links {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-6);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* ─── Case study ───────────────────────────────────────────────────────── */
+
+/* Full-bleed: this sits outside .wrapper in the markup, so it spans the
+   viewport without needing 100vw (which would overflow by the scrollbar). */
+.case-study-banner {
+  background: var(--layer-2-background);
+  height: 60vh;
+  height: 60svh;
+  min-height: 260px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.case-study-banner img {
+  object-fit: cover;
+}
+
+/* Stays inside .wrapper, unlike .case-study-banner above it. */
+.case-study-figure {
+  aspect-ratio: 16 / 9;
+  background: var(--layer-2-background);
+  border-radius: var(--radius-normal);
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.case-study-figure img {
+  object-fit: cover;
+}
+
+/* ─── Cursor pet ───────────────────────────────────────────────────────── */
+
+/* Position, size and background-position are written each frame by CursorPet;
+   everything static lives here. Hidden until the first mouse move so it never
+   sits on the hero at load. */
+.cursor-pet {
+  background-image: url("/cursor-pet/frames.png");
+  background-repeat: no-repeat;
+  background-size: 256px 128px;
+  height: 32px;
+  image-rendering: pixelated;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  transform: scale(0.85);
+  transform-origin: center center;
+  transition: opacity var(--motion-duration-normal) var(--motion-ease-standard);
+  width: 32px;
+  z-index: 9999;
+}
+
+.cursor-pet[data-active="true"] {
+  opacity: 1;
+}
+
+/* ─── Motion: streaming text ───────────────────────────────────────────── */
+
+/* StreamText wraps each word in .stream-w and staggers transition-delay, so the
+   words resolve in sequence once .is-streaming lands. .stream-atom opts a
+   non-text element (an image, say) into the same resolve as one unit. */
+.stream {
+  --stream-gap: 60ms;
+  --stream-fade: 350ms;
+  --stream-blur: 1px;
+  --stream-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.stream-w,
+.stream .stream-atom {
+  filter: blur(var(--stream-blur));
+  opacity: 0;
+  transition:
+    opacity var(--stream-fade) var(--stream-ease),
+    filter var(--stream-fade) var(--stream-ease);
+}
+
+.stream.is-streaming .stream-w,
+.stream.is-streaming .stream-atom {
+  filter: blur(0);
+  opacity: 1;
+}
+
+/* ─── Motion: staggered reveal ─────────────────────────────────────────── */
+
+/* Lines start translated down, blurred and invisible; .is-shown on the parent
+   flips them to rest. Later lines are held back so the eye lands on line 1. */
+.stagger {
+  --stagger-dur: 700ms;
+  --stagger-distance: 12px;
+  --stagger-stagger: 90ms;
+  --stagger-blur: 3px;
+  --stagger-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.stagger-line {
+  display: block;
+  filter: blur(var(--stagger-blur));
+  opacity: 0;
+  transform: translateY(var(--stagger-distance));
+  transition:
+    opacity var(--stagger-dur) var(--stagger-ease),
+    transform var(--stagger-dur) var(--stagger-ease),
+    filter var(--stagger-dur) var(--stagger-ease);
+  will-change: transform, opacity, filter;
+}
+
+/* Reveals a whole block as one unit, rather than line by line. */
+.stagger-block {
+  filter: blur(var(--stagger-blur));
+  opacity: 0;
+  transform: translateY(var(--stagger-distance));
+  transition:
+    opacity var(--stagger-dur) var(--stagger-ease),
+    transform var(--stagger-dur) var(--stagger-ease),
+    filter var(--stagger-dur) var(--stagger-ease);
+  will-change: transform, opacity, filter;
+}
+
+.stagger-block.is-shown {
+  filter: blur(0);
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stagger-line--2 {
+  transition-delay: var(--stagger-stagger);
+}
+
+.stagger-line--3 {
+  transition-delay: calc(var(--stagger-stagger) * 2);
+}
+
+.stagger.is-shown .stagger-line {
+  filter: blur(0);
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Exit decouples from the stagger: one quiet fade, no Y return, no blur. */
+.stagger.is-hiding .stagger-line {
+  filter: blur(0);
+  opacity: 0;
+  transform: translateY(0);
+  transition:
+    opacity 200ms ease,
+    transform 0s linear,
+    filter 0s linear;
+  transition-delay: 0s;
+}
+
+/* ─── Keyframes ────────────────────────────────────────────────────────── */
+
+@keyframes tab-select {
+  from { opacity: 0.55; transform: translateY(2px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes tag-enter {
+  from { opacity: 0; transform: scale(0.94); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ─── Media queries ────────────────────────────────────────────────────── */
+
+/* Below this the tab labels no longer fit on one line, so stack them rather
+   than let each label wrap mid-phrase. */
+@media (max-width: 640px) {
+  .tabs-list {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--spacing-3);
+  }
+
+  /* Label and links need 383px side by side and start colliding around a
+     430px viewport; stacked here to match the tabs above. */
+  .about-elsewhere {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--spacing-3);
+  }
+}
+
+/* .is-shown is added by StaggerReveal, so without scripting the lines would
+   never resolve. Show them outright instead. */
+@media (scripting: none) {
+  .stagger-line,
+  .stagger-block {
+    filter: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-duration-fast: 0ms;
+    --motion-duration-normal: 0ms;
+    --motion-duration-slow: 0ms;
+  }
+
+  .link-spinner,
+  .tabs-tab[aria-selected="true"],
+  .tag {
+    animation: none;
+  }
+
+  .stream-w,
+  .stream .stream-atom {
+    filter: none !important;
+    opacity: 1 !important;
+    transition: none !important;
+  }
+
+  .stagger-line,
+  .stagger-block,
+  .tooltip {
+    transition: none !important;
+  }
+}

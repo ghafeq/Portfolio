@@ -1,0 +1,193 @@
+:root {
+/* ─── Color Palette ─── */
+    /* Base */
+    --white: #fff;
+    --black: #000;
+    
+    /* Gray */
+    --gray-10: #f4f4f4;
+    --gray-20: #e0e0e0;
+    --gray-30: #c6c6c6;
+    --gray-40: #a8a8a8;
+    --gray-50: #8d8d8d;
+    --gray-60: #6f6f6f;
+    --gray-70: #525252;
+    --gray-80: #393939;
+    --gray-90: #262626;
+    --gray-100: #161616;
+
+    /* Gray – Hover */
+    --gray-10-hover: #e8e8e8;
+    --gray-20-hover: #d1d1d1;
+    --gray-30-hover: #b5b5b5;
+    --gray-40-hover: #999999;
+    --gray-50-hover: #7a7a7a;
+    --gray-60-hover: #5e5e5e;
+    --gray-70-hover: #636363;
+    --gray-80-hover: #474747;
+    --gray-90-hover: #333333;
+    --gray-100-hover: #292929;
+
+    /* Cool Gray */
+    --cool-gray-10: #f2f4f8;
+    --cool-gray-20: #dde1e6;
+    --cool-gray-30: #c1c7cd;
+    --cool-gray-40: #a2a9b0;
+    --cool-gray-50: #878d96;
+    --cool-gray-60: #697077;
+    --cool-gray-70: #4d5358;
+    --cool-gray-80: #343a3f;
+    --cool-gray-90: #21272a;
+    --cool-gray-100: #121619;
+
+    /* Cool Gray – Hover */
+    --cool-gray-10-hover: #e4e9f1;
+    --cool-gray-20-hover: #cdd3da;
+    --cool-gray-30-hover: #adb5bd;
+    --cool-gray-40-hover: #9199a1;
+    --cool-gray-50-hover: #757b85;
+    --cool-gray-60-hover: #585e64;
+    --cool-gray-70-hover: #5d646a;
+    --cool-gray-80-hover: #434a51;
+    --cool-gray-90-hover: #2b3236;
+    --cool-gray-100-hover: #222a2f;
+
+    /* Warm Gray */
+    --warm-gray-10: #f7f3f2;
+    --warm-gray-20: #e5e0df;
+    --warm-gray-30: #cac5c4;
+    --warm-gray-40: #ada8a8;
+    --warm-gray-50: #8f8b8b;
+    --warm-gray-60: #726e6e;
+    --warm-gray-70: #565151;
+    --warm-gray-80: #3c3838;
+    --warm-gray-90: #272525;
+    --warm-gray-100: #171414;
+
+    /* Warm Gray – Hover */
+    --warm-gray-10-hover: #f0e8e6;
+    --warm-gray-20-hover: #d8d0cf;
+    --warm-gray-30-hover: #b9b3b1;
+    --warm-gray-40-hover: #9c9696;
+    --warm-gray-50-hover: #7f7b7b;
+    --warm-gray-60-hover: #605d5d;
+    --warm-gray-70-hover: #696363;
+    --warm-gray-80-hover: #4c4848;
+    --warm-gray-90-hover: #343232;
+    --warm-gray-100-hover: #2c2626;
+
+    /* Blue */
+    --blue-10: #edf5ff;
+    --blue-20: #d0e2ff;
+    --blue-30: #a6c8ff;
+    --blue-40: #78a9ff;
+    --blue-50: #4589ff;
+    --blue-60: #0f62fe;
+    --blue-70: #0043ce;
+    --blue-80: #002d9c;
+    --blue-90: #001d6c;
+    --blue-100: #001141;
+
+    /* Blue – Hover */
+    --blue-10-hover: #dbebff;
+    --blue-20-hover: #b8d3ff;
+    --blue-30-hover: #8ab6ff;
+    --blue-40-hover: #5c97ff;
+    --blue-50-hover: #1f70ff;
+    --blue-60-hover: #0050e6;
+    --blue-70-hover: #0053ff;
+    --blue-80-hover: #0039c7;
+    --blue-90-hover: #00258a;
+    --blue-100-hover: #001f75;
+
+    /* Green */
+    --green-10: #defbe6;
+    --green-20: #a7f0ba;
+    --green-30: #6fdc8c;
+    --green-40: #42be65;
+    --green-50: #24a148;
+    --green-60: #198038;
+    --green-70: #0e6027;
+    --green-80: #044317;
+    --green-90: #022d0d;
+    --green-100: #071908;
+
+    /* Green – Hover */
+    --green-10-hover: #b6f6c8;
+    --green-20-hover: #74e792;
+    --green-30-hover: #36ce5e;
+    --green-40-hover: #3bab5a;
+    --green-50-hover: #208e3f;
+    --green-60-hover: #166f31;
+    --green-70-hover: #11742f;
+    --green-80-hover: #05521c;
+    --green-90-hover: #033b11;
+    --green-100-hover: #0d300f;
+
+    /* Red */
+    --red-10: #fff1f1;
+    --red-20: #ffd7d9;
+    --red-30: #ffb3b8;
+    --red-40: #ff8389;
+    --red-50: #fa4d56;
+    --red-60: #da1e28;
+    --red-70: #a2191f;
+    --red-80: #750e13;
+    --red-90: #520408;
+    --red-100: #2d0709;
+
+    /* Red – Hover */
+    --red-10-hover: #ffe0e0;
+    --red-20-hover: #ffc2c5;
+    --red-30-hover: #ff99a0;
+    --red-40-hover: #ff6168;
+    --red-50-hover: #ee0713;
+    --red-60-hover: #b81922;
+    --red-70-hover: #c21e25;
+    --red-80-hover: #921118;
+    --red-90-hover: #66050a;
+    --red-100-hover: #540d11;
+
+    /* Yellow */
+    --yellow-10: #fcf4d6;
+    --yellow-20: #fddc69;
+    --yellow-30: #f1c21b;
+    --yellow-40: #d2a106;
+    --yellow-50: #b28600;
+    --yellow-60: #8e6a00;
+    --yellow-70: #684e00;
+    --yellow-80: #483700;
+    --yellow-90: #302400;
+    --yellow-100: #1c1500;
+
+    /* Yellow – Hover */
+    --yellow-10-hover: #f8e6a0;
+    --yellow-20-hover: #fccd27;
+    --yellow-30-hover: #ddb00e;
+    --yellow-40-hover: #bc9005;
+    --yellow-50-hover: #9e7700;
+    --yellow-60-hover: #755800;
+    --yellow-70-hover: #806000;
+    --yellow-80-hover: #5c4600;
+    --yellow-90-hover: #3d2e00;
+    --yellow-100-hover: #332600;
+
+/* ─── Font Sizes and Weights ─── */
+    --font-family-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-family-serif: 'Plus Jakarta Sans', Georgia, 'Times New Roman', serif;
+    --fs-1: 1.5rem;
+    --fs-2: 1.25rem;
+    --fs-3: 1.13rem;
+    --fs-4: 1rem;
+    --fs-5: 0.94rem;
+    --fs-6: 0.88rem;
+    --fs-7: 0.63rem;
+
+    --fw-semibold: 600;
+    --fw-medium: 500;
+    --fw-regular: 400;
+
+    --lh-auto: auto;
+    --lh-1: 1.38rem;
+    --lh-2: 2rem;
+}
