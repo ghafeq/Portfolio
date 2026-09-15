@@ -13,6 +13,9 @@
      visually — see the handover note about moving it to --warm-gray-10. */
   --layer-2-background: var(--gray-20);
   --layer-2-background-hover: var(--gray-30-hover);
+  /* A cool tint for grouped content on a white page, where the neutral greys
+     read as disabled rather than as a surface. */
+  --layer-muted-background: var(--cool-gray-10);
   --danger-solid-background: var(--red-60);
   --danger-subtle-background: var(--red-10);
   --success-solid-background: var(--green-60);
@@ -99,7 +102,7 @@ button {
 .display {
   font-family: var(--font-family-sans);
   font-size: var(--fs-display);
-  font-weight: var(--fw-semibold);
+  font-weight: var(--fw-bold);
   letter-spacing: 0%;
   line-height: var(--lh-auto);
   color: var(--text-primary);

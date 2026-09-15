@@ -302,7 +302,7 @@
   font-weight: var(--fw-semibold);
   gap: var(--spacing-2);
   line-height: 1;
-  max-width: 100%;
+  width: fit-content;
   min-height: 1.75rem;
   padding: 0 var(--spacing-3);
 }
@@ -313,7 +313,7 @@
 }
 
 .tag-small {
-  font-size: var(--fs-7);
+  font-size: var(--fs-6);
   min-height: 1.5rem;
   padding-inline: var(--spacing-2);
 }
@@ -716,8 +716,8 @@
    viewport without needing 100vw (which would overflow by the scrollbar). */
 .case-study-banner {
   background: var(--layer-2-background);
-  height: 60vh;
-  height: 60svh;
+  height: 120vh;
+  height: 120svh;
   min-height: 260px;
   overflow: hidden;
   position: relative;
@@ -817,6 +817,123 @@
   display: list-item;
 }
 
+/* ─── Case study: professional template ───────────────────────────────── */
+
+/* Height only: the width follows each logo's own ratio. */
+.case-study-logo {
+  display: block;
+  height: 5rem;
+  width: auto;
+}
+
+.case-study-lede {
+  color: var(--text-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-1);
+  font-weight: var(--fw-regular);
+  letter-spacing: 0%;
+  line-height: var(--lh-2);
+}
+
+.case-study-meta {
+  margin-top: var(--spacing-7);
+}
+
+.case-study-meta-term {
+  color: var(--text-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-4);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0%;
+  line-height: var(--lh-auto);
+}
+
+.case-study-meta-value {
+  color: var(--text-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-4);
+  font-weight: var(--fw-regular);
+  letter-spacing: 0%;
+  line-height: var(--lh-1);
+}
+
+.case-study-heading {
+  color: var(--text-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-1);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0%;
+  line-height: var(--lh-auto);
+}
+
+.case-study-card {
+  background: var(--layer-muted-background);
+  border-radius: var(--radius-normal);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  padding: var(--spacing-5);
+}
+
+.case-study-card-title {
+  color: var(--text-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-2);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0%;
+  line-height: var(--lh-auto);
+}
+
+.case-study-stat-value {
+  color: var(--text-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-display);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0%;
+  line-height: var(--lh-auto);
+}
+
+.case-study-stat-body {
+  color: var(--text-primary);
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-4);
+  font-weight: var(--fw-regular);
+  letter-spacing: 0%;
+  line-height: var(--lh-1);
+}
+
+/* A screenshot and its note as one bordered unit, so the caption cannot be
+   mistaken for the next row's. */
+.case-study-feature {
+  border: var(--border-width-1) solid var(--layer-1-border);
+  border-radius: var(--radius-normal);
+  overflow: hidden;
+}
+
+.case-study-feature-image {
+  background: var(--app-layer-background);
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+/* The feature already draws the outer edge, so the reserved slot keeps only
+   the dashed line that separates it from the note. Matches the screenshots'
+   ratio, so swapping one in does not move the layout. */
+.case-study-feature-placeholder {
+  aspect-ratio: 4096 / 2023;
+  border: 0;
+  border-bottom: var(--border-width-1) dashed var(--layer-1-border-strong);
+  border-radius: 0;
+}
+
+.case-study-feature-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  padding: var(--spacing-5);
+}
+
 /* ─── Case study media ─────────────────────────────────────────────────── */
 
 /* Illustrations read wider than the 660px measure, so they break out of the
@@ -833,11 +950,15 @@ body:has(.case-study) {
   background: var(--white);
 }
 
-.case-study-media {
+.case-study-media,
+.case-study-wide {
   --case-study-media-width: min(1080px, calc(100vw - var(--spacing-6) * 2));
-  margin-block: var(--spacing-7);
   margin-inline: calc((100% - var(--case-study-media-width)) / 2);
   width: var(--case-study-media-width);
+}
+
+.case-study-media {
+  margin-block: var(--spacing-7);
 }
 
 /* Media that belongs at the reading measure rather than broken out — an

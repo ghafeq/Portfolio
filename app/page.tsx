@@ -46,6 +46,30 @@ const work = [
     ],
     inProgress: true,
   },
+  {
+    href: "/vstecs-billing",
+    title: "CSP Reseller Billing at VSTECS",
+    description:
+      "Monthly cloud subscription billing for VSTECS and its reseller network, designed and built front end in ASP.NET MVC",
+    cover: "/projects/Vstecs/Shared%20Partial%20View.png",
+    info: "Professional" as const,
+  },
+  {
+    href: "/five-fleet-portal",
+    title: "SKDS & SKPS at Five Petroleum",
+    description:
+      "A web portal for fleet operators in Malaysia’s subsidised diesel scheme. Vehicles, drivers and subsidy points in one place",
+    cover: "/projects/Five-Portal/Update%20Vehicle.png",
+    info: "Professional" as const,
+  },
+  {
+    href: "/five-company-mode",
+    title: "Company Mode on Five Petroleum App",
+    description:
+      "Buying subsidised diesel against a company-held quota, from vehicle to invoice in seven steps",
+    cover: "/projects/Five-App/Quota%20Check.png",
+    info: "Professional" as const,
+  },
 ];
 
 const principles = [

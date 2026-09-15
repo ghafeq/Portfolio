@@ -1,5 +1,15 @@
 export { Card } from "./card";
 export type { CardProps } from "./card";
+export {
+  CaseStudyCard,
+  CaseStudyFeature,
+  CaseStudyHero,
+  CaseStudyMeta,
+  CaseStudySection,
+  CaseStudyStat,
+  projectAsset,
+} from "./case-study";
+export type { CaseStudyImage } from "./case-study";
 export { ClickSound } from "./click-sound";
 export { CursorPet } from "./cursor-pet";
 export { DeviceMockups } from "./device-mockups";

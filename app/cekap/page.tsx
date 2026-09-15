@@ -13,11 +13,12 @@ const HEATMAP = ux("Competitive Landscape Heatmap.png");
 const PERSONA_SPECTRUM = ux("Inclusive Design.png");
 
 const meta = [
-  ["Role", "Research, UX, design system, front-end"],
-  ["Team", "Solo project"],
-  ["Timeline", "May 2026 — present"],
+  ["Role", "Research, UX, Design System & Front-end"],
+  ["Team", "Self-Initiated Project"],
+  ["Timeline", "May 2026 - Present"],
   ["Status", "v1 built, not yet tested with travellers"],
-  ["Tools", "Figma, EPDS tokens, a coded slice"],
+  ["Design", "Figma, EPDS tokens"],
+  ["Build", "Expo React Native, Claude Code"]
 ];
 
 // Weight is carried by the tag tone as well as the word, so a claim's strength
@@ -166,18 +167,17 @@ export default function CekapPage() {
         {/* <Link href="/" leadingIcon={<ArrowLeft size={16} />} type="standalone">
           Back home
         </Link> */}
-        <div className="flex flex-wrap justify-between items-center gap-3">
           <div>
-              <h1 className="display">CEKAP</h1>
+              <div className="flex flex-wrap gap-1 items-center gap-3">
+                <h1 className="display">CEKAP</h1>
+                <Tag icon={<ClockFading height={15} width={15} />} size="medium" tone="warning">
+                  On Going
+                </Tag>    
+              </div>
               <p className="m-0 body-01">
-              Airport guidance for the worst day of a trip.
+                Airport guidance for the day you have the least capacity to think
               </p>
           </div>
-          <Tag icon={<ClockFading height={15} width={15} />} size="medium" tone="warning">
-            On Going
-          </Tag>
-        </div>
-
       </section>
 
       <ScrollReveal className="case-study-banner">
