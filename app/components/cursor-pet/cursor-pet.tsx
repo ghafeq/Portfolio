@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 
 // Ported from the Cursor Pet browser extension (github.com/DixitRam/Cursor-Pet):
@@ -9,6 +10,9 @@ const REACH_THRESHOLD = 10;
 const TICK_MS = 1000 / 12;
 const IDLE_STILL_MS = 2000;
 const IDLE_TRANSITION_MS = 200;
+
+// Only the home and about pages get the pet; case studies stay distraction-free.
+const PET_PATHS = new Set(["/", "/about"]);
 
 type Direction =
   | "Right"
@@ -48,6 +52,12 @@ function directionFor(degrees: number): Direction {
 }
 
 export function CursorPet() {
+  const pathname = usePathname();
+
+  return PET_PATHS.has(pathname) ? <Pet /> : null;
+}
+
+function Pet() {
   const petRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
