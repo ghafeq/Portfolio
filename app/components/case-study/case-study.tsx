@@ -47,7 +47,7 @@ export function CaseStudyHero({ logo, title, lede }: CaseStudyHeroProps) {
         />
       )}
       <h1 className="display">{title}</h1>
-      <p className="case-study-lede">{lede}</p>
+      <p className="case-study-lede mt-2">{lede}</p>
     </header>
   );
 }
