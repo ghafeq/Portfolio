@@ -18,7 +18,8 @@ const asset = (file: string) => projectAsset("Gain-Secure", file);
 const meta: [string, string][] = [
   ["Role", "Sole graphic designer, Lead"],
   ["Design", "Adobe Illustrator"],
-  ["Timeline", "May 2026 - Present"],
+  ["Status", "Currently used"],
+  ["Year", "2025"],
 ];
 
 // Every swatch card is exported at the same size.
