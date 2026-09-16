@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import {
   CaseStudyFeature,
   CaseStudyHero,
+  CaseStudyIndex,
   CaseStudyMeta,
   CaseStudySection,
   CaseStudyStat,
@@ -114,6 +115,7 @@ export default function FiveCompanyModePage() {
           </div>
         </CaseStudySection>
       </div>
+      <CaseStudyIndex />
     </main>
   );
 }

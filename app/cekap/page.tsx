@@ -1,158 +1,116 @@
-import { ArrowLeft, ClockFading, Diamond, MonitorPlay, WifiOff, Workflow } from "lucide-react";
-import Image from "next/image";
-import type { ReactNode } from "react";
-import { Link, ScrollReveal, Tag } from "../components";
+import type { Metadata } from "next";
+import {
+  CaseStudyFeature,
+  CaseStudyHero,
+  CaseStudyIndex,
+  CaseStudyMeta,
+  CaseStudySection,
+  CaseStudyStat,
+  ImageLightbox,
+  ScrollReveal,
+  projectAsset,
+} from "../components";
 
-// Written out plainly and encoded here, rather than hand-encoding the URLs: the
-// spaces still need escaping for hosts that do not normalise them, but the
-// names stay readable and can be checked against the files on disk at a glance.
-const UX_DIRECTORY = "/projects/Cekap/UX";
-const ux = (file: string) => `${UX_DIRECTORY}/${encodeURIComponent(file)}`;
+export const metadata: Metadata = {
+  title: "CEKAP — Shafiq Efféndy",
+};
 
-const HEATMAP = ux("Competitive Landscape Heatmap.png");
-const PERSONA_SPECTRUM = ux("Inclusive Design.png");
+const ux = (file: string) => projectAsset("Cekap/UX", file);
 
-const meta = [
-  ["Role", "Research, UX, Design System & Front-end"],
-  ["Team", "Self-Initiated Project"],
+const meta: [string, string][] = [
+  ["Role", "Research, UX, design system, front end"],
   ["Timeline", "May 2026 - Present"],
+  ["Team", "Self-Initiated Project"],
   ["Status", "v1 built, not yet tested with travellers"],
-  ["Design", "Figma, EPDS tokens"],
-  ["Build", "Expo React Native, Claude Code"]
+  ["Design", "Figma"],
+  ["Build", "Expo React Native, Claude Code"],
 ];
 
-// Weight is carried by the tag tone as well as the word, so a claim's strength
-// survives a skim.
-const claims = [
-  {
-    claim: "Guidance is the thin layer.",
-    weight: "High confidence",
-    tone: "success" as const,
-    source: "from the landscape review",
-  },
-  {
-    claim: "Stress degrades the ability to use these systems.",
-    weight: "Medium",
-    tone: "warning" as const,
-    source: "from literature and one very specific Tuesday",
-  },
-  {
-    claim: "Family wants permission-based visibility.",
-    weight: "Low",
-    tone: "danger" as const,
-    source: "my own experience wearing a costume",
-  },
-];
+const call = (file: string) => projectAsset("Cekap/Calls", file);
 
-const barriers = [
-  ["Permanent", "low vision, one-handed use"],
-  ["Temporary", "post-surgery pain, a baby on one arm"],
-  ["Situational", "late, unfamiliar terminal, four percent battery"],
-];
+// Every call screenshot is exported at the same size.
+const CALL_SCREEN = { width: 4096, height: 2304 };
 
-// figure is only set on the call that has screens to show, so the type is
-// declared rather than inferred from the mixed literal.
-const calls: { title: string; body: string; figure?: ReactNode }[] = [
+const calls = [
   {
-    title: "Manual checkpoints over sensing.",
-    body: "I looked at GPS, beacons and continuous location, then left all three out. Manual confirmation survives a dead network and a stale feed, avoids a location trail I would have to secure and explain, and hands back a small win at each step. The flaw is obvious: a stressed person forgets to tap. So confirmation sits on the lock screen, with fallback to the last confirmed point. Sensing earns v2 only if testing proves the tap is a real barrier.",
+    title: "Manual checkpoints over sensing",
+    body: "GPS is unreliable around large terminal buildings, and continuous location creates a trail I would have to secure and explain. Manual confirmation survives a dead network and hands back a small win at each step. The flaw is obvious, a stressed person forgets to tap, so confirmation sits on the lock screen with fallback to the last confirmed point.",
+    image: {
+      ...CALL_SCREEN,
+      src: call("Manual Checkpoints.png"),
+      alt: "A phone lock screen showing a CEKAP live activity: on track, step 1 of 8, next check in online, with a Mark as Complete button.",
+    },
   },
   {
-    title: "Offline is a connection state, not a truth state.",
-    body: "Losing signal does not make saved information wrong. It means the app cannot see what changed. Five confidence states carry that: confirmed, live, likely, last known, unconfirmed. Advice turns conservative as data ages. On reconnect, a change gets announced, never quietly swapped.",
-    // The one call with screens to show, so the placeholder belongs here rather
-    // than after the group.
-    figure: (
-      <Placeholder
-        icon={<WifiOff height={20} width={20} />}
-        label="Offline and reconnect screens"
-        note="Illustration in progress"
-        ratio="2 / 1"
-      />
-    ),
+    title: "Offline is a connection state, not a truth state",
+    body: "Losing signal does not make saved information wrong. It means the app cannot see what changed. Five states carry that distinction: confirmed, live, likely, last known, unconfirmed. Advice turns conservative as data ages, and on reconnect a change is announced rather than quietly swapped.",
+    image: {
+      ...CALL_SCREEN,
+      src: call("Offline State.png"),
+      alt: "Two CEKAP screens while offline. One flags a delayed flight under a You're offline banner. The other explains the saved journey is available but flight and gate changes cannot be confirmed, last updated at 8:15 AM.",
+    },
   },
   {
-    title: "Shared Awareness stays out.",
-    body: "The emotionally obvious feature carries the highest infrastructure cost, the highest privacy risk and my weakest evidence. Better a narrow v1 I understand.",
+    title: "A Rest Window after every completed checkpoint",
+    body: "Clearing a checkpoint is the moment a tired traveller most wants to sit down and least knows whether they can. So every completed step returns a Rest Window: how long you can safely pause before the next deadline bites, calculated from your own pace rather than an average walker. It answers the question my own missed flight failed on, without the traveller having to ask.",
+    image: {
+      ...CALL_SCREEN,
+      src: call("Rest Window.png"),
+      alt: "Three Rest Window screens counting 5, 16 and 9 minutes. The centre one confirms arrival at KLIA Terminal 1 and lists nearby surau, toilets and seating.",
+    },
   },
 ];
 
-const predictions = [
-  "I made it too calm and someone misses the urgency.",
-  "Saved information reads as current unless the timestamp is unmissable.",
-  "Someone opens the airline app first.",
+const metrics = [
+  {
+    value: "3",
+    title: "Tasks in the test plan",
+    body: "Decide whether resting is safe. Read a departure change after reconnecting. Find the way forward after a missed flight.",
+  },
+  {
+    value: "4",
+    title: "Signals I would track",
+    body: "Correct rest-or-move calls, whether saved data reads as current, skipped confirmations, plus SUS and AttrakDiff because calm is part of the claim.",
+  },
+  {
+    value: "3",
+    title: "Predictions logged before session one",
+    body: "I made it too calm and someone misses the urgency. Saved information reads as current. Someone opens the airline app first.",
+  },
+  {
+    value: "0",
+    title: "Travellers tested so far",
+    body: "Recruitment fell through twice. There are no results here and I am not going to imply otherwise.",
+    // The number the other three are waiting on.
+    emphasis: true,
+  },
 ];
 
-/** A finished illustration, sized from its own pixels so nothing is cropped. */
+/** An illustration sized from its own pixels, so nothing is cropped. Runs edge
+    to edge; click to open it full screen. */
 function Figure({
   alt,
-  caption,
   height,
-  scrollable = false,
   src,
   width,
 }: {
   alt: string;
-  caption: string;
   height: number;
-  /** Lets a dense illustration pan sideways on phones instead of shrinking
-      below the point where its labels can be read. */
-  scrollable?: boolean;
   src: string;
   width: number;
 }) {
   return (
-    <ScrollReveal
-      className={`case-study-media${scrollable ? " case-study-media-scroll" : ""}`}
-    >
+    <ScrollReveal className="case-study-media">
       <figure className="case-study-media-figure">
         <div className="case-study-media-frame">
-          <Image
+          <ImageLightbox
             alt={alt}
             height={height}
-            sizes="(max-width: 1128px) 100vw, 1080px"
+            sizes="100vw"
             src={src}
             width={width}
           />
         </div>
-        <figcaption className="case-study-media-caption">{caption}</figcaption>
-      </figure>
-    </ScrollReveal>
-  );
-}
-
-/** A slot held open for work that is still in progress, labelled as such so a
-    reader can tell a missing illustration from one that looks unfinished. */
-function Placeholder({
-  caption,
-  icon,
-  label,
-  measure = false,
-  note,
-  ratio,
-}: {
-  caption?: string;
-  icon: ReactNode;
-  label: string;
-  /** Holds the slot to the reading measure instead of breaking out wider. */
-  measure?: boolean;
-  note: string;
-  /** CSS aspect-ratio for the slot. Defaults to 16 / 9. */
-  ratio?: string;
-}) {
-  return (
-    <ScrollReveal
-      className={`case-study-media${measure ? " case-study-media-measure" : ""}`}
-    >
-      <figure className="case-study-media-figure">
-        <div className="case-study-placeholder" style={ratio ? { aspectRatio: ratio } : undefined}>
-          <span aria-hidden="true" className="case-study-placeholder-icon">
-            {icon}
-          </span>
-          <span className="case-study-placeholder-label">{label}</span>
-          <span className="caption">{note}</span>
-        </div>
-        {caption && <figcaption className="case-study-media-caption">{caption}</figcaption>}
       </figure>
     </ScrollReveal>
   );
@@ -160,281 +118,108 @@ function Placeholder({
 
 export default function CekapPage() {
   return (
-    // The wrapper moves onto each section so the banner between them can run
-    // the full width of the viewport.
     <main className="case-study flex-1 bg-(--white) text-(--text-primary)">
-      <section className="wrapper px-6 pt-16 pb-12 sm:px-10">
-        {/* <Link href="/" leadingIcon={<ArrowLeft size={16} />} type="standalone">
-          Back home
-        </Link> */}
-          <div>
-              <div className="flex flex-wrap gap-1 items-center gap-3">
-                <h1 className="display">CEKAP</h1>
-                <Tag icon={<ClockFading height={15} width={15} />} size="medium" tone="warning">
-                  On Going
-                </Tag>    
-              </div>
-              <p className="m-0 body-01">
-                Airport guidance for the day you have the least capacity to think
-              </p>
-          </div>
-      </section>
-
-      <ScrollReveal className="case-study-banner">
-        <Image
-          alt="CEKAP flight companion screens"
-          fill
-          priority
-          sizes="100vw"
-          src="/projects/Cekap/Cover.png"
+      <div className="wrapper px-6 pt-16 pb-16 sm:px-10">
+        <CaseStudyHero
+          lede="Airport guidance for the day you have the least capacity to think."
+          title="CEKAP"
         />
-      </ScrollReveal>
 
-      <section className="wrapper px-6 pt-12 pb-16 sm:px-10">
-        <ScrollReveal>
-          <dl className="grid gap-6 sm:grid-cols-3">
-            {meta.map(([term, value]) => (
-              <div key={term}>
-                <dt className="label-02 text-(--text-secondary)">{term}</dt>
-                <dd className="body-02 mt-1">{value}</dd>
-              </div>
-            ))}
-          </dl>
+        <ScrollReveal className="case-study-figure case-study-cover mt-6">
+          <ImageLightbox
+            alt="CEKAP flight companion screens"
+            height={2304}
+            preload
+            sizes="(max-width: 660px) 100vw, 600px"
+            src={projectAsset("Cekap", "Cover.png")}
+            width={4096}
+          />
         </ScrollReveal>
 
-        <article className="case-study-section">
-          <ScrollReveal>
-            <h2 className="title-02">Try it first</h2>
-          </ScrollReveal>
-          <Placeholder
-            caption="Set the pace, then take it offline. That is where the decisions live."
-            icon={<MonitorPlay height={20} width={20} />}
-            label="Live demo"
-            measure
-            note="Coded slice in progress"
-            ratio="16 / 10"
-          />
-        </article>
+        <CaseStudyMeta items={meta} />
 
-        <article className="case-study-section">
-          <ScrollReveal>
-            <h2 className="title-02">Why I built it</h2>
-            <p className="case-study-copy mt-4">
-              March 2025. Weeks after surgery for a herniated disc, I flew from KLIA2 with my
-              sister. We dropped bags upstairs, went down to sit because sitting was the whole
-              point of my recovery, then misjudged the walk back. We hit security ten minutes past
-              the line. The flight left without us.
-            </p>
-            <p className="case-study-quote mt-6">
-              The closed gate was not the hard part. Not knowing what to do next was.
-            </p>
-            <p className="case-study-copy mt-6">
-              One bad day is a question, not a problem. So I went looking for evidence against my
-              own story.
-            </p>
-          </ScrollReveal>
-        </article>
+        <CaseStudySection
+          copy="March 2025. Weeks after surgery for a herniated disc, I flew from KLIA2 with my sister. We dropped bags upstairs, went down to sit because sitting was the whole point of my recovery, then misjudged the walk back. We hit security ten minutes past the line. The flight left without us."
+          title="Where it starts. The closed gate was not the hard part."
+        />
 
-        <article className="case-study-section">
-          <ScrollReveal>
-            <h2 className="title-02">What held up, and what did not</h2>
-            <p className="case-study-copy mt-4">
-              I mapped seven products across nine capabilities: both KLIA terminals, MYairports,
-              Malaysia Airlines, AirAsia MOVE, Batik Air, Firefly.
-            </p>
-            <p className="case-study-copy mt-6">
-              Information is everywhere. Guidance is not. Nothing tells you whether to sit down or
-              start walking. Timing rules also sit in separate systems. Malaysia Airlines closes
-              counters at 60 minutes and gates at 30. AirAsia closes bag drop at 60 and gates at
-              20. Combining those with security, immigration and the walk is left to the traveller.
-            </p>
-          </ScrollReveal>
-
+        <CaseStudySection
+          copy="Airport journeys are planned around an average person: average pace, attention, confidence and ability to stand and walk. Real capacity moves. It can be permanent, like a mobility or sensory condition. Temporary, like recovering from surgery. Or situational, like rushing through an unfamiliar terminal with bags on both arms. The design has to serve reduced capacity without asking anyone to diagnose themselves first."
+          title="There is no “average” traveller"
+        >
           <Figure
-            alt="Heatmap scoring existing systems against traveller capabilities. Rows are airport gate updates, the MYairports app, Malaysia Airlines, AirAsia MOVE, Batik Air Malaysia and Firefly. Columns run from flight information and check-in through terminal navigation, mobility and assistance, cognitive load support, recovery guidance and shared journey awareness. Flight information and check-in are green across almost every system; cognitive load support, recovery guidance and shared journey awareness are orange to red across all of them."
-            caption="Every system is strong on information and weak in the same place. The columns that matter on a bad day — cognitive load, recovery, shared awareness — are red almost the whole way down."
-            height={998}
-            scrollable
-            src={HEATMAP}
-            width={2800}
+            alt="A grid of four abilities, move, hear, see and focus, across permanent, temporary and situational limits, running from few people affected to more. Move: wheelchair user, recovering from knee surgery, pushing a trolley with two cases. Hear: deaf traveller, ear infection, missing a gate announcement in a noisy hall. See: low vision, forgot glasses at home, glare on a phone screen near terminal windows. Focus: low vision, exhaustion after a red-eye flight, running late in a crowded, unfamiliar terminal. About 1.3 billion people live with significant disability, 1 in 6 worldwide (WHO, 2023)."
+            height={2127}
+            src={ux("Inclusive_Design.png")}
+            width={4096}
           />
+        </CaseStudySection>
 
-          <ScrollReveal>
-            <p className="case-study-copy mt-8">My claims, labelled by weight:</p>
-            <ul className="case-study-list mt-4">
-              {claims.map(({ claim, weight, tone, source }) => (
-                <li className="case-study-claim" key={claim}>
-                  <Tag showIcon={false} size="small" tone={tone}>
-                    {weight}
-                  </Tag>
-                  <span className="case-study-copy">
-                    {claim} <span className="text-(--text-secondary)">{source}</span>.
-                  </span>
-                </li>
-              ))}
-            </ul>
-            <p className="case-study-copy mt-6">
-              That last one is why Shared Awareness is not in v1.
-            </p>
-          </ScrollReveal>
-        </article>
-
-        <article className="case-study-section">
-          <ScrollReveal>
-            <h2 className="title-02">The decision the product rests on</h2>
-            <p className="case-study-copy mt-4">
-              Airline deadline, your pace, your last confirmed checkpoint, and how stale the data
-              has gone. Those four resolve to one next action.
-            </p>
-            <p className="case-study-copy mt-6">
-              Every screen answers three questions. Where am I. What now. Is stopping safe.
-            </p>
-          </ScrollReveal>
-          <Placeholder
-            icon={<Workflow height={20} width={20} />}
-            label="Core mechanism"
-            note="Illustration in progress"
-            ratio="5 / 2"
-          />
-        </article>
-
-        <article className="case-study-section">
-          <ScrollReveal>
-            <h2 className="title-02">Three calls I would defend in a review</h2>
-          </ScrollReveal>
-          {calls.map(({ title, body, figure }) => (
-            <div key={title}>
-              <ScrollReveal className="mt-8">
-                <h3 className="case-study-subhead">{title}</h3>
-                <p className="case-study-copy mt-3">{body}</p>
-              </ScrollReveal>
-              {figure}
-            </div>
-          ))}
-        </article>
-
-        <article className="case-study-section">
-          <ScrollReveal>
-            <h2 className="title-02">Designing for the day people are least capable</h2>
-            <p className="case-study-copy mt-4">
-              One capability: reading a status and acting on it while moving.
-            </p>
-            <ul className="case-study-list mt-4">
-              {barriers.map(([kind, examples]) => (
-                <li className="case-study-claim" key={kind}>
-                  {/* A plain label rather than a Tag: these three are a
-                      vocabulary, not a rating, and tag-neutral is the same grey
-                      as the page behind it. */}
-                  <span className="case-study-claim-label">{kind}</span>
-                  <span className="case-study-copy">{examples}</span>
-                </li>
-              ))}
-            </ul>
-            <p className="case-study-copy mt-6">
-              One design covers all three. One message at a time. Status in colour, icon and words
-              together. 4.5:1 body text, 3:1 components. Thumb reach, reduced motion, screen-reader
-              labels in the code. WCAG 2.2 AA through POUR.
-            </p>
-            <p className="case-study-copy mt-6">
-              I did not arrive here from a checklist. I arrived as the temporary case.
-            </p>
-          </ScrollReveal>
-
+        <CaseStudySection
+          copy={[
+            "I mapped seven products across nine capabilities: MYairports, Malaysia Airlines, AirAsia MOVE, Batik Air and Firefly.",
+            "Information is everywhere. Flight status, check-in, maps and boarding details are covered several times over. The gap opens after the information arrives. A traveller can know the gate and the departure time and still not know whether they can sit down, whether the queue is turning risky, or which task matters first.",
+            "That moved the concept away from another airport app and towards a thin layer that interprets what already exists.",
+          ]}
+          title="What the existing ecosystem already does well"
+        >
           <Figure
-            alt="A spectrum from narrowed to broader across three groups. Long-term conditions covers mobility limitations and sensory impairments, tagged permanent. Short-term challenges covers recovery after surgery and physical tiredness, tagged temporary. Context-dependent needs covers time pressure, unfamiliar surroundings and ADHD-related distraction and overload, tagged situational."
-            caption="The same capability, reached three ways. Designing for the permanent case is what makes the temporary and situational ones work."
-            height={995}
-            src={PERSONA_SPECTRUM}
-            width={2400}
+            alt="A heatmap of seven airport and airline products across nine capabilities. Every product covers information well, and coverage falls away for cognitive load, recovery and shared awareness."
+            height={1349}
+            src={ux("Landscape_Gap_Heatmap.png")}
+            width={4096}
           />
-        </article>
+        </CaseStudySection>
 
-        <article className="case-study-section">
-          <ScrollReveal>
-            <h2 className="title-02">What I built</h2>
-            <p className="case-study-copy mt-4">
-              The v1 spine: flight import and masking, pace and privacy setup, a nine-checkpoint
-              timeline, Rest Windows, priority alerts, offline save with refresh on reconnect,
-              recovery from last-known and unknown states, widget and lock-screen views.
-            </p>
-            <p className="case-study-copy mt-6">
-              The design system grew out of what repeated rather than getting drawn up front. A
-              pattern here carries content rules and state changes, not a saved layout.
-            </p>
-            <p className="case-study-copy mt-6">
-              I took the timeline into code against EPDS tokens instead of stopping at Figma. Focus
-              behaviour, real contrast and interaction timing surface problems a static frame
-              hides.
-            </p>
-          </ScrollReveal>
-        </article>
+        <CaseStudySection
+          copy={[
+            "Interviews fell through twice. Rather than let one bad day stand in for research, I ran a structured desk pass and graded every source by what it could actually support. Official pages establish timing rules. News reports document specific incidents. Reviews and forums show failure patterns but never how often they happen.",
+            "Five things held up. Walking distances are long enough that Malaysia Airports added buggies and travelators. Terminal 1 and Terminal 2 are separate journeys, and booking platforms often show only Kuala Lumpur International. A single failure cascades, as in the 2023 Aerotrain breakdown that stranded 114 passengers, ten of whom reportedly missed flights. Queues resist estimation, with a 2025 autogate failure producing reported two-hour waits. And the timing rules live in separate systems: Malaysia Airlines closes counters at 60 minutes and gates at 30, AirAsia closes bag drop at 60 and gates at 20, and combining those with security, immigration and the walk is left entirely to the traveller.",
+            "What this cannot tell me is how often any of it happens, which problem causes the most stress, or whether anyone would install a companion app. That needs people, not better sourcing.",
+          ]}
+          title="What reported experiences suggest"
+        />
 
-        <article className="case-study-section">
-          <ScrollReveal>
-            <h2 className="title-02">The strongest argument against building it</h2>
-            <p className="case-study-copy mt-4">
-              Adoption. People already carry an airline app, an email, a wallet pass and airport
-              screens. Cekap asks for setup ahead of a journey that usually goes fine. A tool built
-              for the worst day gets ignored on the ordinary ones.
-            </p>
-            <p className="case-study-copy mt-6">
-              The honest read: this belongs to an airport operator or an airline, close to the
-              operational data. Built independently, it has a ceiling I cannot design past.
-            </p>
-            <p className="case-study-copy mt-6">
-              The bet is short setup and a product that lives on the lock screen. If testing shows
-              people reach for the airline app first, the concept changes.
-            </p>
-          </ScrollReveal>
-        </article>
+        <CaseStudySection
+          copy="Airline deadline, chosen pace, last confirmed checkpoint, and how stale the data has gone. Those four produce one prioritised next step, and every screen answers the same three questions: where am I, what now, is stopping safe. It is built for a single capability, reading a status and acting on it while moving, which is what makes the permanent case, the post-surgery case and the four-percent-battery case the same design problem."
+          title="The solution. Four inputs resolve to one next action."
+        />
 
-        <article className="case-study-section">
-          <ScrollReveal>
-            <h2 className="title-02">How I would know it works</h2>
-            <p className="case-study-copy mt-4">
-              Three moderated think-aloud tasks: decide whether resting is safe, interpret a
-              departure change after reconnecting, find the way forward after a missed flight. I
-              track whether rest-or-move calls are correct, whether saved information reads as
-              current, and how often confirmations get skipped. SUS, plus AttrakDiff because calm
-              is part of the claim.
-            </p>
-            <p className="case-study-copy mt-6">Predictions logged before session one:</p>
-            <ul className="case-study-list case-study-list-bulleted mt-4">
-              {predictions.map((prediction) => (
-                <li className="case-study-copy" key={prediction}>
-                  {prediction}
-                </li>
-              ))}
-            </ul>
-          </ScrollReveal>
-        </article>
+        <CaseStudySection title="Three calls I would defend in a review.">
+          <div className="grid gap-4">
+            {calls.map(({ title, body, image }) => (
+              <CaseStudyFeature image={image} key={title} title={title}>
+                {body}
+              </CaseStudyFeature>
+            ))}
+          </div>
+        </CaseStudySection>
 
-        <article className="case-study-section">
-          <ScrollReveal>
-            <h2 className="title-02">Where this stands</h2>
-          </ScrollReveal>
-          <Placeholder
-            icon={<Diamond height={20} width={20} />}
-            label="Double diamond status"
-            note="Illustration in progress"
-            ratio="5 / 2"
-          />
-          <ScrollReveal>
-            <p className="case-study-copy mt-8">
-              Two kinds of unfinished, kept apart. Interviews, the diary study and JTBD sessions
-              are on hold because recruitment fell through twice. Sensing, focus support and Shared
-              Awareness are deferred on purpose, to keep v1 provable.
-            </p>
-            <p className="case-study-copy mt-6">
-              What I would change: I tied evaluative testing to the same hard-to-reach sample as
-              the generative work and stalled both. Splitting them let the prototype move.
-            </p>
-            <p className="case-study-copy mt-6">
-              Desk research shows the problem exists. Real behaviour still needs people.
-            </p>
-          </ScrollReveal>
-        </article>
-      </section>
+        <CaseStudySection
+          copy="The prototype is built in Figma and Expo. It is not yet tested with travellers, but it is ready for user testing and iteration."
+          title="The prototype, in Figma and in code."
+        />
+
+        <CaseStudySection title="Metrics. What I would measure, and what I have.">
+          <div className="grid gap-4 sm:grid-cols-2">
+            {metrics.map(({ value, title, body, emphasis }) => (
+              <CaseStudyStat emphasis={emphasis} key={title} title={title} value={value}>
+                {body}
+              </CaseStudyStat>
+            ))}
+          </div>
+        </CaseStudySection>
+
+        <CaseStudySection
+          copy={[
+            "Desk research suggests the problem exists. It cannot show how often, or how people behave under stress. Travellers already carry an airline app, a wallet pass and their own checklist, so the open question is whether Cekap earns a place beside them.",
+            "Shared Awareness, letting someone trusted follow the journey, is the feature people react to most and the one I cut. It carries the highest infrastructure cost, the highest privacy risk and my weakest evidence, so it waits until the manual journey is proven.",
+            "Next, I’ll validate the concept through five think aloud sessions, targeted re tests, and a core task comparison with an existing airline product. I’ll also test offline recovery, finalise the key flows in Figma and code, complete the POUR review, and revisit the problem definition based on what I learn.",
+          ]}
+          title="What is next, and what could sink it."
+        />
+      </div>
+      <CaseStudyIndex />
     </main>
   );
 }

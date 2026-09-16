@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
+import { ImageLightbox } from "../image-lightbox";
 import { ScrollReveal } from "../stagger-reveal";
 
 /** A file under /public/projects, with its size so nothing is cropped. */
@@ -26,7 +27,8 @@ const LOGO_HEIGHT = 80;
 const MEASURE_SIZES = "(max-width: 660px) 100vw, 600px";
 
 export interface CaseStudyHeroProps {
-  logo: CaseStudyImage;
+  /** Left out for self-initiated work with no client mark. */
+  logo?: CaseStudyImage;
   title: string;
   lede: string;
 }
@@ -34,24 +36,33 @@ export interface CaseStudyHeroProps {
 export function CaseStudyHero({ logo, title, lede }: CaseStudyHeroProps) {
   return (
     <header>
-      <Image
-        alt={logo.alt}
-        className="case-study-logo"
-        height={LOGO_HEIGHT}
-        loading="eager"
-        src={logo.src}
-        width={Math.round((logo.width * LOGO_HEIGHT) / logo.height)}
-      />
-      <h1 className="display mt-6">{title}</h1>
-      <p className="case-study-lede mt-6">{lede}</p>
+      {logo && (
+        <Image
+          alt={logo.alt}
+          className="case-study-logo mb-6"
+          height={LOGO_HEIGHT}
+          loading="eager"
+          src={logo.src}
+          width={Math.round((logo.width * LOGO_HEIGHT) / logo.height)}
+        />
+      )}
+      <h1 className="display">{title}</h1>
+      <p className="case-study-lede">{lede}</p>
     </header>
   );
 }
 
-export function CaseStudyMeta({ items }: { items: [term: string, value: string][] }) {
+export function CaseStudyMeta({
+  items,
+  columns = 2,
+}: {
+  items: [term: string, value: string][];
+  /** Three suits a short list that would otherwise leave one item alone. */
+  columns?: 2 | 3;
+}) {
   return (
     <ScrollReveal className="case-study-meta">
-      <dl className="grid gap-3 sm:grid-cols-2">
+      <dl className={`grid gap-3 ${columns === 3 ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}>
         {items.map(([term, value]) => (
           <div key={term}>
             <dt className="case-study-meta-term">{term}</dt>
@@ -72,13 +83,24 @@ export interface CaseStudySectionProps {
   children?: ReactNode;
 }
 
+/** A URL fragment from a heading, so every section can be linked to and the
+    floating index has something to jump to. */
+const headingId = (title: string) =>
+  title
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
 export function CaseStudySection({ title, copy, wide = false, children }: CaseStudySectionProps) {
   const paragraphs = copy === undefined ? [] : [copy].flat();
 
   return (
     <article className={`case-study-section${wide ? " case-study-wide" : ""}`}>
       <ScrollReveal>
-        <h2 className="case-study-heading">{title}</h2>
+        <h2 className="case-study-heading" id={headingId(title)}>
+          {title}
+        </h2>
         {paragraphs.map((paragraph) => (
           <p className="case-study-copy mt-6" key={paragraph}>
             {paragraph}
@@ -111,7 +133,7 @@ export function CaseStudyFeature({ title, image, children }: CaseStudyFeaturePro
   return (
     <ScrollReveal className="case-study-feature">
       {image ? (
-        <Image
+        <ImageLightbox
           alt={image.alt}
           className="case-study-feature-image"
           height={image.height}
@@ -136,12 +158,15 @@ export function CaseStudyFeature({ title, image, children }: CaseStudyFeaturePro
 export interface CaseStudyStatProps {
   value: string;
   title: string;
+  /** Sets the card a step darker, for the one number the rest should be read
+      against. */
+  emphasis?: boolean;
   children: ReactNode;
 }
 
-export function CaseStudyStat({ value, title, children }: CaseStudyStatProps) {
+export function CaseStudyStat({ value, title, emphasis = false, children }: CaseStudyStatProps) {
   return (
-    <ScrollReveal className="case-study-card">
+    <ScrollReveal className={`case-study-card${emphasis ? " case-study-card-emphasis" : ""}`}>
       <p className="case-study-stat-value">{value}</p>
       <div>
         <h3 className="case-study-card-title">{title}</h3>

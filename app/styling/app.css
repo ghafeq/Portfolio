@@ -133,7 +133,7 @@
 .card-title {
   color: var(--text-primary);
   font-family: var(--font-family-sans);
-  font-size: var(--fs-2);
+  font-size: var(--fs-3);
   font-weight: var(--fw-semibold);
   letter-spacing: 0%;
   line-height: var(--lh-auto);
@@ -142,7 +142,7 @@
 .card-description {
   color: var(--text-primary);
   font-family: var(--font-family-sans);
-  font-size: var(--fs-4);
+  font-size: var(--fs-5);
   font-weight: var(--fw-medium);
   letter-spacing: 0%;
   line-height: var(--lh-1);
@@ -189,10 +189,17 @@
    their text unreadable. */
 @media (min-width: 640px) and (hover: hover) {
   .card-deck {
+    /* Equal-height rows. The fan's translateY lifts a card by its own height
+       (100%), which only lands on the row above when every row is the same
+       height — without this, a card whose copy wraps to an extra line
+       overshoots upward by the difference and rides over the heading. */
+    grid-auto-rows: 1fr;
+
     /* Height of one card row. The fan occupies a single row, so the second
        row's worth of height is pulled back to close the gap beneath it.
-       Tied to card content height — retune if the copy grows. */
-    --deck-row-height: 10.75rem;
+       Only affects the gap under the deck, never the fan's alignment —
+       retune if the copy grows enough to change the row height. */
+    --deck-row-height: 12.65rem;
     margin-bottom: calc(-1 * (var(--deck-row-height) + var(--spacing-6)));
     transition: margin-bottom var(--motion-duration-slow) var(--motion-ease-emphasized);
   }
@@ -424,6 +431,7 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
+  gap: var(--spacing-1);
   padding: var(--spacing-5);
 }
 
@@ -440,7 +448,7 @@
 .tile-description {
   color: var(--text-primary);
   font-family: var(--font-family-sans);
-  font-size: var(--fs-4);
+  font-size: var(--fs-5);
   font-weight: var(--fw-medium);
   letter-spacing: 0%;
   line-height: var(--lh-1);
@@ -464,6 +472,23 @@
 .tile-link:focus-visible {
   outline: 3px solid var(--layer-1-border-focus);
   outline-offset: 3px;
+}
+
+/* A bento tile spanning two grid rows. Its banner gives up the fixed ratio and
+   grows into whatever height the neighbouring pair sets, so a landscape cover
+   is cropped to a narrow portrait slice. Anchored top-centre: covers centre
+   their subject (a phone mockup sits mid-frame on a background that fills the
+   corners), and the top edge keeps a screenshot's header in view. Two columns
+   start at 640px (sm:grid-cols-2); below that it is an ordinary tile. */
+@media (min-width: 640px) {
+  .tile-tall .tile-banner {
+    aspect-ratio: auto;
+    flex: 1 1 auto;
+  }
+
+  .tile-tall .tile-banner-art :is(img, video, picture) {
+    object-position: center top;
+  }
 }
 
 /* ─── Tooltip ──────────────────────────────────────────────────────────── */
@@ -742,6 +767,17 @@
   object-fit: cover;
 }
 
+/* A hero cover cropped to the design's 760 × 400 band. The full image is still
+   one click away in the lightbox, so the crop loses nothing. */
+.case-study-cover {
+  aspect-ratio: 19 / 10;
+}
+
+.case-study-cover .image-lightbox-trigger,
+.case-study-cover .image-lightbox-trigger img {
+  height: 100%;
+}
+
 /* Long-form sections. Bigger than the gaps inside a section, so the reader can
    see where one argument ends. */
 .case-study-section {
@@ -754,10 +790,10 @@
 .case-study-copy {
   color: var(--text-primary);
   font-family: var(--font-family-sans);
-  font-size: var(--fs-3);
+  font-size: var(--fs-4);
   font-weight: var(--fw-regular);
   letter-spacing: 0%;
-  line-height: var(--lh-2);
+  /* line-height: var(--lh-2); */
 }
 
 .case-study-subhead {
@@ -770,7 +806,7 @@
 }
 
 .case-study-quote {
-  border-left: var(--border-width-focused) solid var(--layer-1-border);
+  border-left: 4px solid var(--layer-1-border);
   color: var(--text-primary);
   font-family: var(--font-family-sans);
   font-size: var(--fs-3);
@@ -829,7 +865,7 @@
 .case-study-lede {
   color: var(--text-primary);
   font-family: var(--font-family-sans);
-  font-size: var(--fs-1);
+  font-size: var(--fs-2);
   font-weight: var(--fw-regular);
   letter-spacing: 0%;
   line-height: var(--lh-2);
@@ -859,7 +895,7 @@
 
 .case-study-heading {
   color: var(--text-primary);
-  font-family: var(--font-family-sans);
+  font-family: var(--font-family-serif);
   font-size: var(--fs-1);
   font-weight: var(--fw-bold);
   letter-spacing: 0%;
@@ -873,6 +909,10 @@
   flex-direction: column;
   gap: var(--spacing-4);
   padding: var(--spacing-5);
+}
+
+.case-study-card-emphasis {
+  background: var(--layer-2-background);
 }
 
 .case-study-card-title {
@@ -950,21 +990,23 @@ body:has(.case-study) {
   background: var(--white);
 }
 
+/* Edge to edge at every width. The scrollbar's share of 100vw is hidden by the
+   x-axis clip on .case-study. */
 .case-study-media,
 .case-study-wide {
-  --case-study-media-width: min(1080px, calc(100vw - var(--spacing-6) * 2));
+  --case-study-media-width: 100vw;
   margin-inline: calc((100% - var(--case-study-media-width)) / 2);
   width: var(--case-study-media-width);
 }
 
-.case-study-media {
-  margin-block: var(--spacing-7);
+/* Illustrations run to the screen edge; sections of cards keep a gutter so
+   their edges and text never touch it. Widened with the viewport below. */
+.case-study-wide {
+  padding-inline: var(--spacing-6);
 }
 
-/* Media that belongs at the reading measure rather than broken out — an
-   embedded demo reads as part of the text, not as an illustration beside it. */
-.case-study-media-measure {
-  --case-study-media-width: 100%;
+.case-study-media {
+  margin-block: var(--spacing-7);
 }
 
 .case-study-media-figure {
@@ -975,8 +1017,8 @@ body:has(.case-study) {
    shadow alone leaves an illustration with no edge at all. */
 .case-study-media-frame {
   background: var(--app-layer-background);
-  border: var(--border-width-1) solid var(--layer-1-border);
-  border-radius: var(--radius-normal);
+  /* border: var(--border-width-1) solid var(--layer-1-border); */
+  /* border-radius: var(--radius-normal); */
   overflow: hidden;
   width: 100%;
 }
@@ -1035,6 +1077,396 @@ body:has(.case-study) {
   font-weight: var(--fw-medium);
   letter-spacing: 0%;
   line-height: var(--lh-auto);
+}
+
+/* ─── Image lightbox ───────────────────────────────────────────────────── */
+
+/* A bare button around the image, so it keeps the image's own box and still
+   opens from the keyboard. */
+.image-lightbox-trigger {
+  background: none;
+  border: 0;
+  cursor: zoom-in;
+  display: block;
+  padding: 0;
+  width: 100%;
+}
+
+.image-lightbox-trigger:focus-visible {
+  outline: 3px solid var(--layer-1-border-focus);
+  outline-offset: 3px;
+}
+
+/* Fills the viewport rather than sizing to the image, so a click anywhere
+   around the picture lands on the dialog and closes it. */
+.image-lightbox {
+  background: none;
+  border: 0;
+  cursor: zoom-out;
+  height: 100dvh;
+  margin: 0;
+  max-height: none;
+  max-width: none;
+  opacity: 0;
+  padding: var(--spacing-8) var(--spacing-6);
+  transform: scale(0.96);
+  transition:
+    opacity var(--motion-duration-slow) var(--motion-ease-emphasized),
+    transform var(--motion-duration-slow) var(--motion-ease-emphasized);
+  width: 100vw;
+}
+
+.image-lightbox[open] {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.image-lightbox::backdrop {
+  background: rgb(0 0 0 / 0.88);
+  opacity: 0;
+  transition: opacity var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.image-lightbox.is-open,
+.image-lightbox.is-open::backdrop {
+  opacity: 1;
+  transform: none;
+}
+
+/* Shorter than the open, so dismissing never feels like waiting. */
+.image-lightbox.is-closing,
+.image-lightbox.is-closing::backdrop {
+  transition-duration: var(--motion-duration-normal);
+}
+
+/* Qualified by element as well as class: the dialog sits inside the media
+   frame in the DOM, and the frame's own img rules would otherwise stretch the
+   full-screen copy to the frame's fixed width. */
+dialog.image-lightbox img.image-lightbox-image {
+  height: auto;
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  width: auto;
+}
+
+.image-lightbox-close {
+  align-items: center;
+  background: var(--white);
+  border: 0;
+  border-radius: var(--radius-pill);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-3);
+  position: fixed;
+  right: var(--spacing-5);
+  top: var(--spacing-5);
+}
+
+.image-lightbox-close:focus-visible {
+  outline: 3px solid var(--layer-1-border-focus);
+  outline-offset: 3px;
+}
+
+/* The dialog makes the page inert but not still; this stops the scroll wheel
+   moving it underneath. */
+html:has(.image-lightbox[open]) {
+  overflow: hidden;
+}
+
+/* ─── Case study index ─────────────────────────────────────────────────── */
+
+/* Headings are jump targets; this stops one landing flush against the top
+   edge of the window. */
+.case-study-heading {
+  scroll-margin-top: var(--spacing-7);
+}
+
+/* Needs the margin beside the 660px measure to float in, so it only appears
+   once the viewport leaves room for it; below that the page reads top to
+   bottom without it. */
+.case-study-index {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .case-study-index {
+    display: block;
+    position: fixed;
+    right: var(--spacing-6);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+  }
+}
+
+.case-study-index-list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* The link is the whole row, so a tick is easy to hit even though the mark
+   itself is a hairline. */
+.case-study-index-link {
+  align-items: center;
+  color: var(--text-secondary);
+  display: flex;
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-5);
+  font-weight: var(--fw-regular);
+  justify-content: flex-end;
+  line-height: var(--lh-1);
+  padding-block: var(--spacing-1);
+  text-decoration: none;
+  transition: var(--motion-transition-colors);
+}
+
+.case-study-index-tick {
+  border-top: var(--border-width-focused) solid var(--layer-1-border-strong);
+  display: block;
+  transition:
+    border-color var(--motion-duration-fast) var(--motion-ease-standard),
+    width var(--motion-duration-normal) var(--motion-ease-standard);
+  width: var(--spacing-5);
+}
+
+.case-study-index-link:hover .case-study-index-tick {
+  border-top-color: var(--text-secondary);
+}
+
+/* The current section stands out by length as well as darkness, so it still
+   reads at a glance to someone who cannot tell the greys apart. */
+.case-study-index-link[aria-current="location"] .case-study-index-tick {
+  border-top-color: var(--text-primary);
+  width: var(--spacing-6);
+}
+
+/* Kept in the accessibility tree while collapsed, so the ticks are announced
+   by their titles rather than as unlabelled links. */
+.case-study-index-label {
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+/* Open: hovering the rail, or tabbing into it, swaps the ticks for a card of
+   titles. Anchored to the right edge, so the card grows away from the pointer
+   and never slides out from under it. */
+.case-study-index:is(:hover, :focus-within) .case-study-index-list {
+  animation: case-study-index-open var(--motion-duration-normal) var(--motion-ease-standard) both;
+  background: var(--layer-1-background);
+  border-radius: var(--radius-normal);
+  box-shadow: var(--shadow-md);
+  gap: var(--spacing-2);
+  max-width: 18rem;
+  padding: var(--spacing-5);
+}
+
+.case-study-index:is(:hover, :focus-within) .case-study-index-link {
+  gap: var(--spacing-3);
+  justify-content: flex-start;
+}
+
+.case-study-index:is(:hover, :focus-within) .case-study-index-tick {
+  display: none;
+}
+
+.case-study-index:is(:hover, :focus-within) .case-study-index-label {
+  clip-path: none;
+  height: auto;
+  overflow: visible;
+  position: static;
+  white-space: normal;
+  width: auto;
+}
+
+.case-study-index-link:hover,
+.case-study-index-link:focus-visible {
+  color: var(--text-primary);
+}
+
+.case-study-index-link:focus-visible {
+  border-radius: var(--radius-normal);
+  outline: 3px solid var(--layer-1-border-focus);
+  outline-offset: 2px;
+}
+
+.case-study-index-link[aria-current="location"] {
+  color: var(--link-enabled);
+}
+
+/* ─── Figma embed ──────────────────────────────────────────────────────── */
+
+.figma-embed {
+  display: grid;
+  gap: var(--spacing-3);
+  margin: 0;
+}
+
+.figma-embed-caption {
+  color: var(--text-secondary);
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-6);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0%;
+  line-height: var(--lh-1);
+}
+
+.figma-embed-frame {
+  background: var(--app-layer-background);
+  border: var(--border-width-1) solid var(--layer-1-border);
+  border-radius: var(--radius-normal);
+  display: block;
+  width: 100%;
+}
+
+/* The design's embed slot is 360px tall. */
+.figma-embed-frame {
+  height: 22.5rem;
+}
+
+/* ─── Markdown spec ────────────────────────────────────────────────────── */
+
+/* A source file as it reads in an editor: a title bar with the file path over
+   a dark body of monospaced lines. */
+.markdown-spec {
+  background: var(--code-background);
+  border-radius: calc(var(--radius-normal) * 2);
+  margin: 0;
+  overflow: hidden;
+}
+
+.markdown-spec-bar {
+  align-items: center;
+  background: var(--code-bar-background);
+  display: flex;
+  gap: var(--spacing-2);
+  padding: var(--spacing-4) var(--spacing-5);
+}
+
+.markdown-spec-dot {
+  display: block;
+  flex: none;
+}
+
+.markdown-spec-file {
+  color: var(--code-text);
+  font-family: var(--font-family-mono);
+  font-size: var(--fs-code-caption);
+  font-weight: var(--fw-regular);
+  letter-spacing: 0%;
+  line-height: var(--lh-auto);
+  margin-left: var(--spacing-5);
+}
+
+/* Lines never wrap, so the padded key column stays aligned; on a screen too
+   narrow for the longest line the body scrolls sideways instead. */
+.markdown-spec-body {
+  color: var(--code-text);
+  font-family: var(--font-family-mono);
+  font-size: var(--fs-code);
+  font-weight: var(--fw-regular);
+  letter-spacing: 0%;
+  line-height: var(--lh-1);
+  margin: 0;
+  overflow-x: auto;
+  padding: var(--spacing-6);
+}
+
+.markdown-spec-body:focus-visible {
+  outline: 3px solid var(--layer-1-border-focus);
+  outline-offset: -3px;
+}
+
+.markdown-spec-body code {
+  display: flex;
+  flex-direction: column;
+  font-family: inherit;
+  gap: calc(var(--spacing-1) / 2);
+}
+
+.markdown-spec-line {
+  display: block;
+  white-space: pre;
+}
+
+/* A blank line between blocks, shorter than a full line of text. */
+.markdown-spec-gap {
+  display: block;
+  height: var(--spacing-4);
+}
+
+.markdown-spec-title {
+  color: var(--code-text-strong);
+  font-size: var(--fs-3);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-2);
+}
+
+.markdown-spec-heading {
+  color: var(--code-heading);
+  font-weight: var(--fw-bold);
+}
+
+.markdown-spec-entry {
+  color: var(--code-key);
+}
+
+.markdown-spec-implementation {
+  color: var(--code-key-implementation);
+}
+
+.markdown-spec-rule {
+  color: var(--code-rule);
+}
+
+/* ─── Gōshi cover ──────────────────────────────────────────────────────── */
+
+/* Black fills whatever box the cover is given; the artwork inside keeps the
+   design's 1440 × 758 frame and centres in it, so the letterforms never
+   stretch, whether the box is the page banner or a wider tile banner. */
+.goshi-cover {
+  background: var(--black);
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  overflow: hidden;
+  width: 100%;
+}
+
+.goshi-cover-art {
+  aspect-ratio: 1440 / 758;
+  flex: none;
+  height: 100%;
+  position: relative;
+}
+
+/* Qualified by the cover so it outranks the tile banner's image rule, which
+   would otherwise cover-fit each glyph into the whole banner. Position and
+   size come from the component, as percentages of the frame. */
+.goshi-cover .goshi-cover-glyph {
+  display: block;
+  max-width: none;
+  object-fit: fill;
+  position: absolute;
+}
+
+/* The case study banner: the frame's ratio at full width, capped at the
+   design's own height so a very wide screen does not get a cover taller than
+   the viewport. */
+.goshi-cover-banner {
+  aspect-ratio: 1440 / 758;
+  height: auto;
+  max-height: 47.375rem;
 }
 
 /* ─── Cursor pet ───────────────────────────────────────────────────────── */
@@ -1175,7 +1607,20 @@ body:has(.case-study) {
   to { transform: rotate(360deg); }
 }
 
+@keyframes case-study-index-open {
+  from { opacity: 0; transform: translateX(var(--spacing-2)); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
 /* ─── Media queries ────────────────────────────────────────────────────── */
+
+/* A wider screen gives a broken-out section a wider gutter, so its cards sit
+   in from the edge the way the reading measure does. */
+@media (min-width: 768px) {
+  .case-study-wide {
+    padding-inline: var(--spacing-8);
+  }
+}
 
 /* Below this the tab labels no longer fit on one line, so stack them rather
    than let each label wrap mid-phrase. */

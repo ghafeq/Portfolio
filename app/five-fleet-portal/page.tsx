@@ -3,6 +3,7 @@ import {
   CaseStudyCard,
   CaseStudyFeature,
   CaseStudyHero,
+  CaseStudyIndex,
   CaseStudyMeta,
   CaseStudySection,
   CaseStudyStat,
@@ -141,6 +142,7 @@ export default function FiveFleetPortalPage() {
           </div>
         </CaseStudySection>
       </div>
+      <CaseStudyIndex />
     </main>
   );
 }

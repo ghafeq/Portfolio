@@ -45,6 +45,16 @@
   --link-hover: var(--blue-80-hover);
   --link-disabled: var(--gray-50);
 
+  /* ─── Code ─── */
+  --code-background: var(--code-ground);
+  --code-bar-background: var(--code-ground-raised);
+  --code-text-strong: var(--code-ink);
+  --code-text: var(--code-ink-muted);
+  --code-heading: var(--code-green);
+  --code-key: var(--code-blue);
+  --code-rule: var(--code-orange);
+  --code-key-implementation: var(--code-purple);
+
   /* ─── Spacing ─── */
   --spacing-1: 0.25rem;
   --spacing-2: 0.38rem;
@@ -90,7 +100,6 @@
    ─────────────────────────────────────────────────────────────────────────── */
 
 h1, h2, h3, h4, h5, h6, p, span, a, li, input, textarea {
-  font-family: var(--font-family-sans);
   letter-spacing: 0%;
 }
 
@@ -100,7 +109,7 @@ button {
 }
 
 .display {
-  font-family: var(--font-family-sans);
+  font-family: var(--font-family-serif);
   font-size: var(--fs-display);
   font-weight: var(--fw-bold);
   letter-spacing: 0%;

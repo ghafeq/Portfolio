@@ -3,6 +3,7 @@ import {
   CaseStudyCard,
   CaseStudyFeature,
   CaseStudyHero,
+  CaseStudyIndex,
   CaseStudyMeta,
   CaseStudySection,
   CaseStudyStat,
@@ -136,6 +137,7 @@ export default function VstecsBillingPage() {
           </div>
         </CaseStudySection>
       </div>
+      <CaseStudyIndex />
     </main>
   );
 }

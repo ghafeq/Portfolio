@@ -10,10 +10,16 @@ export {
   projectAsset,
 } from "./case-study";
 export type { CaseStudyImage } from "./case-study";
+export { CaseStudyIndex } from "./case-study-index";
 export { ClickSound } from "./click-sound";
+export { FigmaEmbed } from "./figma-embed";
+export type { FigmaEmbedProps } from "./figma-embed";
+export { GoshiCover } from "./goshi-cover";
 export { CursorPet } from "./cursor-pet";
 export { DeviceMockups } from "./device-mockups";
 export type { DeviceMockupsProps } from "./device-mockups";
+export { ImageLightbox } from "./image-lightbox";
+export type { ImageLightboxProps } from "./image-lightbox";
 export { Link } from "./link";
 export type { LinkProps, LinkState, LinkType } from "./link";
 export { ScrollReveal, StaggerReveal, useStaggerReveal } from "./stagger-reveal";

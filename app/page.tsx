@@ -1,6 +1,6 @@
 import { ArrowRight, ClockFading, FolderGit2, Layers, PackageCheck, Sparkle } from "lucide-react";
 import Image from "next/image";
-import { Card, DeviceMockups, Link, ScrollReveal, Tabs, Tag, Tile } from "./components";
+import { Card, DeviceMockups, GoshiCover, Link, ScrollReveal, Tabs, Tag, Tile } from "./components";
 
 const introduction = [
   {
@@ -45,6 +45,40 @@ const work = [
       
     ],
     inProgress: true,
+    // The fanned mockups are laid out for a wide banner, so the lead study
+    // takes the full row.
+    span: "wide" as const,
+  },
+    {
+    href: "/goshi-design-system",
+    title: "Gōshi Design System",
+    description:
+      "A component library and UI framework spanning enterprise, consumer and physical products, starting with enterprise",
+    // Drawn from vectors rather than a cover image, so it stays sharp.
+    artwork: <GoshiCover />,
+    info: "Concept" as const,
+    inProgress: true,
+    span: "wide" as const,
+  },
+    {
+    href: "/gain-secure",
+    title: "Gain Secure Corporate Identity",
+    description:
+      "A mark for an AI-driven company, built on the “://” every web address shares, with its colour and type system",
+    cover: "/projects/Gain-Secure/Cover.png",
+    info: "Professional" as const,
+    // Closes the grid with a full row, balancing the wide tile at the top.
+    span: "wide" as const,
+  },
+    {
+    href: "/five-company-mode",
+    title: "Company Mode on Five Petroleum App",
+    description:
+      "Buying subsidised diesel against a company-held quota, from vehicle to invoice in seven steps",
+    // Portrait, with the phones stacked top to bottom, so it suits the tall slot.
+    cover: "/projects/Five-App/Cover.png",
+    info: "Professional" as const,
+    span: "tall" as const,
   },
   {
     href: "/vstecs-billing",
@@ -60,14 +94,6 @@ const work = [
     description:
       "A web portal for fleet operators in Malaysia’s subsidised diesel scheme. Vehicles, drivers and subsidy points in one place",
     cover: "/projects/Five-Portal/Update%20Vehicle.png",
-    info: "Professional" as const,
-  },
-  {
-    href: "/five-company-mode",
-    title: "Company Mode on Five Petroleum App",
-    description:
-      "Buying subsidised diesel against a company-held quota, from vehicle to invoice in seven steps",
-    cover: "/projects/Five-App/Quota%20Check.png",
     info: "Professional" as const,
   },
 ];
@@ -123,30 +149,43 @@ export default function HomePage() {
         <ScrollReveal>
           <h2 className="title-02">Selected work</h2>
         </ScrollReveal>
-        <div className="mt-3 grid gap-6">
-          {work.map(({ href, title, description, cover, mockups, info, inProgress }) => (
-            <Tile
-              banner={
-                mockups ? (
-                  <DeviceMockups images={mockups} />
-                ) : cover ? (
-                  <Image alt="" fill sizes="(max-width: 720px) 100vw, 660px" src={cover} />
-                ) : undefined
-              }
-              description={description}
-              href={href}
-              info={info}
-              key={href}
-              tag={
-                inProgress ? (
-                  <Tag icon={<ClockFading height={15} width={15} />} size="medium" tone="warning">
-                    On Going
-                  </Tag>
-                ) : undefined
-              }
-              title={title}
-            />
-          ))}
+        {/* Bento: two columns from 640px, with the lead study across the top
+            and one tall tile beside a stacked pair. One column below that. */}
+        <div className="mt-3 grid gap-6 sm:grid-cols-2">
+          {work.map(({ href, title, description, cover, mockups, artwork, info, inProgress, span }) => {
+            // A wide tile fills the wrapper; every other tile is one of two columns.
+            const coverSizes =
+              span === "wide" ? "(max-width: 720px) 100vw, 660px" : "(max-width: 640px) 100vw, 330px";
+
+            return (
+              <Tile
+                banner={
+                  artwork ? (
+                    artwork
+                  ) : mockups ? (
+                    <DeviceMockups images={mockups} />
+                  ) : cover ? (
+                    <Image alt="" fill sizes={coverSizes} src={cover} />
+                  ) : undefined
+                }
+                className={
+                  span === "wide" ? "sm:col-span-2" : span === "tall" ? "tile-tall sm:row-span-2" : undefined
+                }
+                description={description}
+                href={href}
+                info={info}
+                key={href}
+                tag={
+                  inProgress ? (
+                    <Tag icon={<ClockFading height={15} width={15} />} size="medium" tone="warning">
+                      On Going
+                    </Tag>
+                  ) : undefined
+                }
+                title={title}
+              />
+            );
+          })}
         </div>
       </section>
     </main>
