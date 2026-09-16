@@ -22,6 +22,8 @@ export { ImageLightbox } from "./image-lightbox";
 export type { ImageLightboxProps } from "./image-lightbox";
 export { Link } from "./link";
 export type { LinkProps, LinkState, LinkType } from "./link";
+export { PixelSplash } from "./pixel-splash";
+export { SmoothScroll } from "./smooth-scroll";
 export { ScrollReveal, StaggerReveal, useStaggerReveal } from "./stagger-reveal";
 export type { ScrollRevealProps, StaggerRevealProps } from "./stagger-reveal";
 export { StreamText } from "./stream-text";

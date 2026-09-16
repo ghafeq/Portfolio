@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans, Roboto_Mono } from "next/font/google";
 import "./globals.css";
-import { ClickSound, CursorPet, TopNavigation } from "./components";
+import { ClickSound, CursorPet, PixelSplash, SmoothScroll, TopNavigation } from "./components";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -40,6 +40,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {children}
         <CursorPet />
         <ClickSound />
+        <PixelSplash />
+        <SmoothScroll />
       </body>
     </html>
   );
