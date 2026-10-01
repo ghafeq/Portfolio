@@ -2,6 +2,7 @@ export { Card } from "./card";
 export type { CardProps } from "./card";
 export {
   CaseStudyCard,
+  CaseStudyClip,
   CaseStudyFeature,
   CaseStudyHero,
   CaseStudyMeta,
@@ -9,7 +10,7 @@ export {
   CaseStudyStat,
   projectAsset,
 } from "./case-study";
-export type { CaseStudyImage } from "./case-study";
+export type { CaseStudyClipVideo, CaseStudyImage } from "./case-study";
 export { CaseStudyIndex } from "./case-study-index";
 export { ClickSound } from "./click-sound";
 export { FigmaEmbed } from "./figma-embed";
@@ -23,6 +24,28 @@ export type { ImageLightboxProps } from "./image-lightbox";
 export { Link } from "./link";
 export type { LinkProps, LinkState, LinkType } from "./link";
 export { PixelSplash } from "./pixel-splash";
+export { PresentationCover } from "./presentation-cover";
+export {
+  CEKAP_SCREENS,
+  Deck,
+  Heading,
+  Meta,
+  Panel,
+  ScreenStack,
+  Shot,
+  Slide,
+  SlideTitle,
+  Text,
+  presentationAsset,
+  u,
+} from "./presentation-deck";
+export type {
+  DeckProps,
+  ShotProps,
+  SlideProps,
+  SlideTitleProps,
+  StackedScreen,
+} from "./presentation-deck";
 export { SmoothScroll } from "./smooth-scroll";
 export { ScrollReveal, StaggerReveal, useStaggerReveal } from "./stagger-reveal";
 export type { ScrollRevealProps, StaggerRevealProps } from "./stagger-reveal";

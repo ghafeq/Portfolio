@@ -31,6 +31,11 @@ const defaultLinks: TopNavigationLink[] = [
   { label: "About", href: "/about" },
 ];
 
+// The presentation (cover, projects and decks) fills the screen on its own,
+// with no site chrome.
+const isBare = (pathname: string) =>
+  pathname === "/presentation" || pathname.startsWith("/presentation/");
+
 export function TopNavigation({
   links = defaultLinks,
   logo,
@@ -56,6 +61,10 @@ export function TopNavigation({
     video.pause();
     // Back to the first frame, so the resting logo always looks the same.
     video.currentTime = 0;
+  }
+
+  if (isBare(pathname)) {
+    return null;
   }
 
   const classes = ["top-navigation", "wrapper", "px-6", "sm:px-10", className]

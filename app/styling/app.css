@@ -630,6 +630,602 @@
   z-index: 10;
 }
 
+/* ─── Presentation cover ───────────────────────────────────────────────── */
+
+/* Five wireframes in five seconds, one scene at a time. The stage is the
+   1440 × 1024 Figma frame scaled to fit the screen: --u is one frame pixel, so
+   the geometry below is read straight off the design rather than tokenised.
+   Every scene's base rule is the layout it comes to rest on; the entrances in
+   the keyframes section animate *into* it, so a scene fading out never snaps. */
+.cover {
+  --u: min(calc(100vw / 1440), calc(100dvh / 1024));
+  background: linear-gradient(
+    to bottom,
+    var(--layer-2-background),
+    var(--app-layer-background)
+  );
+  inset: 0;
+  overflow: hidden;
+  /* A reel, not an interface: only the continue link below takes a click. */
+  pointer-events: none;
+  position: fixed;
+}
+
+/* Centred, and left unclipped so artwork that runs off the frame carries on to
+   the edge of the screen. */
+.cover-stage {
+  height: calc(var(--u) * 1024);
+  inset: 0;
+  margin: auto;
+  position: absolute;
+  width: calc(var(--u) * 1440);
+}
+
+.cover img {
+  max-width: none;
+}
+
+/* Leaving takes the stagger's exit: one quiet 200ms fade under the scene
+   arriving on top of it. */
+.cover-scene {
+  inset: 0;
+  opacity: 0;
+  position: absolute;
+  transition:
+    opacity 200ms ease,
+    visibility 0s linear 200ms;
+  visibility: hidden;
+}
+
+.cover-scene.is-active {
+  opacity: 1;
+  transition: none;
+  visibility: visible;
+  z-index: 1;
+}
+
+/* CEKAP. The fan is the home tile's DeviceMockups, in a box of the banner's
+   proportions so its arrangement carries over, sat on the frame's lower edge. */
+.cover-cekap-fan {
+  aspect-ratio: 660 / 289;
+  bottom: 0;
+  left: calc(var(--u) * -240);
+  position: absolute;
+  width: calc(var(--u) * 1920);
+}
+
+/* The tile clips its phones to the banner; here they stand clear of the box. */
+.cover-cekap-fan .device-mockups {
+  overflow: visible;
+}
+
+/* Each phone's turn in the reveal, counted from the left. */
+.cover-cekap-fan .device-mockup:nth-child(1) { --n: 1; }
+.cover-cekap-fan .device-mockup:nth-child(2) { --n: 2; }
+.cover-cekap-fan .device-mockup:nth-child(3) { --n: 3; }
+.cover-cekap-fan .device-mockup:nth-child(4) { --n: 4; }
+.cover-cekap-fan .device-mockup:nth-child(5) { --n: 5; }
+
+/* The site's ordinary stagger reveal, one phone held back behind the last. */
+.cover-cekap.is-active .device-mockup {
+  animation: cover-rise calc(var(--scene) * 0.5) var(--stagger-ease) both;
+  animation-delay: calc(var(--scene) * 0.06 * (var(--n) - 1));
+}
+
+/* Daikin Home: the tablet swipes up from under the frame. */
+.cover-daikin-device {
+  height: calc(var(--u) * 1001);
+  left: calc(var(--u) * 219);
+  position: absolute;
+  top: calc(var(--u) * 293);
+  width: calc(var(--u) * 1001);
+}
+
+.cover-daikin.is-active .cover-daikin-device {
+  animation: cover-swipe-up calc(var(--scene) * 0.85) var(--motion-ease-emphasized) both;
+}
+
+/* VSTECS: three stacked screens, each hinged on its top edge and flipped down
+   into place, back to front. */
+.cover-vstecs {
+  perspective: calc(var(--u) * 2400);
+  perspective-origin: 50% 35%;
+}
+
+.cover-flip-card {
+  border-radius: calc(var(--u) * 13.148);
+  height: calc(var(--u) * var(--h));
+  left: calc(var(--u) * var(--x));
+  overflow: hidden;
+  position: absolute;
+  top: calc(var(--u) * var(--y));
+  transform-origin: 50% 0;
+  width: calc(var(--u) * var(--w));
+}
+
+.cover-flip-card img,
+.cover-scroll-screen img {
+  object-fit: cover;
+}
+
+.cover-vstecs.is-active .cover-flip-card {
+  animation: cover-flip calc(var(--scene) * 0.56) var(--stagger-ease) both;
+  animation-delay: calc(var(--scene) * 0.17 * var(--i));
+}
+
+/* Five portal: a row of four screens, scrolled from the first to the last. It
+   opens on the frame as drawn, the first screen 74 in from the left, and rests
+   on its mirror: the last screen 74 in from the right, the third showing
+   behind it. */
+.cover-scroll-screen {
+  border-radius: calc(var(--u) * 8.174);
+  height: calc(var(--u) * 613.06);
+  left: calc(var(--u) * var(--x));
+  overflow: hidden;
+  position: absolute;
+  top: calc(var(--u) * 205);
+  translate: calc(var(--u) * -3188.09) 0;
+  width: calc(var(--u) * var(--w));
+}
+
+/* Done two thirds of the way through its slot, so the last screen stands still
+   long enough to be read. */
+.cover-portal.is-active .cover-scroll-screen {
+  animation: cover-scroll calc(var(--scene) * 0.68) var(--motion-ease-standard) both;
+}
+
+/* Five app: the prototype's five screens played through the phone as a story. */
+/* The whole phone sits in the middle of the frame, at three quarters of the
+   component's own size; the screen's corners and the bezel scale with it. */
+.cover-story-phone {
+  height: calc(var(--u) * 819.375);
+  left: calc(var(--u) * 532);
+  position: absolute;
+  top: calc(var(--u) * 102);
+  width: calc(var(--u) * 376.875);
+}
+
+.cover-story-screen {
+  border-radius: calc(var(--u) * 30);
+  inset: 0;
+  overflow: hidden;
+  position: absolute;
+}
+
+/* All five screens side by side, resting on the last. */
+.cover-story-track {
+  display: flex;
+  height: 100%;
+  transform: translateX(-80%);
+  width: 500%;
+}
+
+.cover-story-track img {
+  flex: 0 0 20%;
+  height: 100%;
+  object-fit: cover;
+  width: 20%;
+}
+
+/* The bezel is drawn larger than the screen it frames: its buttons and rim
+   overhang the component's bounds on every side. */
+.cover-story-bezel {
+  height: calc(var(--u) * 849.75);
+  left: calc(var(--u) * -18.94);
+  position: absolute;
+  top: calc(var(--u) * -15.19);
+  width: calc(var(--u) * 414.75);
+}
+
+.cover-five-app.is-active .cover-story-phone {
+  animation: cover-rise calc(var(--scene) * 0.32) var(--stagger-ease) both;
+}
+
+.cover-five-app.is-active .cover-story-track {
+  animation: cover-story-track var(--scene) var(--motion-ease-emphasized) both;
+}
+
+/* The whole cover is one click target onward, to the projects. */
+.cover-continue {
+  inset: 0;
+  pointer-events: auto;
+  position: absolute;
+  z-index: 2;
+}
+
+.cover-continue:focus-visible {
+  outline: 3px solid var(--layer-1-border-focus);
+  outline-offset: -6px;
+}
+
+/* ─── Presentation deck ────────────────────────────────────────────────── */
+
+/* The projects page and each project's deck. A slide is its Figma frame,
+   1440 wide by --slide-h tall, scaled to fit one screen and centred on it;
+   --u is one frame pixel, so the geometry here, and in the u() lengths the
+   pages pass inline, is read straight off the design.
+
+   One slide shows at a time, filling the screen; Deck marks it .is-current. */
+.deck {
+  background: var(--app-layer-background);
+  inset: 0;
+  overflow: hidden;
+  position: fixed;
+}
+
+/* Leaving takes the stagger's exit: one quiet 200ms fade under the slide
+   arriving on top of it. */
+.deck-slide-frame {
+  background: var(--app-layer-background);
+  /* Lets --u measure the screen, not the page. */
+  container-type: size;
+  display: grid;
+  inset: 0;
+  opacity: 0;
+  place-items: center;
+  position: absolute;
+  transition:
+    opacity 200ms ease,
+    visibility 0s linear 200ms;
+  visibility: hidden;
+}
+
+.deck-slide-frame.is-current,
+/* Until Deck has read the address, the first slide stands in. */
+.deck:not(.is-ready) > .deck-slide-frame:first-child {
+  opacity: 1;
+  transition: none;
+  visibility: visible;
+  z-index: 1;
+}
+
+/* Arriving slides come in from the side they are stepped towards. */
+.deck[data-direction="forward"] {
+  --deck-enter: 1;
+}
+
+.deck[data-direction="back"] {
+  --deck-enter: -1;
+}
+
+.deck.is-ready .deck-slide-frame.is-current .deck-slide {
+  animation: deck-enter 450ms var(--stagger-ease) both;
+}
+
+.deck-slide {
+  --u: min(calc(100cqw / 1440), calc(100cqh / var(--slide-h)));
+  color: var(--gray-100);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-family-sans);
+  height: calc(var(--u) * var(--slide-h));
+  overflow: hidden;
+  position: relative;
+  width: calc(var(--u) * 1440);
+}
+
+.deck-slide :is(h1, h2, h3, p, ul, ol, dl, dd, figure) {
+  margin: 0;
+}
+
+.deck-head {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: calc(var(--u) * 12);
+  padding: calc(var(--u) * 42);
+}
+
+.deck-title {
+  font-size: calc(var(--u) * 48);
+  font-weight: var(--fw-semibold);
+  line-height: normal;
+}
+
+.deck-title-hero {
+  font-size: calc(var(--u) * 64);
+}
+
+.deck-lead {
+  color: var(--black);
+  font-size: calc(var(--u) * 36);
+  line-height: normal;
+}
+
+/* A slide's single statement, set as a title rather than a card heading. */
+.deck-statement {
+  color: var(--gray-100);
+  font-size: calc(var(--u) * 36);
+  font-weight: var(--fw-semibold);
+  line-height: normal;
+}
+
+.deck-heading {
+  font-family: var(--font-family-serif);
+  font-weight: var(--fw-semibold);
+  line-height: normal;
+}
+
+.deck-text {
+  font-weight: var(--fw-regular);
+  line-height: normal;
+}
+
+/* Copy Figma sets in pure black rather than the titles' near-black. */
+.deck-ink {
+  color: var(--black);
+}
+
+/* The space under a title: padded, and laid out as a row by default. */
+.deck-body {
+  align-items: center;
+  display: flex;
+  flex: 1 0 0;
+  gap: calc(var(--u) * 42);
+  justify-content: center;
+  min-height: 0;
+  padding: calc(var(--u) * 42);
+  position: relative;
+}
+
+/* Two equal halves filling the slide, with no padding of their own; a grid,
+   so one half's padding cannot take width from the other. */
+.deck-row {
+  align-items: center;
+  display: grid;
+  flex: 1 0 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-height: 0;
+}
+
+.deck-col {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.deck-shot {
+  display: block;
+  overflow: hidden;
+  position: relative;
+}
+
+.deck-shot img {
+  object-fit: cover;
+}
+
+/* A screenshot in a back-to-front stack, centred on its box. */
+.deck-stacked {
+  border-radius: calc(var(--u) * 5.186);
+  position: absolute;
+  translate: -50% 0;
+}
+
+.deck-panel {
+  background: linear-gradient(to bottom, var(--gray-100), var(--cool-gray-100));
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  padding: calc(var(--u) * 42);
+}
+
+.deck-panel-spread {
+  justify-content: space-between;
+}
+
+.deck-panel-centred {
+  gap: calc(var(--u) * 12);
+  justify-content: center;
+}
+
+/* Two panels side by side, out to the slide's edges and foot. */
+.deck-panels {
+  display: grid;
+  flex: 1 0 0;
+  gap: calc(var(--u) * 42);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-height: 0;
+}
+
+.deck-list {
+  line-height: normal;
+  list-style: disc;
+  padding-inline-start: calc(var(--u) * 36);
+}
+
+/* An opening slide's artwork, between the title and the meta row. */
+.deck-art {
+  flex: 1 0 0;
+  min-height: 0;
+  position: relative;
+}
+
+/* The home tile's CEKAP fan, in a box of the tile banner's proportions so its
+   arrangement carries over, sat on the art's lower edge. */
+.deck-fan {
+  aspect-ratio: 660 / 289;
+  bottom: 0;
+  inset-inline: 0;
+  position: absolute;
+}
+
+/* Positioned, so the stacked art that runs down behind it stays underneath. */
+.deck-meta {
+  display: grid;
+  flex-shrink: 0;
+  font-size: calc(var(--u) * 24);
+  gap: calc(var(--u) * 24);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  line-height: normal;
+  padding: calc(var(--u) * 24);
+  position: relative;
+  text-align: center;
+}
+
+.deck-meta > div {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 10);
+}
+
+.deck-meta-term {
+  font-family: var(--font-family-serif);
+  font-weight: var(--fw-semibold);
+}
+
+/* Who owned which stage of the work. */
+.deck-legend {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 12);
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+.deck-legend-item {
+  align-items: center;
+  display: flex;
+  gap: calc(var(--u) * 24);
+}
+
+.deck-swatch {
+  flex-shrink: 0;
+  height: calc(var(--u) * 24);
+  width: calc(var(--u) * 24);
+}
+
+.deck-label {
+  font-size: calc(var(--u) * 16);
+  font-weight: var(--fw-semibold);
+  line-height: normal;
+}
+
+.deck-phases {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+.deck-phase {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  gap: calc(var(--u) * 12);
+  min-width: 0;
+}
+
+.deck-phase-bar {
+  height: calc(var(--u) * 60);
+}
+
+/* A decision with its screen on the left half and its claim on the right. */
+.deck-decision {
+  align-items: center;
+  display: flex;
+  flex: 1 0 0;
+  gap: calc(var(--u) * 12);
+  min-height: 0;
+}
+
+.deck-decision-media {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  height: 100%;
+  justify-content: center;
+  overflow: hidden;
+  width: calc(var(--u) * 672);
+}
+
+.deck-decision-screen {
+  border-radius: calc(var(--u) * 5.186);
+}
+
+/* A decision: its screenshot over its claim, on one dark card. */
+.deck-feature-stage {
+  display: flex;
+  flex: 1 0 0;
+  justify-content: center;
+  min-height: 0;
+}
+
+.deck-feature {
+  background: linear-gradient(to bottom, var(--gray-100), var(--cool-gray-100));
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  width: calc(var(--u) * 880);
+}
+
+.deck-feature-caption {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--u) * 24);
+  padding: calc(var(--u) * 42);
+}
+
+/* First concept beside final, each captioned at its foot. */
+.deck-compare {
+  justify-content: space-between;
+}
+
+.deck-caption {
+  color: var(--gray-80);
+  font-size: calc(var(--u) * 40);
+  font-weight: var(--fw-semibold);
+  line-height: normal;
+}
+
+/* The projects page: one tile per deck. */
+.deck-projects {
+  display: flex;
+  flex-shrink: 0;
+  height: calc(var(--u) * 639);
+}
+
+.deck-project {
+  color: inherit;
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  text-decoration: none;
+  transition: background-color var(--motion-duration-normal) var(--motion-ease-standard);
+}
+
+.deck-project:hover {
+  background: var(--layer-2-background);
+}
+
+.deck-project:focus-visible {
+  outline: 3px solid var(--layer-1-border-focus);
+  outline-offset: -3px;
+}
+
+.deck-project-art {
+  aspect-ratio: 2880 / 1588;
+  width: 100%;
+}
+
+.deck-project-art img {
+  transition: scale var(--motion-duration-slow) var(--motion-ease-emphasized);
+}
+
+.deck-project:hover .deck-project-art img {
+  scale: 1.03;
+}
+
+.deck-project-title {
+  font-size: calc(var(--u) * 36);
+  font-weight: var(--fw-semibold);
+  line-height: normal;
+  padding: calc(var(--u) * 42);
+}
+
 /* ─── Top navigation ───────────────────────────────────────────────────── */
 
 /* padding-block rather than the `padding: 24px 0` shorthand, so the wrapper's
@@ -972,6 +1568,46 @@
   flex-direction: column;
   gap: var(--spacing-2);
   padding: var(--spacing-5);
+}
+
+/* A phone recording and its note. Side by side from 640px, where the portrait
+   screen would otherwise tower over the copy; stacked and centred below. */
+.case-study-clip {
+  display: grid;
+}
+
+.case-study-clip-screen {
+  background: var(--app-layer-background);
+  border-bottom: var(--border-width-1) solid var(--layer-1-border);
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-6);
+}
+
+/* Rounded to a phone's corners, so the recording reads as a device rather
+   than a tall rectangle. */
+.case-study-clip-screen video {
+  aspect-ratio: 440 / 960;
+  background: var(--white);
+  border: var(--border-width-1) solid var(--layer-1-border);
+  border-radius: 28px;
+  display: block;
+  height: auto;
+  max-width: 240px;
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .case-study-clip {
+    align-items: center;
+    grid-template-columns: 280px minmax(0, 1fr);
+  }
+
+  .case-study-clip-screen {
+    align-self: stretch;
+    border-bottom: 0;
+    border-right: var(--border-width-1) solid var(--layer-1-border);
+  }
 }
 
 /* ─── Case study media ─────────────────────────────────────────────────── */
@@ -1612,6 +2248,71 @@ html:has(.image-lightbox[open]) {
   to { opacity: 1; transform: translateX(0); }
 }
 
+/* Presentation cover. Each entrance spans its scene's slot, so the percentages
+   below are beats within that scene. None states a final frame: they all end
+   on the element's own resting rule. */
+
+/* The stagger reveal at stage scale: risen, sharpened and faded in. Moves with
+   `translate`, leaving alone any transform that places the element. */
+@keyframes cover-rise {
+  from {
+    filter: blur(var(--stagger-blur));
+    opacity: 0;
+    translate: 0 calc(var(--u) * 40);
+  }
+}
+
+/* A slide arriving: shifted towards where it came from, blurred, faded. */
+@keyframes deck-enter {
+  from {
+    filter: blur(var(--stagger-blur));
+    opacity: 0;
+    translate: calc(var(--u) * 48 * var(--deck-enter, 1)) 0;
+  }
+}
+
+/* From wholly below the frame. */
+@keyframes cover-swipe-up {
+  from { transform: translateY(calc(var(--u) * 760)); }
+}
+
+/* Edge-on at the hinge, then down past flat and back. */
+@keyframes cover-flip {
+  0% { opacity: 0; transform: rotateX(-86deg); }
+  30% { opacity: 1; }
+  72% { transform: rotateX(5deg); }
+}
+
+/* Fades in on the row's start, as drawn, and only then sets off, so the first
+   screen is seen before it leaves. */
+@keyframes cover-scroll {
+  0% {
+    filter: blur(var(--stagger-blur));
+    opacity: 0;
+    translate: 0 0;
+  }
+
+  16% {
+    filter: blur(0);
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+/* Four slides, a beat's rest on each screen between them. The easing is set
+   on the element: a var() timing function inside a keyframe is ignored. */
+@keyframes cover-story-track {
+  0%,
+  22% { transform: translateX(0); }
+  34%,
+  40% { transform: translateX(-20%); }
+  52%,
+  58% { transform: translateX(-40%); }
+  70%,
+  76% { transform: translateX(-60%); }
+  88% { transform: translateX(-80%); }
+}
+
 /* ─── Media queries ────────────────────────────────────────────────────── */
 
 /* A wider screen gives a broken-out section a wider gutter, so its cards sit
@@ -1668,6 +2369,12 @@ html:has(.image-lightbox[open]) {
     opacity: 1;
     transform: none;
   }
+
+  /* Nothing would ever start the reel, so it rests on its opening scene. */
+  .cover-cekap {
+    opacity: 1;
+    visibility: visible;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1693,6 +2400,18 @@ html:has(.image-lightbox[open]) {
   .stagger-line,
   .stagger-block,
   .tooltip {
+    transition: none !important;
+  }
+
+  /* The cover holds its opening scene at rest; nothing plays into it. */
+  .cover * {
+    animation: none !important;
+  }
+
+  /* Slides change in one cut. */
+  .deck *,
+  .deck-slide-frame {
+    animation: none !important;
     transition: none !important;
   }
 }

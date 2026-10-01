@@ -88,6 +88,18 @@
     --blue-90: #001d6c;
     --blue-100: #001141;
 
+    /* Teal */
+    --teal-10: #d9fbfb;
+    --teal-20: #9ef0f0;
+    --teal-30: #3ddbd9;
+    --teal-40: #08bdba;
+    --teal-50: #009d9a;
+    --teal-60: #007d79;
+    --teal-70: #005d5d;
+    --teal-80: #004144;
+    --teal-90: #022b30;
+    --teal-100: #081a1c;
+
     /* Blue – Hover */
     --blue-10-hover: #dbebff;
     --blue-20-hover: #b8d3ff;

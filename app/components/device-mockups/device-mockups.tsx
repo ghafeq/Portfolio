@@ -18,6 +18,10 @@ const LAYOUT = [
 export interface DeviceMockupsProps {
   /** Ordered left to right; the middle one sits centred, upright and largest. */
   images: string[];
+  /** How wide one screen renders. Defaults to the home tile's banner. */
+  sizes?: string;
+  /** Fetches every screen up front, for a fan that animates in on arrival. */
+  eager?: boolean;
   className?: string;
 }
 
@@ -25,7 +29,12 @@ export interface DeviceMockupsProps {
  * A fanned arc of phone screens. Hovering one lifts it slightly and brings it
  * in front of the others.
  */
-export function DeviceMockups({ images, className }: DeviceMockupsProps) {
+export function DeviceMockups({
+  images,
+  sizes = "(max-width: 720px) 30vw, 200px",
+  eager = false,
+  className,
+}: DeviceMockupsProps) {
   return (
     <span className={["device-mockups", className].filter(Boolean).join(" ")}>
       {images.map((src, index) => {
@@ -45,7 +54,7 @@ export function DeviceMockups({ images, className }: DeviceMockupsProps) {
               } as CSSProperties
             }
           >
-            <Image alt="" fill sizes="(max-width: 720px) 30vw, 200px" src={src} />
+            <Image alt="" fill loading={eager ? "eager" : "lazy"} sizes={sizes} src={src} />
           </span>
         );
       })}
