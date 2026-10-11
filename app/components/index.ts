@@ -1,3 +1,4 @@
+export { AskAssistant } from "./ask-assistant";
 export { Card } from "./card";
 export type { CardProps } from "./card";
 export {

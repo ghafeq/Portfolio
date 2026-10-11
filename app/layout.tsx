@@ -38,6 +38,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         <TopNavigation />
         {children}
+        {/* Hidden for now. To bring the assistant back, restore this and the
+            AskAssistant import, and set ENABLED in app/api/ask/route.ts. */}
+        {/* <AskAssistant /> */}
         <CursorPet />
         <ClickSound />
         <PixelSplash />

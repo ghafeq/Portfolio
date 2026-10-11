@@ -2,6 +2,7 @@
 @import "./styling/foundation/tokens.css";
 @import "./styling/semantic/tokens.css";
 @import "./styling/app.css";
+@import "./styling/transitions.css";
 @import "./styling/deprecated/button.css";
 @import "./styling/deprecated/floating-bottom-nav.css";
 
