@@ -65,7 +65,7 @@ export function Tile({ title, description, banner, tag, info, href, className }:
         {tag && <span className="tile-tag">{tag}</span>}
         {href && (
           <span className="tooltip" role="tooltip">
-            Click to read the study
+            {isInternalRoute(href) ? "Click to read the study" : "Click to open on GitHub"}
           </span>
         )}
       </div>
@@ -84,7 +84,7 @@ export function Tile({ title, description, banner, tag, info, href, className }:
         {content}
       </NextLink>
     ) : (
-      <a className={classes} href={href} ref={revealRef}>
+      <a className={classes} href={href} ref={revealRef} rel="noopener noreferrer" target="_blank">
         {content}
       </a>
     );

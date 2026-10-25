@@ -50,10 +50,10 @@ const work = [
     span: "wide" as const,
   },
     {
-    href: "/goshi-design-system",
-    title: "Gōshi Design System",
+    href: "https://github.com/ghafeq/goshi.git",
+    title: "Gōshi Interactive Blocks",
     description:
-      "A component library and UI framework spanning enterprise, consumer and physical products, starting with enterprise",
+      "Interactive blocks and micro-interactions from the Gōshi Design System, built as working code",
     // Drawn from vectors rather than a cover image, so it stays sharp.
     artwork: <GoshiCover />,
     info: "Concept" as const,
