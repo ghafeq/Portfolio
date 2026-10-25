@@ -59,7 +59,7 @@ Each has its own page; the path is given so visitors can open it.
 - Cut Shared Awareness (letting someone trusted follow the journey) until the manual journey is proven, because of cost, privacy risk and weak evidence.
 - Next: five think-aloud sessions, re-tests, a comparison with an existing airline app, offline recovery testing and a POUR accessibility review. Zero travellers tested so far, and the case study says so plainly.
 
-### Gōshi Design System (/goshi-design-system)
+### Gōshi Design System (/goshi-design-system/case-study)
 - Personal, self-initiated project, sole designer, started 6 September 2025, in progress. Figma and Iconoir, with a code framework and markdown specs.
 - A component library and UI framework meant to span enterprise, consumer and physical products (kiosks, handheld terminals, home appliances). Enterprise is the first tier.
 - Exists because three parallel client projects at work had no shared design layer, so patterns kept being redrawn.

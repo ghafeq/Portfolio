@@ -61,7 +61,7 @@ Outside work, he runs self-initiated projects to test his design thinking. These
 // made-up path in an answer stays plain text instead of leading to a 404.
 const SITE_PATHS = [
   "/cekap",
-  "/goshi-design-system",
+  "/goshi-design-system/case-study",
   "/gain-secure",
   "/five-company-mode",
   "/five-fleet-portal",
