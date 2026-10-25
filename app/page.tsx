@@ -1,6 +1,6 @@
 import { ArrowRight, ClockFading, FolderGit2, Layers, PackageCheck, Sparkle } from "lucide-react";
 import Image from "next/image";
-import { Card, DeviceMockups, GoshiCover, Link, ScrollReveal, Tabs, Tag, Tile } from "./components";
+import { Card, DeviceMockups, Link, ScrollReveal, Tabs, Tag, Tile } from "./components";
 
 const introduction = [
   {
@@ -51,11 +51,11 @@ const work = [
   },
     {
     href: "https://goshi-nu.vercel.app/",
-    title: "Gōshi Interactive Blocks",
+    title: "Gōshi",
     description:
       "Interactive blocks and micro-interactions from the Gōshi Design System, built as working code",
-    // Drawn from vectors rather than a cover image, so it stays sharp.
-    artwork: <GoshiCover />,
+    // A snapshot of the live block grid, captured at twice the banner's size.
+    cover: "/projects/Goshi/Cover.png",
     info: "Concept" as const,
     inProgress: true,
     span: "wide" as const,
@@ -152,7 +152,7 @@ export default function HomePage() {
         {/* Bento: two columns from 640px, with the lead study across the top
             and one tall tile beside a stacked pair. One column below that. */}
         <div className="mt-3 grid gap-6 sm:grid-cols-2">
-          {work.map(({ href, title, description, cover, mockups, artwork, info, inProgress, span }) => {
+          {work.map(({ href, title, description, cover, mockups, info, inProgress, span }) => {
             // A wide tile fills the wrapper; every other tile is one of two columns.
             const coverSizes =
               span === "wide" ? "(max-width: 720px) 100vw, 660px" : "(max-width: 640px) 100vw, 330px";
@@ -160,9 +160,7 @@ export default function HomePage() {
             return (
               <Tile
                 banner={
-                  artwork ? (
-                    artwork
-                  ) : mockups ? (
+                  mockups ? (
                     <DeviceMockups images={mockups} />
                   ) : cover ? (
                     <Image alt="" fill sizes={coverSizes} src={cover} />
