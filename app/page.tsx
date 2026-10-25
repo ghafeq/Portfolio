@@ -50,7 +50,7 @@ const work = [
     span: "wide" as const,
   },
     {
-    href: "https://github.com/ghafeq/goshi.git",
+    href: "https://goshi-nu.vercel.app/",
     title: "Gōshi Interactive Blocks",
     description:
       "Interactive blocks and micro-interactions from the Gōshi Design System, built as working code",

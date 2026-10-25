@@ -65,7 +65,7 @@ export function Tile({ title, description, banner, tag, info, href, className }:
         {tag && <span className="tile-tag">{tag}</span>}
         {href && (
           <span className="tooltip" role="tooltip">
-            {isInternalRoute(href) ? "Click to read the study" : "Click to open on GitHub"}
+            {isInternalRoute(href) ? "Click to read the study" : "Click to open the live site"}
           </span>
         )}
       </div>
