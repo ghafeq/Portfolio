@@ -1,1 +1,1 @@
-export { PixelSplash } from "./pixel-splash";
+export { PixelSplash, playPixelSplash } from "./pixel-splash";

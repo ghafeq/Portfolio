@@ -10,11 +10,18 @@ export interface TabItem {
   disabled?: boolean;
 }
 
+export type TabsSize = "normal" | "small";
+
 export interface TabsProps {
   items: TabItem[];
   defaultValue?: string;
   value?: string;
   onValueChange?: (value: string) => void;
+  /** Streams each panel in word by word. Turn off for anything but plain text. */
+  stream?: boolean;
+  /** Sits in line with the tab list, at its start. */
+  heading?: ReactNode;
+  size?: TabsSize;
   className?: string;
 }
 
@@ -23,6 +30,9 @@ export function Tabs({
   defaultValue,
   value,
   onValueChange,
+  stream = true,
+  heading,
+  size = "normal",
   className,
 }: TabsProps) {
   const tabsId = useId();
@@ -70,7 +80,8 @@ export function Tabs({
   const panelId = `${tabsId}-panel-${activeItem.value}`;
 
   return (
-    <div className={["tabs", className].filter(Boolean).join(" ")}>
+    <div className={["tabs", size === "small" && "tabs-small", className].filter(Boolean).join(" ")}>
+      {heading}
       <div aria-label="Tabs" className="tabs-list" role="tablist">
         {items.map((item) => {
           const itemId = `${tabsId}-tab-${item.value}`;
@@ -103,7 +114,7 @@ export function Tabs({
         role="tabpanel"
         tabIndex={0}
       >
-        <StreamText>{activeItem.content}</StreamText>
+        {stream ? <StreamText>{activeItem.content}</StreamText> : activeItem.content}
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ import {
   FigmaEmbed,
   GoshiCover,
   ScrollReveal,
-} from "../components";
+} from "../../components";
 
 export const metadata: Metadata = {
   title: "Gōshi Design System — Shafiq Efféndy",

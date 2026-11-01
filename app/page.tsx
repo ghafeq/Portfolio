@@ -1,6 +1,17 @@
 import { ArrowRight, ClockFading, FolderGit2, Layers, PackageCheck, Sparkle } from "lucide-react";
 import Image from "next/image";
-import { Card, DeviceMockups, Link, ScrollReveal, Tabs, Tag, Tile } from "./components";
+import type { CSSProperties } from "react";
+import {
+  Card,
+  CardDeck,
+  DeviceMockups,
+  HomeCorner,
+  Link,
+  ScrollReveal,
+  Tabs,
+  Tag,
+  Tile,
+} from "./components";
 
 const introduction = [
   {
@@ -45,9 +56,8 @@ const work = [
       
     ],
     inProgress: true,
-    // The fanned mockups are laid out for a wide banner, so the lead study
-    // takes the full row.
-    span: "wide" as const,
+    // The fanned mockups are laid out for a wide banner.
+    aspect: 8 / 5,
   },
     {
     href: "https://goshi-nu.vercel.app/",
@@ -58,7 +68,7 @@ const work = [
     cover: "/projects/Goshi/Cover.png",
     info: "Concept" as const,
     inProgress: true,
-    span: "wide" as const,
+    aspect: 2640 / 1156,
   },
     {
     href: "/gain-secure",
@@ -67,18 +77,17 @@ const work = [
       "A mark for an AI-driven company, built on the “://” every web address shares, with its colour and type system",
     cover: "/projects/Gain-Secure/Cover.png",
     info: "Professional" as const,
-    // Closes the grid with a full row, balancing the wide tile at the top.
-    span: "wide" as const,
+    aspect: 1440 / 758,
   },
     {
     href: "/five-company-mode",
     title: "Company Mode on Five Petroleum App",
     description:
       "Buying subsidised diesel against a company-held quota, from vehicle to invoice in seven steps",
-    // Portrait, with the phones stacked top to bottom, so it suits the tall slot.
+    // Portrait, with the phones stacked top to bottom.
     cover: "/projects/Five-App/Cover.png",
     info: "Professional" as const,
-    span: "tall" as const,
+    aspect: 1212 / 1575,
   },
   {
     href: "/vstecs-billing",
@@ -87,6 +96,7 @@ const work = [
       "Monthly cloud subscription billing for VSTECS and its reseller network, designed and built front end in ASP.NET MVC",
     cover: "/projects/Vstecs/Shared%20Partial%20View.png",
     info: "Professional" as const,
+    aspect: 4096 / 2023,
   },
   {
     href: "/five-fleet-portal",
@@ -95,8 +105,36 @@ const work = [
       "A web portal for fleet operators in Malaysia’s subsidised diesel scheme. Vehicles, drivers and subsidy points in one place",
     cover: "/projects/Five-Portal/Update%20Vehicle.png",
     info: "Professional" as const,
+    aspect: 4096 / 2023,
   },
 ];
+
+const categories = [
+  { value: "all", label: "All" },
+  { value: "Concept", label: "Concept" },
+  { value: "Professional", label: "Professional" },
+];
+
+// A tile's caption, as a share of its width. Only used to balance the columns.
+const CAPTION_HEIGHT = 0.3;
+
+/**
+ * Deals work into two columns, each to whichever is shorter, keeping each item's
+ * place in the list so one column can read in that order on a phone.
+ */
+function toColumns(items: typeof work) {
+  const columns: { item: (typeof work)[number]; order: number }[][] = [[], []];
+  const heights = [0, 0];
+
+  items.forEach((item, order) => {
+    const column = heights[1] < heights[0] ? 1 : 0;
+
+    columns[column].push({ item, order });
+    heights[column] += 1 / item.aspect + CAPTION_HEIGHT;
+  });
+
+  return columns;
+}
 
 const principles = [
   [PackageCheck, "Design to production", "Design isn't done until it ships the way it was intended."],
@@ -108,6 +146,7 @@ const principles = [
 export default function HomePage() {
   return (
     <main className="flex-1 wrapper bg-(--app-layer-background) px-6 py-16 text-(--text-primary) sm:px-10">
+      <HomeCorner />
       <section>
         <Tabs
           className="mt-6"
@@ -132,7 +171,7 @@ export default function HomePage() {
         <ScrollReveal>
           <h2 className="title-02">Principles I ship by</h2>
         </ScrollReveal>
-        <div className="card-deck mt-3 grid gap-6 sm:grid-cols-2">
+        <CardDeck className="mt-3 grid gap-6 sm:grid-cols-2">
           {principles.map(([Icon, title, description]) => (
             <Card
               className="card-quiet"
@@ -142,50 +181,66 @@ export default function HomePage() {
               title={title}
             />
           ))}
-        </div>
+        </CardDeck>
       </section>
 
-      <section className="mt-16">
-        <ScrollReveal>
-          <h2 className="title-02">Selected work</h2>
-        </ScrollReveal>
-        {/* Bento: two columns from 640px, with the lead study across the top
-            and one tall tile beside a stacked pair. One column below that. */}
-        <div className="mt-3 grid gap-6 sm:grid-cols-2">
-          {work.map(({ href, title, description, cover, mockups, info, inProgress, span }) => {
-            // A wide tile fills the wrapper; every other tile is one of two columns.
-            const coverSizes =
-              span === "wide" ? "(max-width: 720px) 100vw, 660px" : "(max-width: 640px) 100vw, 330px";
-
-            return (
-              <Tile
-                banner={
-                  mockups ? (
-                    <DeviceMockups images={mockups} />
-                  ) : cover ? (
-                    <Image alt="" fill sizes={coverSizes} src={cover} />
-                  ) : undefined
-                }
-                className={
-                  span === "wide" ? "sm:col-span-2" : span === "tall" ? "tile-tall sm:row-span-2" : undefined
-                }
-                description={description}
-                href={href}
-                info={info}
-                key={href}
-                tag={
-                  inProgress ? (
-                    <Tag icon={<ClockFading height={15} width={15} />} size="medium" tone="warning">
-                      On Going
-                    </Tag>
-                  ) : undefined
-                }
-                title={title}
-              />
-            );
-          })}
-        </div>
-      </section>
+      <Tabs
+        className="work-index"
+        heading={<h2 className="title-02">Selected work</h2>}
+        items={categories.map(({ value, label }) => ({
+          value,
+          label,
+          content: (
+            <div className="work-index-grid">
+              {toColumns(work.filter(({ info }) => value === "all" || info === value)).map(
+                (column, index) => (
+                  <div className="work-index-column" key={index}>
+                    {column.map(({ item, order }) => (
+                      <div
+                        className="work-index-item"
+                        key={item.href}
+                        style={{ "--work-aspect": item.aspect, order } as CSSProperties}
+                      >
+                        <Tile
+                          banner={
+                            item.mockups ? (
+                              <DeviceMockups images={item.mockups} />
+                            ) : item.cover ? (
+                              <Image
+                                alt=""
+                                fill
+                                sizes="(max-width: 640px) 100vw, 560px"
+                                src={item.cover}
+                              />
+                            ) : undefined
+                          }
+                          description={item.description}
+                          href={item.href}
+                          info={item.info}
+                          tag={
+                            item.inProgress ? (
+                              <Tag
+                                icon={<ClockFading height={15} width={15} />}
+                                size="medium"
+                                tone="warning"
+                              >
+                                On Going
+                              </Tag>
+                            ) : undefined
+                          }
+                          title={item.title}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ),
+              )}
+            </div>
+          ),
+        }))}
+        size="small"
+        stream={false}
+      />
     </main>
   );
 }

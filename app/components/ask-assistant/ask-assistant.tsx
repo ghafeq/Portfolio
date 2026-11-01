@@ -61,7 +61,7 @@ Outside work, he runs self-initiated projects to test his design thinking. These
 // made-up path in an answer stays plain text instead of leading to a 404.
 const SITE_PATHS = [
   "/cekap",
-  "/goshi-design-system",
+  "/goshi-design-system/case-study",
   "/gain-secure",
   "/five-company-mode",
   "/five-fleet-portal",
@@ -84,7 +84,7 @@ function durationMs(value: string, fallback: number) {
 
 // The presentation fills the screen on its own, as in TopNavigation.
 const isBare = (pathname: string) =>
-  pathname === "/presentation" || pathname.startsWith("/presentation/");
+  pathname === "/mac" || pathname === "/presentation" || pathname.startsWith("/presentation/");
 
 /**
  * "Ask about Shafiq": a side panel that answers visitor questions through

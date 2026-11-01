@@ -196,6 +196,29 @@
     --code-orange: #ffa657;
     --code-purple: #d2a8ff;
 
+    /* Sampled from the Five Petroleum cover, for the pixels on the home page, with
+       lilac and orchid as its lighter tints. */
+    --five-ink: #08061c;
+    --five-navy: #1c1599;
+    --five-indigo: #2117af;
+    --five-violet: #6c1fda;
+    --five-orchid: #a66bff;
+    --five-lilac: #d9c7ff;
+
+    /* The Macintosh's screen, a cyan phosphor with a dark ink, and the six stripes
+       of its badge. The hardware's shading lives with the drawing, in mac-art.tsx. */
+    --mac-phosphor: #06d6ea;
+    --mac-phosphor-deep: #0d9fdb;
+    --mac-paper: #f4fdff;
+    --mac-ink: #123f4c;
+    --mac-ink-dim: #7a8a90;
+    --mac-stripe-1: #5ebd3e;
+    --mac-stripe-2: #ffb900;
+    --mac-stripe-3: #f78200;
+    --mac-stripe-4: #e23838;
+    --mac-stripe-5: #973999;
+    --mac-stripe-6: #009cdf;
+
 /* ─── Font Sizes and Weights ─── */
     --font-family-sans: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
     --font-family-serif: var(--font-plus-jakarta-sans), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;

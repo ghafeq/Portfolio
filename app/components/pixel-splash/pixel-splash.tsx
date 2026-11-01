@@ -24,12 +24,38 @@ function easeInOutQuad(t: number) {
   return t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2;
 }
 
-/** Plays a pixel-block wipe over the page on every load and route change. Renders a canvas. */
+// Set while a mounted PixelSplash is able to animate.
+let playSplash: ((onCovered?: () => void) => void) | null = null;
+
+/**
+ * Plays the wipe on demand. `onCovered` runs when the screen is fully covered, for
+ * swapping what is underneath; with reduced motion it just runs at once.
+ */
+export function playPixelSplash(onCovered?: () => void) {
+  if (playSplash) {
+    playSplash(onCovered);
+  } else {
+    onCovered?.();
+  }
+}
+
+/**
+ * Plays a pixel-block wipe over the page on every load and route change, except
+ * where the Mac is the entrance: on /mac, and on the home page when a visit
+ * starts there. Renders a canvas.
+ */
 export function PixelSplash() {
   const pathname = usePathname();
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // The page this visit started on, until it moves to another.
+  const entryRef = useRef<string | null>(pathname);
 
   useEffect(() => {
+    if (pathname !== entryRef.current) {
+      entryRef.current = null;
+    }
+
+    const isMacEntrance = entryRef.current === "/" || pathname === "/mac";
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d");
 
@@ -90,6 +116,7 @@ export function PixelSplash() {
     let frame = 0;
     let elapsed = 0;
     let previous: number | null = null;
+    let onCovered: (() => void) | undefined;
 
     function tick(now: number) {
       // Advance by capped frame deltas, not wall-clock time: a route change can
@@ -104,6 +131,11 @@ export function PixelSplash() {
         return;
       }
 
+      if (elapsed >= PHASE_MS) {
+        onCovered?.();
+        onCovered = undefined;
+      }
+
       if (elapsed < PHASE_MS) {
         draw(elapsed / PHASE_MS, false);
       } else {
@@ -113,12 +145,26 @@ export function PixelSplash() {
       frame = requestAnimationFrame(tick);
     }
 
+    function start(covered?: () => void) {
+      cancelAnimationFrame(frame);
+      elapsed = 0;
+      previous = null;
+      onCovered = covered;
+      canvas!.style.display = "block";
+      frame = requestAnimationFrame(tick);
+    }
+
     resize();
-    canvas.style.display = "block";
-    frame = requestAnimationFrame(tick);
+    playSplash = start;
+
+    if (!isMacEntrance) {
+      start();
+    }
+
     window.addEventListener("resize", resize);
 
     return () => {
+      playSplash = null;
       cancelAnimationFrame(frame);
       window.removeEventListener("resize", resize);
       canvas.style.display = "none";

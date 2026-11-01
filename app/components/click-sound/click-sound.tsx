@@ -20,28 +20,40 @@ const INTERACTIVE_SELECTOR = [
   'input[type="radio"]',
 ].join(",");
 
-// One shared element: the file is fetched once and only one click sound ever
-// needs to play at a time.
-let clickSound: HTMLAudioElement | null = null;
+// A region can swap the sound for the controls inside it by naming a file in
+// this attribute, in place of the default rather than on top of it.
+const SOUND_OVERRIDE_SELECTOR = "[data-click-sound]";
 
-function ensureClickSound() {
+// One shared element per file: each is fetched once and only one click sound
+// ever needs to play at a time.
+const clickSounds = new Map<string, HTMLAudioElement>();
+
+function ensureClickSound(src: string) {
   if (typeof Audio === "undefined") {
     return null;
   }
 
+  let clickSound = clickSounds.get(src);
+
   if (!clickSound) {
-    clickSound = new Audio(CLICK_SOUND_SRC);
+    clickSound = new Audio(src);
     // Decode ahead of the first click. Without this the first play has to wait
     // on the network, which a navigation will outrun.
     clickSound.preload = "auto";
     clickSound.load();
+    clickSounds.set(src, clickSound);
   }
 
   return clickSound;
 }
 
-function playClickSound() {
-  const audio = ensureClickSound();
+/** Warms up a `data-click-sound` file so its first click is instant. */
+export function preloadClickSound(src: string) {
+  ensureClickSound(src);
+}
+
+function playClickSound(src: string) {
+  const audio = ensureClickSound(src);
 
   if (!audio) {
     return;
@@ -56,7 +68,7 @@ function playClickSound() {
 export function ClickSound() {
   useEffect(() => {
     // Warm the file up on mount so the first click is instant.
-    ensureClickSound();
+    ensureClickSound(CLICK_SOUND_SRC);
 
     function handleClick(event: MouseEvent) {
       // Only the primary button, and not when a modifier is held (those open
@@ -79,7 +91,9 @@ export function ClickSound() {
         return;
       }
 
-      playClickSound();
+      const override = control.closest(SOUND_OVERRIDE_SELECTOR)?.getAttribute("data-click-sound");
+
+      playClickSound(override || CLICK_SOUND_SRC);
     }
 
     // Capture phase, so a handler calling stopPropagation cannot silence it.

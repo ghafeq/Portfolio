@@ -1,6 +1,6 @@
 export { AskAssistant } from "./ask-assistant";
-export { Card } from "./card";
-export type { CardProps } from "./card";
+export { Card, CardDeck } from "./card";
+export type { CardDeckProps, CardProps } from "./card";
 export {
   CaseStudyCard,
   CaseStudyClip,
@@ -20,10 +20,12 @@ export { GoshiCover } from "./goshi-cover";
 export { CursorPet } from "./cursor-pet";
 export { DeviceMockups } from "./device-mockups";
 export type { DeviceMockupsProps } from "./device-mockups";
+export { HomeCorner } from "./home-corner";
 export { ImageLightbox } from "./image-lightbox";
 export type { ImageLightboxProps } from "./image-lightbox";
 export { Link } from "./link";
 export type { LinkProps, LinkState, LinkType } from "./link";
+export { Mac, MacIntro } from "./mac";
 export { PixelSplash } from "./pixel-splash";
 export { PresentationCover } from "./presentation-cover";
 export {
@@ -53,7 +55,7 @@ export type { ScrollRevealProps, StaggerRevealProps } from "./stagger-reveal";
 export { StreamText } from "./stream-text";
 export type { StreamTextProps } from "./stream-text";
 export { Tabs } from "./tabs";
-export type { TabItem, TabsProps } from "./tabs";
+export type { TabItem, TabsProps, TabsSize } from "./tabs";
 export { Tag } from "./tags";
 export type { TagProps, TagSize, TagTone } from "./tags";
 export { Tooltip } from "./tooltip";

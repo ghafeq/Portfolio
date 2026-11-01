@@ -1,1 +1,1 @@
-export { ClickSound } from "./click-sound";
+export { ClickSound, preloadClickSound } from "./click-sound";
