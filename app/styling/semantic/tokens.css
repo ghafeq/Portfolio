@@ -84,9 +84,15 @@
   --motion-duration-fast: 120ms;
   --motion-duration-normal: 180ms;
   --motion-duration-slow: 320ms;
+  --motion-duration-liquid: 720ms;
   --motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --motion-ease-emphasized: cubic-bezier(0.2, 0.8, 0.2, 1);
   --motion-ease-linear: linear;
+  /* A damped spring (ratio 0.65): overshoots by about 7%, then settles. */
+  --motion-ease-liquid: linear(
+    0, 0.07, 0.231, 0.424, 0.611, 0.771, 0.895, 0.98, 1.033, 1.06, 1.068, 1.064, 1.053,
+    1.04, 1.027, 1.016, 1.008, 1.002, 0.998, 0.996, 0.995, 0.996, 0.996, 0.997, 1
+  );
   --motion-transition-colors:
     color var(--motion-duration-fast) var(--motion-ease-standard),
     background-color var(--motion-duration-fast) var(--motion-ease-standard),

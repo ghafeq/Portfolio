@@ -201,11 +201,17 @@
        retune if the copy grows enough to change the row height. */
     --deck-row-height: 12.65rem;
     margin-bottom: calc(-1 * (var(--deck-row-height) + var(--spacing-6)));
-    transition: margin-bottom var(--motion-duration-slow) var(--motion-ease-emphasized);
+    position: relative;
+    transition: margin-bottom var(--motion-duration-liquid) var(--motion-ease-liquid);
   }
 
-  .card-deck > * {
+  .card-deck > .card {
     box-shadow: var(--shadow-sm);
+  }
+
+  .card-deck > .card,
+  .card-deck-liquid > span::before,
+  .card-deck-liquid > span::after {
     /* Undo this card's grid cell, then fan it out from the first one.
 
        (100% + gap) is one grid column: the card's own width plus the gap.
@@ -222,26 +228,87 @@
         - var(--deck-col) * (100% + var(--spacing-6))
       ))
       translateY(calc(-1 * var(--deck-row) * (100% + var(--spacing-6))));
+  }
+
+  .card-deck > .card,
+  .card-deck-liquid > span::before {
     transition:
-      transform var(--motion-duration-slow) var(--motion-ease-emphasized),
+      transform var(--motion-duration-liquid) var(--motion-ease-liquid)
+      calc(var(--motion-duration-liquid) * var(--deck-index) * 0.03),
       box-shadow var(--motion-duration-fast) var(--motion-ease-standard);
+  }
+
+  .card-deck > .card {
     z-index: calc(10 - var(--deck-index));
   }
 
   /* Row/column of each cell, and its place in the fan. The first card sits
      rightmost and on top, as in the reference. */
-  .card-deck > *:nth-child(1) { --deck-index: 0; --deck-col: 0; --deck-row: 0; --deck-fan: 3; }
-  .card-deck > *:nth-child(2) { --deck-index: 1; --deck-col: 1; --deck-row: 0; --deck-fan: 2; }
-  .card-deck > *:nth-child(3) { --deck-index: 2; --deck-col: 0; --deck-row: 1; --deck-fan: 1; }
-  .card-deck > *:nth-child(4) { --deck-index: 3; --deck-col: 1; --deck-row: 1; --deck-fan: 0; }
+  .card-deck > :nth-child(1), .card-deck-liquid > :nth-child(1) { --deck-index: 0; --deck-col: 0; --deck-row: 0; --deck-fan: 3; }
+  .card-deck > :nth-child(2), .card-deck-liquid > :nth-child(2) { --deck-index: 1; --deck-col: 1; --deck-row: 0; --deck-fan: 2; }
+  .card-deck > :nth-child(3), .card-deck-liquid > :nth-child(3) { --deck-index: 2; --deck-col: 0; --deck-row: 1; --deck-fan: 1; }
+  .card-deck > :nth-child(4), .card-deck-liquid > :nth-child(4) { --deck-index: 3; --deck-col: 1; --deck-row: 1; --deck-fan: 0; }
 
   /* Hovering anywhere on the group returns every card to its grid cell. */
   .card-deck:hover {
     margin-bottom: 0;
   }
 
-  .card-deck:hover > * {
+  .card-deck:hover > .card,
+  .card-deck:hover .card-deck-liquid > span::before,
+  .card-deck:hover .card-deck-liquid > span::after {
     transform: none;
+  }
+
+  /* The card surface as a fluid. The cards can't carry the effect themselves:
+     the filter has to wrap everything that merges, and that would melt their
+     text too. So this layer repeats their surfaces behind them, on the same
+     grid and the same transforms, and only what shows in the gaps is seen.
+
+     Each cell holds a head (::before), which keeps time with its card, and a
+     tail (::after), which drags behind it. The filter blends the two, so a
+     card pulls a neck of surface out of the fan that thins and snaps. */
+  .card-deck-liquid {
+    display: grid;
+    filter:
+      url("#card-deck-liquid-filter")
+      drop-shadow(0 2px 4px var(--warm-gray-10, var(--warm-gray-20)));
+    gap: var(--spacing-6);
+    grid-auto-rows: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+  }
+
+  .card-deck-liquid > span {
+    position: relative;
+  }
+
+  .card-deck-liquid > span::before,
+  .card-deck-liquid > span::after {
+    background: var(--layer-1-background);
+    border-radius: var(--radius-normal);
+    content: "";
+    inset: 0;
+    position: absolute;
+  }
+
+  /* Closing stays tight: a slow tail would sit over the work section as it
+     rises back up under the deck. */
+  .card-deck-liquid > span::after {
+    transition: transform calc(var(--motion-duration-liquid) * 0.7) var(--motion-ease-emphasized);
+  }
+
+  .card-deck:hover .card-deck-liquid > span::after {
+    transition: transform calc(var(--motion-duration-liquid) * 1.25) var(--motion-ease-emphasized)
+      calc(var(--motion-duration-liquid) * 0.08);
+  }
+}
+
+@media not all and (min-width: 640px) and (hover: hover) {
+  .card-deck-liquid {
+    display: none;
   }
 }
 
@@ -2698,6 +2765,11 @@ html:has(.image-lightbox[open]) {
     --motion-duration-fast: 0ms;
     --motion-duration-normal: 0ms;
     --motion-duration-slow: 0ms;
+    --motion-duration-liquid: 0ms;
+  }
+
+  .card-deck-liquid {
+    display: none;
   }
 
   .link-spinner,

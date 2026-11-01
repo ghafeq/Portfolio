@@ -1,6 +1,6 @@
 import { ArrowRight, ClockFading, FolderGit2, Layers, PackageCheck, Sparkle } from "lucide-react";
 import Image from "next/image";
-import { Card, DeviceMockups, Link, ScrollReveal, Tabs, Tag, Tile } from "./components";
+import { Card, CardDeck, DeviceMockups, Link, ScrollReveal, Tabs, Tag, Tile } from "./components";
 
 const introduction = [
   {
@@ -132,7 +132,7 @@ export default function HomePage() {
         <ScrollReveal>
           <h2 className="title-02">Principles I ship by</h2>
         </ScrollReveal>
-        <div className="card-deck mt-3 grid gap-6 sm:grid-cols-2">
+        <CardDeck className="mt-3 grid gap-6 sm:grid-cols-2">
           {principles.map(([Icon, title, description]) => (
             <Card
               className="card-quiet"
@@ -142,7 +142,7 @@ export default function HomePage() {
               title={title}
             />
           ))}
-        </div>
+        </CardDeck>
       </section>
 
       <section className="mt-16">

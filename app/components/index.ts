@@ -1,6 +1,6 @@
 export { AskAssistant } from "./ask-assistant";
-export { Card } from "./card";
-export type { CardProps } from "./card";
+export { Card, CardDeck } from "./card";
+export type { CardDeckProps, CardProps } from "./card";
 export {
   CaseStudyCard,
   CaseStudyClip,
