@@ -1,14 +1,15 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState, type TransitionEvent } from "react";
+import { useEffect, useRef, useState } from "react";
+import { playPixelSplash } from "../pixel-splash";
 import { MacHardware, MacStart } from "./mac-hardware";
 
 /**
  * Stands in front of the home page when a visit starts there. "Click" pushes in
- * through the Mac's screen, which shows a copy of the page behind it, sized so the
- * zoom lands exactly on the real thing and the Mac can simply be taken away. It
- * sits in the root layout, which outlives navigation, so coming back to the home
+ * through the Mac's screen, which shows a copy of the page behind it, while a
+ * black pixel wipe sweeps over; the Mac is taken away under the wipe. It sits in
+ * the root layout, which outlives navigation, so coming back to the home
  * page later never shows it again; a reload does.
  */
 export function MacIntro() {
@@ -78,15 +79,7 @@ export function MacIntro() {
       site.append(copy);
     });
     setIsEntering(true);
-  }
-
-  function handleTransitionEnd(event: TransitionEvent<HTMLDivElement>) {
-    const isZoomDone =
-      event.propertyName === "transform" && (event.target as Element).classList.contains("mac");
-
-    if (isEntering && isZoomDone) {
-      setIsShown(false);
-    }
+    playPixelSplash(() => setIsShown(false));
   }
 
   if (!isShown) {
@@ -100,7 +93,6 @@ export function MacIntro() {
       className="mac-stage mac-intro"
       data-entering={isEntering}
       data-lenis-prevent
-      onTransitionEnd={handleTransitionEnd}
       ref={stageRef}
       role="dialog"
     >

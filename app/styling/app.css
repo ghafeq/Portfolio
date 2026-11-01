@@ -572,6 +572,7 @@
 
   .home-corner canvas {
     height: 804px;
+    image-rendering: pixelated;
     position: absolute;
     right: 0;
     top: 0;
@@ -587,6 +588,7 @@
   /* Pushed past the box's edges, where a blur would otherwise thin out. */
   .home-corner .home-corner-soft {
     filter: blur(14px);
+    image-rendering: auto;
     right: -28px;
     top: -28px;
   }

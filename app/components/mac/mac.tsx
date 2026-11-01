@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { playPixelSplash } from "../pixel-splash";
 import { MacHardware, MacStart } from "./mac-hardware";
 import { MacLanding } from "./mac-landing";
 
@@ -25,6 +26,7 @@ export function Mac() {
   function open() {
     setIsOpen(true);
     setHasOpened(true);
+    playPixelSplash();
   }
 
   function close() {

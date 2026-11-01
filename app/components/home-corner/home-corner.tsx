@@ -11,14 +11,15 @@ const COUNT = SIZE / PITCH;
 const CLUMP = 3;
 // Fixed, so every visit starts from the same pattern.
 const SEED = 2117;
-// How far the gradient reaches from the corner, and how much it swells by.
+// How far the gradient reaches from the corner.
 const REACH = SIZE * 0.8;
-const SWELL = 0.05;
+// Squares this far outside the box still feed the blur along its edges.
+const BLUR_MARGIN = 40;
 // The blurred copy is small and soft already, so it costs little to keep up.
 const SOFT_SCALE = 6;
-const SOFT_EVERY = 3;
+const SOFT_EVERY = 5;
 // It moves too slowly to need more, and this leaves the main thread alone.
-const FRAME_MS = 1000 / 24;
+const FRAME_MS = 1000 / 15;
 // Squares are lit in steps of opacity, one path per step.
 const STEPS = 5;
 // How sharply a square goes from out to fully lit.
@@ -98,7 +99,6 @@ export function HomeCorner() {
       return;
     }
 
-    const ratio = Math.min(2, window.devicePixelRatio || 1);
     const color = (name: string) =>
       getComputedStyle(document.documentElement).getPropertyValue(name).trim();
     const colors = {
@@ -111,11 +111,12 @@ export function HomeCorner() {
     };
     const squares = createSquares();
 
-    sharp.width = SIZE * ratio;
-    sharp.height = SIZE * ratio;
+    // One canvas pixel to a CSS pixel on every screen: the squares sit on whole
+    // pixels, and CSS keeps them hard-edged on a dense display.
+    sharp.width = SIZE;
+    sharp.height = SIZE;
     soft.width = Math.round(SIZE / SOFT_SCALE);
     soft.height = Math.round(SIZE / SOFT_SCALE);
-    context.scale(ratio, ratio);
 
     const squareFill = context.createRadialGradient(SIZE, 0, 0, SIZE, 0, REACH);
 
@@ -123,25 +124,41 @@ export function HomeCorner() {
     squareFill.addColorStop(0.48, colors.orchid);
     squareFill.addColorStop(0.8, colors.violet);
 
+    // The glow never changes, so it is painted once and copied.
+    const glow = document.createElement("canvas");
+    const glowContext = glow.getContext("2d")!;
+    const glowFill = glowContext.createRadialGradient(SIZE, 0, 0, SIZE, 0, REACH);
+
+    glow.width = SIZE;
+    glow.height = SIZE;
+    glowFill.addColorStop(0, colors.ink);
+    glowFill.addColorStop(0.18, colors.navy);
+    glowFill.addColorStop(0.38, colors.indigo);
+    // Hex alpha: 72%, 30% and none.
+    glowFill.addColorStop(0.62, `${colors.violet}b8`);
+    glowFill.addColorStop(0.82, `${colors.lilac}4d`);
+    glowFill.addColorStop(1, `${colors.lilac}00`);
+    glowContext.fillStyle = glowFill;
+    glowContext.fillRect(0, 0, SIZE, SIZE);
+
+    // Most of the canvas hangs outside its box, so those squares are never drawn.
+    let shown = squares;
+    const box = sharp.parentElement!;
+
+    function measure() {
+      const left = SIZE - box.clientWidth - BLUR_MARGIN;
+      const bottom = box.clientHeight + BLUR_MARGIN;
+
+      shown = squares.filter(({ x, y }) => x + CELL > left && y < bottom);
+    }
+
     function draw(seconds: number) {
-      const reach = REACH * (1 + SWELL * Math.sin(seconds * 0.2));
-      const glow = context!.createRadialGradient(SIZE, 0, 0, SIZE, 0, reach);
-
-      glow.addColorStop(0, colors.ink);
-      glow.addColorStop(0.18, colors.navy);
-      glow.addColorStop(0.38, colors.indigo);
-      // Hex alpha: 72%, 30% and none.
-      glow.addColorStop(0.62, `${colors.violet}b8`);
-      glow.addColorStop(0.82, `${colors.lilac}4d`);
-      glow.addColorStop(1, `${colors.lilac}00`);
-
       context!.clearRect(0, 0, SIZE, SIZE);
-      context!.fillStyle = glow;
-      context!.fillRect(0, 0, SIZE, SIZE);
+      context!.drawImage(glow, 0, 0);
 
       const paths = Array.from({ length: STEPS + 1 }, () => new Path2D());
 
-      for (const { density, jitter, x, y } of squares) {
+      for (const { density, jitter, x, y } of shown) {
         // Lit once the light passes its own threshold, and brighter the further it
         // passes, so each square fades up and down instead of blinking.
         const level = density * (0.2 + 0.95 * lightAt(x, y, seconds)) - jitter;
@@ -165,6 +182,7 @@ export function HomeCorner() {
       softContext!.drawImage(sharp!, 0, 0, soft!.width, soft!.height);
     }
 
+    measure();
     draw(0);
     drawSoft();
 
@@ -207,10 +225,14 @@ export function HomeCorner() {
       }
     });
 
+    const resizeObserver = new ResizeObserver(measure);
+
     observer.observe(sharp);
+    resizeObserver.observe(box);
 
     return () => {
       observer.disconnect();
+      resizeObserver.disconnect();
       cancelAnimationFrame(animation);
     };
   }, []);
