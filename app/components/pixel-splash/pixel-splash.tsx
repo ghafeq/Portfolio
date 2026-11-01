@@ -24,12 +24,26 @@ function easeInOutQuad(t: number) {
   return t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2;
 }
 
-/** Plays a pixel-block wipe over the page on every load and route change. Renders a canvas. */
+/**
+ * Plays a pixel-block wipe over the page on every load and route change, except
+ * where the Mac is the entrance: on /mac, and on the home page when a visit
+ * starts there. Renders a canvas.
+ */
 export function PixelSplash() {
   const pathname = usePathname();
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // The page this visit started on, until it moves to another.
+  const entryRef = useRef<string | null>(pathname);
 
   useEffect(() => {
+    if (pathname !== entryRef.current) {
+      entryRef.current = null;
+    }
+
+    if (entryRef.current === "/" || pathname === "/mac") {
+      return;
+    }
+
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d");
 

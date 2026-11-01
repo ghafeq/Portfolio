@@ -84,7 +84,7 @@ function durationMs(value: string, fallback: number) {
 
 // The presentation fills the screen on its own, as in TopNavigation.
 const isBare = (pathname: string) =>
-  pathname === "/presentation" || pathname.startsWith("/presentation/");
+  pathname === "/mac" || pathname === "/presentation" || pathname.startsWith("/presentation/");
 
 /**
  * "Ask about Shafiq": a side panel that answers visitor questions through

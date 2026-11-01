@@ -31,10 +31,10 @@ const defaultLinks: TopNavigationLink[] = [
   { label: "About", href: "/about" },
 ];
 
-// The presentation (cover, projects and decks) fills the screen on its own,
-// with no site chrome.
+// The presentation (cover, projects and decks) and the Mac fill the screen on
+// their own, with no site chrome.
 const isBare = (pathname: string) =>
-  pathname === "/presentation" || pathname.startsWith("/presentation/");
+  pathname === "/mac" || pathname === "/presentation" || pathname.startsWith("/presentation/");
 
 export function TopNavigation({
   links = defaultLinks,

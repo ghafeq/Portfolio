@@ -270,9 +270,7 @@
      card pulls a neck of surface out of the fan that thins and snaps. */
   .card-deck-liquid {
     display: grid;
-    filter:
-      url("#card-deck-liquid-filter")
-      drop-shadow(0 2px 4px var(--warm-gray-10, var(--warm-gray-20)));
+    filter: url("#card-deck-liquid-filter");
     gap: var(--spacing-6);
     grid-auto-rows: 1fr;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -362,6 +360,14 @@
 
 .tabs-panel {
   padding-top: var(--spacing-5);
+}
+
+.tabs-small .tabs-list {
+  gap: var(--spacing-4);
+}
+
+.tabs-small .tabs-tab {
+  font-size: var(--fs-5);
 }
 
 /* ─── Tag ──────────────────────────────────────────────────────────────── */
@@ -541,21 +547,109 @@
   outline-offset: 3px;
 }
 
-/* A bento tile spanning two grid rows. Its banner gives up the fixed ratio and
-   grows into whatever height the neighbouring pair sets, so a landscape cover
-   is cropped to a narrow portrait slice. Anchored top-centre: covers centre
-   their subject (a phone mockup sits mid-frame on a background that fills the
-   corners), and the top edge keeps a screenshot's header in view. Two columns
-   start at 640px (sm:grid-cols-2); below that it is an ordinary tile. */
-@media (min-width: 640px) {
-  .tile-tall .tile-banner {
-    aspect-ratio: auto;
-    flex: 1 1 auto;
+/* ─── Home corner ──────────────────────────────────────────────────────── */
+
+/* Fills the space beside the 660px text column and no further: the mask reaches
+   nothing at the box's left and bottom edges, so the pattern is gone by the text.
+   Narrower screens have no such space, and it would sit behind the nav links. */
+.home-corner {
+  display: none;
+}
+
+@media (min-width: 1000px) {
+  .home-corner {
+    display: block;
+    height: min(70vh, 640px);
+    mask-image: radial-gradient(farthest-side at 100% 0, #000 45%, transparent 100%);
+    pointer-events: none;
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: calc((100vw - 660px) / 2);
+    z-index: -1;
   }
 
-  .tile-tall .tile-banner-art :is(img, video, picture) {
-    object-position: center top;
+  .home-corner canvas {
+    height: 804px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 804px;
   }
+
+  /* The sharp pattern fades out over a blurred copy of itself, so the squares melt
+     towards the end of the gradient. */
+  .home-corner-sharp {
+    mask-image: radial-gradient(farthest-side at 100% 0, #000 22%, transparent 58%);
+  }
+
+  /* Pushed past the box's edges, where a blur would otherwise thin out. */
+  .home-corner .home-corner-soft {
+    filter: blur(14px);
+    right: -28px;
+    top: -28px;
+  }
+}
+
+/* ─── Work index ───────────────────────────────────────────────────────── */
+
+/* Wider than the text above it, centred on the page however wide that gets. The
+   heading and tab list share the first row; the panel takes the full width. */
+.work-index {
+  --work-index-width: min(100vw - 2 * var(--spacing-6), 1140px);
+
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-4) var(--spacing-5);
+  justify-content: space-between;
+  margin-inline: calc((100% - var(--work-index-width)) / 2);
+  margin-top: var(--spacing-8);
+  width: auto;
+}
+
+/* Three short labels fit in a row on any phone, unlike the intro's long ones. */
+.work-index .tabs-list {
+  align-items: center;
+  flex-direction: row;
+}
+
+.work-index .tabs-panel {
+  flex: 0 0 100%;
+  min-width: 0;
+  padding-top: var(--spacing-3);
+}
+
+/* One list on a phone, in the items' own order; the columns step aside for it. */
+.work-index-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+}
+
+.work-index-column {
+  display: contents;
+}
+
+@media (min-width: 640px) {
+  .work-index-grid {
+    align-items: flex-start;
+    flex-direction: row;
+  }
+
+  .work-index-column {
+    display: flex;
+    flex: 1 1 0;
+    flex-direction: column;
+    gap: var(--spacing-6);
+    min-width: 0;
+  }
+}
+
+/* Covers keep their own proportions, so the columns fall unevenly. */
+.work-index .tile-banner {
+  aspect-ratio: var(--work-aspect);
 }
 
 /* ─── Tooltip ──────────────────────────────────────────────────────────── */
@@ -2760,6 +2854,886 @@ html:has(.image-lightbox[open]) {
   }
 }
 
+/* ───────────────────────────────────────────────────────────────────────────
+   Mac (/mac, and in front of the home page). A Macintosh Classic II with its
+   keyboard and mouse: mac-art.tsx draws them on a 2600×1600 desk, and --mac-p is
+   one unit of that desk here.
+
+   The desk is laid out at its zoomed-in size, so the screen's contents are real,
+   crisp pixels once open, and scaled down to sit on the page at rest. Opening
+   is then one transform.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.mac-stage {
+  --mac-gutter: var(--spacing-5);
+  /* The screen when open: as big as the viewport allows, in the shape of the glass. */
+  --mac-crt-width: min(
+    100dvw - 2 * var(--mac-gutter),
+    (100dvh - 2 * var(--mac-gutter)) * 672 / 490,
+    60rem
+  );
+  /* The screen is 672 units of the desk across. */
+  --mac-p: calc(var(--mac-crt-width) / 672);
+  --mac-rest-scale: 0.18;
+  /* Nudges the desk at rest, in its own units, to balance the mouse at the right. */
+  --mac-rest-x: -110;
+  --mac-rest-y: 0;
+  /* Going in is a slow push that gathers speed and settles on what is inside. */
+  --mac-through-duration: 1300ms;
+  --mac-through-ease: cubic-bezier(0.76, 0, 0.24, 1);
+
+  position: fixed;
+  inset: 0;
+  /* clip, not hidden: focus inside the oversized Mac must not scroll this. */
+  overflow: clip;
+  background: var(--app-layer-background);
+}
+
+.mac {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--mac-p) * 2600);
+  height: calc(var(--mac-p) * 1600);
+  margin-top: calc(var(--mac-p) * -800);
+  margin-left: calc(var(--mac-p) * -1300);
+  transform: translate(
+      calc(var(--mac-p) * var(--mac-rest-x) * var(--mac-rest-scale)),
+      calc(var(--mac-p) * var(--mac-rest-y) * var(--mac-rest-scale))
+    )
+    scale(var(--mac-rest-scale));
+  transition: transform var(--motion-duration-liquid) var(--motion-ease-emphasized);
+}
+
+/* The screen's middle is 330 above the desk's. */
+.mac-stage[data-open="true"] .mac {
+  transform: translate(0, calc(var(--mac-p) * 330)) scale(1);
+  transition: transform var(--mac-through-duration) var(--mac-through-ease);
+}
+
+/* In front of the home page, and over the cursor pet. */
+.mac-intro {
+  z-index: 10000;
+}
+
+/* Through the screen. The shift grows with the scale, to keep the screen's middle
+   on the viewport's. */
+.mac-intro[data-entering="true"] .mac {
+  transform: translate(0, calc(var(--mac-p) * 330 * var(--mac-through-scale)))
+    scale(var(--mac-through-scale));
+  transition: transform var(--mac-through-duration) var(--mac-through-ease);
+}
+
+/* The copy of the page, viewport-sized and shrunk to the screen, so the zoom brings
+   it back to exactly its real size and place. */
+.mac-site {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--app-layer-background);
+  /* Paints the rest of the screen, which is rarely the viewport's shape. */
+  box-shadow: 0 0 0 100vmax var(--app-layer-background);
+  color: var(--text-primary);
+  font-family: var(--font-family-sans);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(calc(1 / var(--mac-through-scale, 1)));
+}
+
+.mac-intro[data-entering="true"] .mac-site {
+  opacity: 1;
+  transition: opacity var(--motion-duration-slow) var(--motion-ease-standard) var(--motion-duration-normal);
+}
+
+/* The screen stops being glass on the way in, so the last frame is just the page. */
+.mac-intro[data-entering="true"] .mac-crt {
+  border-radius: 0;
+  transition: border-radius var(--mac-through-duration) var(--motion-ease-standard);
+}
+
+.mac-intro[data-entering="true"] .mac-crt::after {
+  opacity: 0;
+  transition: opacity var(--mac-through-duration) var(--motion-ease-standard);
+}
+
+.mac-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.mac-art-legend {
+  fill: #55524a;
+  font-family: var(--font-family-sans);
+  font-size: 8px;
+  font-style: italic;
+}
+
+.mac-art-wordmark {
+  fill: #5c584f;
+  font-family: Garamond, "EB Garamond", "Times New Roman", Times, serif;
+  font-size: 34px;
+}
+
+.mac-art-cable-tall {
+  display: none;
+}
+
+/* Tall screens keep the width for the computer and keyboard: the mouse moves
+   under the keyboard, on a short lead up behind it. */
+@media (max-aspect-ratio: 3 / 4) {
+  .mac-stage {
+    --mac-rest-scale: 0.355;
+    --mac-rest-x: 0;
+    --mac-rest-y: -120;
+  }
+
+  .mac-art-mouse {
+    transform: translate(-400px, 285px);
+  }
+
+  .mac-art-cable-wide {
+    display: none;
+  }
+
+  .mac-art-cable-tall {
+    display: inline;
+  }
+}
+
+/* ─── Screen ─── */
+
+/* Fills the glass at (964, 225) on the desk, up to the tube's rim. */
+.mac-crt {
+  position: absolute;
+  top: calc(var(--mac-p) * 225);
+  left: calc(var(--mac-p) * 964);
+  /* Sizes the text inside to the screen, which is a different size on each viewport. */
+  container-type: inline-size;
+  width: var(--mac-crt-width);
+  aspect-ratio: 672 / 490;
+  overflow: hidden;
+  border-radius: calc(var(--mac-p) * 32);
+  background: var(--mac-phosphor);
+  color: var(--mac-ink);
+  font-family: var(--font-jersey), var(--font-family-mono);
+}
+
+/* The glass, darkening into its corners, with the recess's shadow along the top. */
+.mac-crt::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  box-shadow:
+    inset 0 calc(var(--mac-p) * 22) calc(var(--mac-p) * 26) calc(var(--mac-p) * -10) rgb(2 24 34 / 0.42),
+    inset 0 0 calc(var(--mac-p) * 18) rgb(4 40 60 / 0.22);
+  content: "";
+  pointer-events: none;
+}
+
+/* Scanlines only show up close to. */
+.mac-stage[data-open="true"] .mac-crt::after {
+  background: repeating-linear-gradient(180deg, transparent 0 2px, rgb(6 48 60 / 0.04) 2px 3px);
+}
+
+/* ─── Click prompt ─── */
+
+.mac-start {
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+
+.mac-start:focus-visible {
+  outline: calc(var(--mac-p) * 3) solid var(--mac-ink);
+  outline-offset: calc(var(--mac-p) * -6);
+}
+
+.mac-paint {
+  --mac-hello-start: 500ms;
+  --mac-hello-stem: 420ms;
+  --mac-hello-body: 1150ms;
+  --mac-hello-flick: 120ms;
+  --mac-hello-hold: 1000ms;
+  --mac-hello-erase: 320ms;
+  --mac-hello-body-start: calc(var(--mac-hello-start) + var(--mac-hello-stem));
+  --mac-hello-flick-start: calc(var(--mac-hello-body-start) + var(--mac-hello-body));
+  --mac-hello-done: calc(var(--mac-hello-flick-start) + var(--mac-hello-flick));
+  --mac-hello-erase-start: calc(var(--mac-hello-done) + var(--mac-hello-hold));
+  --mac-bleep-start: calc(var(--mac-hello-erase-start) + var(--mac-hello-erase) + 700ms);
+
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.mac-paint-text {
+  fill: var(--mac-ink);
+  font-size: 15px;
+}
+
+/* At rest, with nothing animating, only the button shows. The word is an
+   animation over that, so whatever stops it can only leave the button. */
+.mac-paint-stroke {
+  stroke-dasharray: 1 2;
+  stroke-dashoffset: 1.01;
+}
+
+.mac-paint-dot {
+  opacity: 0;
+}
+
+.mac-paint-eraser {
+  transform: scaleX(0);
+  transform-box: fill-box;
+  transform-origin: left;
+}
+
+.mac-paint-click {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.mac-start[data-hello="false"] .mac-paint {
+  --mac-bleep-start: 0ms;
+}
+
+.mac-start[data-hello="true"] .mac-paint-stem {
+  animation: mac-hello-write var(--mac-hello-stem) var(--motion-ease-standard) var(--mac-hello-start) forwards;
+}
+
+.mac-start[data-hello="true"] .mac-paint-body {
+  animation: mac-hello-write var(--mac-hello-body) ease-in-out var(--mac-hello-body-start) forwards;
+}
+
+.mac-start[data-hello="true"] .mac-paint-flick {
+  animation: mac-hello-write var(--mac-hello-flick) linear var(--mac-hello-flick-start) forwards;
+}
+
+.mac-start[data-hello="true"] .mac-paint-dot {
+  animation: mac-hello-dot 1ms linear calc(var(--mac-hello-done) + 180ms) forwards;
+}
+
+/* Rubbed out left to right in eraser-sized jumps, then the button takes its place.
+   jump-none arrives before the end: a plain steps() can stop one jump short of
+   full width when its end time rounds down, which leaves ink behind the button. */
+.mac-start[data-hello="true"] .mac-paint-eraser {
+  animation: mac-hello-erase var(--mac-hello-erase) steps(10, jump-none) var(--mac-hello-erase-start) forwards;
+}
+
+.mac-start[data-hello="true"] .mac-paint-click {
+  animation: mac-click-in var(--motion-duration-normal) steps(3) calc(var(--mac-hello-erase-start) + var(--mac-hello-erase)) backwards;
+}
+
+@keyframes mac-hello-write {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes mac-hello-dot {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes mac-hello-erase {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes mac-click-in {
+  from {
+    opacity: 0;
+    transform: scale(0.72);
+  }
+}
+
+/* The bleep: two quick flashes and a rest, like a Mac asking for attention. Hover
+   and the zoom take over from it, so it stays out of their way. */
+.mac-paint-click-face {
+  fill: var(--mac-phosphor);
+  transition: fill var(--motion-duration-fast) var(--motion-ease-standard);
+  animation: mac-click-bleep-face 1800ms step-end var(--mac-bleep-start) infinite;
+}
+
+.mac-paint-click-label {
+  fill: var(--mac-ink);
+  font-size: 84px;
+  transition: fill var(--motion-duration-fast) var(--motion-ease-standard);
+  animation: mac-click-bleep-label 1800ms step-end var(--mac-bleep-start) infinite;
+}
+
+@keyframes mac-click-bleep-face {
+  0% {
+    fill: var(--mac-ink);
+  }
+
+  9% {
+    fill: var(--mac-phosphor);
+  }
+
+  18% {
+    fill: var(--mac-ink);
+  }
+
+  27%,
+  100% {
+    fill: var(--mac-phosphor);
+  }
+}
+
+@keyframes mac-click-bleep-label {
+  0% {
+    fill: var(--mac-phosphor);
+  }
+
+  9% {
+    fill: var(--mac-ink);
+  }
+
+  18% {
+    fill: var(--mac-phosphor);
+  }
+
+  27%,
+  100% {
+    fill: var(--mac-ink);
+  }
+}
+
+.mac-start:hover .mac-paint-click-face,
+.mac-start:focus-visible .mac-paint-click-face {
+  animation: none;
+  fill: var(--mac-ink);
+}
+
+.mac-start:hover .mac-paint-click-label,
+.mac-start:focus-visible .mac-paint-click-label {
+  animation: none;
+  fill: var(--mac-phosphor);
+}
+
+.mac-intro[data-entering="true"] .mac-paint-click-face,
+.mac-intro[data-entering="true"] .mac-paint-click-label {
+  animation: none;
+}
+
+/* ─── Inside the screen ─── */
+
+.mac-desktop {
+  display: flex;
+  isolation: isolate;
+  flex-direction: column;
+  height: 100%;
+  background: repeating-linear-gradient(90deg, var(--mac-phosphor-deep) 0 1px, var(--mac-phosphor) 1px 2px);
+  font-size: clamp(var(--fs-4), 2.7cqi, 1.625rem);
+  line-height: 1.15;
+}
+
+.mac-desktop button {
+  font: inherit;
+}
+
+.mac-menubar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex: none;
+  align-items: stretch;
+  padding: 0 2.2em;
+  border-bottom: 2px solid var(--mac-ink);
+  background: var(--mac-paper);
+}
+
+.mac-menu {
+  position: relative;
+  display: flex;
+}
+
+.mac-menu-title {
+  display: flex;
+  align-items: center;
+  padding: 0.15em 0.55em;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* Dimmed, as a menu with nothing for the moment. */
+.mac-menu-title:disabled {
+  color: var(--mac-ink-dim);
+  cursor: default;
+}
+
+.mac-menu-title[aria-expanded="true"],
+.mac-menu-title:enabled:hover {
+  background: var(--mac-ink);
+  color: var(--mac-paper);
+}
+
+.mac-menu-apple {
+  width: 0.8em;
+}
+
+.mac-menu-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 9em;
+  border: 2px solid var(--mac-ink);
+  background: var(--mac-paper);
+  box-shadow: 2px 2px 0 var(--mac-ink);
+}
+
+.mac-menu-item {
+  padding: 0.15em 0.8em;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.mac-menu-item[aria-pressed="true"]::before {
+  content: "✓ ";
+}
+
+.mac-menu-item:hover,
+.mac-menu-item:focus-visible {
+  background: var(--mac-ink);
+  color: var(--mac-paper);
+}
+
+.mac-finder {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+.mac-desktop-icon {
+  position: absolute;
+  right: 0.5em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 5.4em;
+  cursor: pointer;
+  color: inherit;
+}
+
+.mac-desktop-icon svg {
+  width: 2.4em;
+}
+
+.mac-desktop-disk {
+  top: 0.5em;
+}
+
+.mac-desktop-trash {
+  bottom: 0.7em;
+}
+
+.mac-item-label {
+  padding: 0 0.3em;
+  background: var(--mac-paper);
+}
+
+/* Fills the desktop bar the two icons on the right, like a resized window. */
+.mac-window {
+  position: absolute;
+  inset: 0.5em 6.4em 0.8em 0.9em;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border: 2px solid var(--mac-ink);
+  background: var(--mac-paper);
+  box-shadow: 3px 3px 0 var(--mac-ink);
+  outline: none;
+  animation: mac-window-open var(--motion-duration-slow) steps(5) var(--motion-duration-normal) backwards;
+}
+
+.mac-window[data-zoomed="true"] {
+  inset: 0.5em 0.9em 0.8em;
+  z-index: 1;
+}
+
+@keyframes mac-window-open {
+  from {
+    opacity: 0.4;
+    transform: scale(0.2);
+  }
+}
+
+.mac-window-bar {
+  display: flex;
+  flex: none;
+  align-items: center;
+  padding: 0.2em 0.5em;
+  border-bottom: 2px solid var(--mac-ink);
+  background: repeating-linear-gradient(180deg, var(--mac-ink) 0 1px, transparent 1px 3px) 0 50% / 100% 62% no-repeat;
+}
+
+.mac-window-box {
+  position: relative;
+  flex: none;
+  width: 0.95em;
+  height: 0.95em;
+  border: 2px solid var(--mac-ink);
+  background: var(--mac-paper);
+  cursor: pointer;
+}
+
+/* The zoom box has a smaller box in its corner. */
+.mac-window-zoom::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 55%;
+  height: 55%;
+  border-right: 2px solid var(--mac-ink);
+  border-bottom: 2px solid var(--mac-ink);
+  content: "";
+}
+
+.mac-window-box:hover,
+.mac-window-box:focus-visible {
+  background: var(--mac-ink);
+}
+
+.mac-window-title {
+  margin: 0 auto;
+  padding: 0 0.6em;
+  overflow: hidden;
+  background: var(--mac-paper);
+  font-size: 1em;
+  font-weight: var(--fw-regular);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mac-window-info {
+  display: flex;
+  flex: none;
+  gap: 1em;
+  justify-content: space-between;
+  padding: 0.1em 0.6em;
+  border-bottom: 4px double var(--mac-ink);
+  white-space: nowrap;
+}
+
+.mac-window-main {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.mac-window-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  overflow-y: auto;
+  padding: 0.7em 1em;
+  scrollbar-width: none;
+}
+
+.mac-empty {
+  margin: auto;
+}
+
+.mac-heading {
+  margin-bottom: 0.2em;
+  font-size: 1.9em;
+  font-weight: var(--fw-regular);
+  line-height: 1.1;
+}
+
+.mac-principles {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6em 1.2em;
+  align-content: space-evenly;
+  margin-block: 0.4em;
+}
+
+.mac-principles dt {
+  font-size: 1.15em;
+}
+
+/* Shares out whatever height the window has, so the items never bunch at the top. */
+.mac-items {
+  flex: 1;
+}
+
+.mac-items[data-view="icon"] {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(6em, 1fr));
+  gap: 0.6em 0.4em;
+  align-content: space-evenly;
+  margin-top: 0.4em;
+}
+
+.mac-items[data-view="icon"][data-columns="3"] {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.mac-items[data-view="icon"] .mac-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.mac-items[data-view="name"] .mac-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  width: 100%;
+  padding: 0.1em 0;
+  text-align: left;
+}
+
+.mac-item {
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.mac-item svg {
+  flex: none;
+  width: 3.6em;
+}
+
+.mac-items[data-view="name"] .mac-item svg {
+  width: 1.1em;
+}
+
+.mac-item-kind {
+  flex: none;
+  margin-left: auto;
+  color: var(--mac-ink-dim);
+}
+
+.mac-item:hover .mac-item-label,
+.mac-item:focus-visible .mac-item-label,
+.mac-desktop-icon:hover .mac-item-label,
+.mac-desktop-icon:focus-visible .mac-item-label {
+  background: var(--mac-ink);
+  color: var(--mac-paper);
+}
+
+.mac-item:hover svg,
+.mac-item:focus-visible svg,
+.mac-desktop-icon:hover svg,
+.mac-desktop-icon:focus-visible svg {
+  filter: brightness(0.6);
+}
+
+/* Scroll bars. The window's own bar is hidden; this one drives it. */
+.mac-scrollbar {
+  --mac-scroll-size: 1.05em;
+
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  width: var(--mac-scroll-size);
+  border-left: 2px solid var(--mac-ink);
+}
+
+.mac-scroll-button,
+.mac-scroll-end {
+  display: grid;
+  flex: none;
+  width: 1.05em;
+  height: 1.05em;
+  place-items: center;
+}
+
+.mac-scroll-button {
+  cursor: pointer;
+  border-bottom: 2px solid var(--mac-ink);
+}
+
+.mac-scroll-down {
+  border-top: 2px solid var(--mac-ink);
+  border-bottom: 0;
+}
+
+.mac-scroll-button:hover {
+  background: var(--mac-ink);
+}
+
+.mac-scroll-arrow {
+  width: 0.85em;
+}
+
+.mac-scroll-down .mac-scroll-arrow {
+  transform: rotate(180deg);
+}
+
+.mac-scroll-left .mac-scroll-arrow {
+  transform: rotate(-90deg);
+}
+
+.mac-scroll-right .mac-scroll-arrow {
+  transform: rotate(90deg);
+}
+
+.mac-scroll-track {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+}
+
+.mac-scrollbar[data-scrollable="true"] .mac-scroll-track {
+  background: conic-gradient(var(--mac-ink-dim) 25%, transparent 0 50%, var(--mac-ink-dim) 0 75%, transparent 0) 0 0 / 4px 4px;
+}
+
+.mac-scroll-thumb {
+  position: absolute;
+  top: calc(var(--mac-thumb, 0) * (100% - var(--mac-scroll-size)));
+  left: 0;
+  display: none;
+  width: 100%;
+  height: var(--mac-scroll-size);
+  border-block: 2px solid var(--mac-ink);
+  background: var(--mac-paper);
+}
+
+.mac-scrollbar[data-scrollable="true"] .mac-scroll-thumb {
+  display: block;
+}
+
+.mac-window-foot {
+  display: flex;
+  flex: none;
+  border-top: 2px solid var(--mac-ink);
+}
+
+.mac-scroll-left {
+  border-right: 2px solid var(--mac-ink);
+}
+
+.mac-scroll-right {
+  border-left: 2px solid var(--mac-ink);
+}
+
+.mac-grow-box {
+  position: relative;
+  flex: none;
+  width: calc(1.05em + 2px);
+  border-left: 2px solid var(--mac-ink);
+}
+
+.mac-grow-box::after {
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  width: 40%;
+  height: 40%;
+  border: 2px solid var(--mac-ink);
+  content: "";
+}
+
+.mac-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8em;
+  margin-top: 0.9em;
+  padding: 0.2em;
+}
+
+.mac-button {
+  display: inline-block;
+  padding: 0.2em 1.1em;
+  border: 2px solid var(--mac-ink);
+  border-radius: 0.7em;
+  background: var(--mac-paper);
+  color: var(--mac-ink);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.mac-button-default {
+  box-shadow:
+    0 0 0 2px var(--mac-paper),
+    0 0 0 4px var(--mac-ink);
+}
+
+.mac-button:hover,
+.mac-button:focus-visible {
+  background: var(--mac-ink);
+  color: var(--mac-paper);
+}
+
+.mac-button:active {
+  transform: translateY(1px);
+}
+
+/* Hover already inverts the controls; focus only needs to match it. */
+.mac-desktop :focus-visible {
+  outline: 2px solid var(--mac-ink);
+  outline-offset: 1px;
+}
+
+/* Takes focus when it opens, so a screen reader lands on it. Not a control. */
+.mac-window:focus-visible {
+  outline: none;
+}
+
+/* A phone's screen has no room for a desktop around the window. */
+@container (max-width: 34rem) {
+  .mac-desktop-icon,
+  .mac-window-zoom,
+  .mac-window-foot {
+    display: none;
+  }
+
+  .mac-window {
+    inset: 0.3em 0.4em 0.5em;
+  }
+
+  .mac-window-info span:nth-child(2) {
+    display: none;
+  }
+
+  .mac-menubar {
+    padding: 0 1em;
+  }
+
+  .mac-window-body {
+    padding: 0.4em 0.6em;
+  }
+
+  .mac-heading {
+    font-size: 1.4em;
+  }
+
+  .mac-item svg {
+    width: 2.2em;
+  }
+
+  .mac-principles {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   :root {
     --motion-duration-fast: 0ms;
@@ -2799,6 +3773,13 @@ html:has(.image-lightbox[open]) {
   /* Slides change in one cut. */
   .deck *,
   .deck-slide-frame {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* The Mac cuts straight between its resting and zoomed-in views. */
+  .mac,
+  .mac * {
     animation: none !important;
     transition: none !important;
   }
