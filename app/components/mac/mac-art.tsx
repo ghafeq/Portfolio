@@ -1,30 +1,32 @@
+import { PLATINUM, SHADOW } from "./mac-desk";
 import { APPLE_PATH, MacApple } from "./mac-icons";
 import { MacKeyboard } from "./mac-keyboard";
+import { MOUSE_CABLE, MacMouse } from "./mac-mouse";
 import { Blur, Ramp } from "./mac-ramp";
 
 /**
  * The desk: a Macintosh Classic II from the front, with its keyboard and mouse,
- * drawn from photographs of each. The screen is left out; MacHardware sets it
- * into the dark glass, at the position marked in app.css.
+ * drawn from photographs of each and lit and coloured from mac-desk.ts, so they
+ * agree. The screen is left out; MacHardware sets it into the dark glass, at the
+ * position marked in app.css.
  *
- * The monitor is drawn from (0, 0) at its top left and moved into place, and the
- * mouse is drawn in the pixels of its own photo, scaled down.
+ * The monitor is drawn from (0, 0) at its top left and moved into place.
  */
 
 const MONITOR_X = 850;
 const MONITOR_Y = 50;
 
-const SHADOW = "#23262b";
-const MOUSE_CABLE =
-  "M2234 1314C2224 1262 2208 1212 2160 1190 2112 1170 2062 1196 2076 1236 2088 1270 2140 1262 2136 1296 2133 1318 2104 1322 2076 1316";
 const COILED_LEAD = "M1950 1262C1984 1176 1858 1098 1650 1096";
+// One ring of the coil, then the gap to the next.
+const COIL_DASH = "7.5 3.5";
 
-const SLAB =
-  "M30 0H870Q899 0 900 30L892 852Q892 862 882 862H18Q8 862 8 852L0 30Q1 0 30 0Z";
-const PANEL =
-  "M12 858H888V1000Q888 1038 848 1041Q450 1056 52 1041Q12 1038 12 1000Z";
-const BASE =
-  "M58 1020H842V1084Q842 1101 822 1102Q450 1114 78 1102Q58 1101 58 1084Z";
+// One moulding: its sides taper in by 10 from top to bottom, all four corners are
+// rounded alike, and the seam at 862 is only a groove across it. The slab and
+// the panel below the seam share those sides, so there is no step between them.
+const SLAB = "M30 0H870Q900 0 900 30L891.8 862H8.2L0 30Q0 0 30 0Z";
+const PANEL = "M8.2 856H891.8L890 1016Q890 1046 860 1046H40Q10 1046 10 1016Z";
+// The foot, set in from the sides and tucked under the panel.
+const BASE = "M60 1030H840V1090Q840 1104 826 1104H74Q60 1104 60 1090Z";
 const GLASS =
   "M146 169H754Q792 169 792 207L795 420 792 634Q792 672 754 672H146Q108 672 108 634L105 420 108 207Q108 169 146 169Z";
 
@@ -55,35 +57,35 @@ function Monitor() {
           axis="y"
           id="mac-recess-top"
           stops={[
-            [129, "#74695a"],
-            [169, "#918778"],
+            [129, "#958d7e"],
+            [169, "#aea697"],
           ]}
         />
         <Ramp
           axis="y"
           id="mac-recess-left"
           stops={[
-            [129, "#cdc6b7"],
-            [320, "#ddd6c8"],
-            [729, "#d6cfc0"],
+            [129, "#aaa292"],
+            [420, "#b9b1a1"],
+            [729, "#b2aa9a"],
           ]}
         />
         <Ramp
           axis="y"
           id="mac-recess-right"
           stops={[
-            [129, "#a2988a"],
-            [420, "#b3a999"],
-            [729, "#aaa090"],
+            [129, "#d6cfc1"],
+            [320, "#e2dbce"],
+            [729, "#dad3c5"],
           ]}
         />
         <Ramp
           axis="x"
           id="mac-recess-ledge"
           stops={[
-            [72, "#f1ece0"],
-            [450, "#eee8dc"],
-            [828, "#f4efe3"],
+            [72, "#f2ede3"],
+            [450, "#ece6da"],
+            [828, "#e4ded2"],
           ]}
         />
         <radialGradient cx="0.46" cy="0.42" id="mac-glass" r="0.72">
@@ -95,28 +97,37 @@ function Monitor() {
           axis="y"
           id="mac-panel"
           stops={[
-            [884, "#dcd5c7"],
-            [960, "#d6cfc1"],
-            [1006, "#cac3b4"],
-            [1050, "#a8a192"],
+            [884, "#d7d0c2"],
+            [990, "#d1c9bb"],
+            [1022, "#c4bcad"],
+            [1046, "#a19a8b"],
           ]}
         />
         <Ramp
           axis="x"
           id="mac-panel-falloff"
           stops={[
-            [12, "#ffffff"],
-            [888, "#e3dfd6"],
+            [10, "#ffffff"],
+            [890, "#e3dfd6"],
           ]}
         />
         <Ramp
           axis="y"
           id="mac-base"
           stops={[
-            [1034, "#5f5a4e"],
-            [1058, "#8f8879"],
-            [1082, "#b4ad9e"],
-            [1108, "#c6bfb0"],
+            [1030, "#5c564a"],
+            [1050, "#8a8374"],
+            [1074, "#b0a899"],
+            [1104, "#c6beae"],
+          ]}
+        />
+        <Ramp
+          axis="x"
+          id="mac-base-falloff"
+          stops={[
+            [60, "#ffffff"],
+            [450, "#f2efe9"],
+            [840, "#d6d1c6"],
           ]}
         />
         <clipPath id="mac-recess-shape">
@@ -128,42 +139,81 @@ function Monitor() {
         <clipPath id="mac-slab-shape">
           <path d={SLAB} />
         </clipPath>
+        <clipPath id="mac-plastic-shape">
+          <path d={SLAB} />
+          <path d={PANEL} />
+        </clipPath>
+        {/* The faint grain of moulded plastic, so it does not read as flat colour. */}
+        <filter height="100%" id="mac-grain" width="100%" x="0" y="0">
+          <feTurbulence baseFrequency="0.8" numOctaves={2} seed={4} type="fractalNoise" />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+        <Ramp
+          axis="y"
+          id="mac-slot-bevel"
+          stops={[
+            [864, "#8f887a"],
+            [870, "#b8b1a2"],
+            [880, "#ddd7ca"],
+            [887, "#f6f2e8"],
+          ]}
+        />
       </defs>
 
-      <path d={BASE} fill="url(#mac-base)" />
+      {/* The base: deep in shade under the panel, lit down its left side and
+          falling away to the right, with a rim of light where it meets the desk. */}
+      <g style={{ isolation: "isolate" }}>
+        <path d={BASE} fill="url(#mac-base)" />
+        <path d={BASE} fill="url(#mac-base-falloff)" style={{ mixBlendMode: "multiply" }} />
+      </g>
+      <g fill="none" filter="url(#mac-blur-edge)">
+        <path d="M61.5 1046V1090Q61.5 1102.5 74 1102.5" stroke="#fff" strokeOpacity={0.4} strokeWidth={3} />
+        <path d="M838.5 1046V1090Q838.5 1102.5 826 1102.5" stroke="#5b5649" strokeOpacity={0.4} strokeWidth={4} />
+        <path d="M74 1103H826" stroke="#f4efe3" strokeOpacity={0.6} strokeWidth={2.4} />
+      </g>
 
       <g style={{ isolation: "isolate" }}>
         <path d={PANEL} fill="url(#mac-panel)" />
         <path d={PANEL} fill="url(#mac-panel-falloff)" style={{ mixBlendMode: "multiply" }} />
       </g>
       {/* The bottom of the panel rolls under, with a rim of reflected light. */}
-      <path d="M40 1040Q450 1055 860 1040" fill="none" stroke="#fff" strokeOpacity={0.3} strokeWidth={1.5} />
+      <path d="M42 1043.5H858" fill="none" filter="url(#mac-blur-soft)" stroke="#fff" strokeOpacity={0.35} strokeWidth={2} />
 
       <g style={{ isolation: "isolate" }}>
         <path d={SLAB} fill="url(#mac-slab)" />
         <path d={SLAB} fill="url(#mac-slab-falloff)" style={{ mixBlendMode: "multiply" }} />
       </g>
+      <rect
+        clipPath="url(#mac-plastic-shape)"
+        filter="url(#mac-grain)"
+        height={1060}
+        opacity={0.07}
+        style={{ mixBlendMode: "multiply" }}
+        width={900}
+      />
       {/* The slab's edges roll away: lit along the top and left, in shade down the
           right, and darkening towards the seam where it turns under. */}
       <g clipPath="url(#mac-slab-shape)">
         <path d="M904 0L896 870" fill="none" filter="url(#mac-blur-near)" stroke="#6b6557" strokeOpacity={0.5} strokeWidth={30} />
         <path d="M0 856H900" fill="none" filter="url(#mac-blur-near)" stroke="#6b6557" strokeOpacity={0.4} strokeWidth={18} />
       </g>
-      <path d="M22 3H878" stroke="#fff" strokeLinecap="round" strokeOpacity={0.75} strokeWidth={2.4} />
-      <path d="M3 34L10 846" stroke="#fff" strokeOpacity={0.5} strokeWidth={2.4} />
-      <path d="M897 34L889 846" stroke="#8d8676" strokeOpacity={0.4} strokeWidth={3} />
+      <g fill="none" filter="url(#mac-blur-edge)" strokeLinecap="round">
+        <path d="M24 4H876" stroke="#fff" strokeOpacity={0.85} strokeWidth={4} />
+        <path d="M4 34L13.6 1012" stroke="#fff" strokeOpacity={0.6} strokeWidth={4} />
+        <path d="M896 34L886.4 1012" stroke="#8d8676" strokeOpacity={0.45} strokeWidth={5} />
+      </g>
 
       {/* The recess. Each wall takes a different light, and they meet softly. */}
       <g clipPath="url(#mac-recess-shape)">
-        <g filter="url(#mac-blur-soft)">
+        <g filter="url(#mac-blur-wall)">
           <path d="M72 129L108 169V672L72 729Z" fill="url(#mac-recess-left)" />
           <path d="M828 129L792 169V672L828 729Z" fill="url(#mac-recess-right)" />
           <path d="M72 729L108 672H792L828 729Z" fill="url(#mac-recess-ledge)" />
           <path d="M62 119H838V129L792 169H108L72 129Z" fill="url(#mac-recess-top)" />
         </g>
       </g>
-      <rect fill="none" height={600} rx={32} stroke="#5f5648" strokeOpacity={0.3} strokeWidth={1.6} width={756} x={72} y={129} />
-      <path d="M100 730Q450 733 800 730" fill="none" stroke="#fff" strokeOpacity={0.55} strokeWidth={2} />
+      <rect fill="none" filter="url(#mac-blur-soft)" height={600} rx={32} stroke="#5f5648" strokeOpacity={0.3} strokeWidth={1.6} width={756} x={72} y={129} />
+      <path d="M100 730Q450 733 800 730" fill="none" filter="url(#mac-blur-edge)" stroke="#fff" strokeOpacity={0.7} strokeWidth={3} />
 
       <path d={GLASS} fill="url(#mac-glass)" />
       {/* The tube's dark rim, with the display's glow caught in it. */}
@@ -173,17 +223,18 @@ function Monitor() {
       </g>
 
       {/* The seam under the slab, and the ridge that runs beneath the slot. */}
-      <path d="M12 862.5H888" stroke="#74705f" strokeOpacity={0.75} strokeWidth={2} />
-      <path d="M12 888H888" stroke="#faf7ef" strokeWidth={3.4} />
-      <path d="M12 890.5H888" stroke="#9e9788" strokeOpacity={0.4} strokeWidth={1.4} />
+      <path d="M8.2 862.5H891.8" filter="url(#mac-blur-soft)" stroke="#74705f" strokeOpacity={0.7} strokeWidth={2.4} />
+      <path d="M8.5 888H891.5" filter="url(#mac-blur-soft)" stroke="#faf7ef" strokeWidth={3.4} />
+      <path d="M8.5 891H891.5" filter="url(#mac-blur-soft)" stroke="#9e9788" strokeOpacity={0.4} strokeWidth={2} />
 
       {/* The floppy slot, cut into the band, with the drive's workings behind. */}
-      <path d="M438 863H780V887H438Z" fill="#141311" />
-      <path d="M441 866H470V884H441Z" fill="#2c2b27" />
-      <path d="M738 866H748V884H738Z" fill="#46453e" />
-      <path d="M752 869H776V878H752Z" fill="#35342e" />
-      <path d="M438 887H780" stroke="#efebe0" strokeWidth={1.4} />
-      <path d="M780 863L788 868V889L780 887Z" fill="#e6e0d3" />
+      {/* A shallow bevel, in shade at the top and catching light along its lip,
+          around a narrow opening. */}
+      <rect fill="url(#mac-slot-bevel)" height={23} rx={3} width={348} x={436} y={864} />
+      <rect fill="#141311" height={9} rx={2} width={330} x={445} y={870} />
+      <rect fill="#000" height={3} opacity={0.55} rx={1.5} width={330} x={445} y={870} />
+      <rect fill="#2f2e29" height={4} rx={1} width={26} x={448} y={873.5} />
+      <path d="M445 879.5H775" stroke="#fff" strokeOpacity={0.35} strokeWidth={1} />
       <circle cx={804} cy={875} fill="#1b1a17" r={2.8} />
       <circle cx={804} cy={875} fill="none" r={4.2} stroke="#fff" strokeOpacity={0.45} strokeWidth={1} />
 
@@ -193,66 +244,6 @@ function Monitor() {
       <text className="mac-art-wordmark" lengthAdjust="spacingAndGlyphs" textLength={206} x={155} y={986}>
         Macintosh Classic II
       </text>
-    </g>
-  );
-}
-
-const MOUSE_OUTLINE =
-  "M60 195C55 215 58 262 72 296L640 722C660 740 685 745 705 738L1050 510C1066 498 1068 480 1066 445 1080 410 1080 390 1065 370L850 165C835 150 820 145 800 140L430 48C410 42 395 42 380 48L75 170C62 176 58 185 60 195Z";
-const MOUSE_SHELL =
-  "M60 195C55 215 60 225 75 232L430 395C470 420 520 520 640 640 660 660 680 665 700 655L1060 425C1080 410 1080 390 1065 370L850 165C835 150 820 145 800 140L430 48C410 42 395 42 380 48L75 170C62 176 58 185 60 195Z";
-
-function Mouse() {
-  return (
-    <g className="mac-art-mouse">
-      <g transform="translate(2165 1270) scale(.3)">
-        <defs>
-          <Ramp
-            axis="y"
-            id="mac-mouse-shell"
-            stops={[
-              [45, "#e5e0d3"],
-              [260, "#ebe6da"],
-              [660, "#ddd7c9"],
-            ]}
-          />
-          <Ramp
-            axis="x"
-            id="mac-mouse-side"
-            stops={[
-              [62, "#bdb7a7"],
-              [420, "#a9a393"],
-              [660, "#9b9585"],
-            ]}
-          />
-          <Ramp
-            axis="x"
-            id="mac-mouse-skirt"
-            stops={[
-              [640, "#c0baab"],
-              [1068, "#d2ccbd"],
-            ]}
-          />
-        </defs>
-
-        <path d={MOUSE_OUTLINE} fill={SHADOW} filter="url(#mac-blur-far)" opacity={0.42} transform="translate(44 62)" />
-        <path d={MOUSE_OUTLINE} fill="#16171a" filter="url(#mac-blur-near)" opacity={0.5} transform="translate(8 14)" />
-        <path d="M66 234L436 398C500 470 570 570 648 662L640 722 72 296C60 275 60 250 66 234Z" fill="url(#mac-mouse-side)" />
-        <path d="M640 662L1066 442C1068 480 1066 498 1050 510L705 738C685 745 660 740 640 722Z" fill="url(#mac-mouse-skirt)" />
-        <path d={MOUSE_SHELL} fill="url(#mac-mouse-shell)" />
-        <ellipse cx={540} cy={215} fill="#fbf9f3" filter="url(#mac-blur-far)" opacity={0.9} rx={150} ry={46} transform="rotate(-20 540 215)" />
-        <clipPath id="mac-mouse-shape">
-          <path d={MOUSE_SHELL} />
-        </clipPath>
-        <g clipPath="url(#mac-mouse-shape)">
-          <path d="M60 225L430 395C470 420 520 520 640 640 660 660 680 665 700 655L1060 425 1072 380" fill="none" filter="url(#mac-blur-near)" stroke="#bcb6a7" strokeOpacity={0.75} strokeWidth={26} />
-        </g>
-        <path d="M66 234L436 398C500 470 570 570 646 664 666 672 684 672 702 660L1066 440" fill="none" stroke="#8d8676" strokeLinejoin="round" strokeWidth={4.5} />
-        <path d="M150 172L400 68 555 112 300 228Z" fill="#e6e1d4" stroke="#b1aa99" strokeLinejoin="round" strokeWidth={4} />
-        <path d="M152 174L300 231 557 114" fill="none" stroke="#fff" strokeOpacity={0.6} strokeWidth={2.4} />
-        <path d={APPLE_PATH} fill="none" stroke="#fff" strokeOpacity={0.8} strokeWidth={0.8} transform="translate(642 432) rotate(-8) scale(3.8)" />
-        <path d={APPLE_PATH} fill="none" stroke="#a9a290" strokeWidth={0.8} transform="translate(639 429) rotate(-8) scale(3.8)" />
-      </g>
     </g>
   );
 }
@@ -304,6 +295,9 @@ export function MacArt() {
     <svg aria-hidden="true" className="mac-art" viewBox="0 0 2600 1600">
       <defs>
         <Blur deviation={1.5} id="mac-blur-soft" />
+        {/* Every edge that catches or loses the light is softened by this much. */}
+        <Blur deviation={2.5} id="mac-blur-edge" />
+        <Blur deviation={7} id="mac-blur-wall" />
         <Blur deviation={8} id="mac-blur-glass" />
         <Blur deviation={8} id="mac-blur-near" />
         <Blur deviation={22} id="mac-blur-mid" />
@@ -313,24 +307,33 @@ export function MacArt() {
       <Shadows />
 
       {/* ─── Cables, behind everything they plug into ─── */}
-      <path className="mac-art-cable-tall" d="M1830 1586C1828 1566 1822 1548 1816 1530" fill="none" stroke="#a7a193" strokeLinecap="round" strokeWidth={7} />
+      <path className="mac-art-cable-tall" d="M1830 1586C1828 1566 1822 1548 1816 1530" fill="none" stroke={PLATINUM.cable} strokeLinecap="round" strokeWidth={7} />
       <g className="mac-art-cable-wide" fill="none" strokeLinecap="round">
         <path d={MOUSE_CABLE} filter="url(#mac-blur-near)" stroke={SHADOW} strokeOpacity={0.22} strokeWidth={9} transform="translate(8 16)" />
-        <path d={MOUSE_CABLE} stroke="#a7a193" strokeWidth={7} />
-        <path d="M2233 1312C2223 1260 2207 1210 2159 1188 2111 1168 2061 1194 2075 1234 2087 1268 2139 1260 2135 1294 2132 1316 2103 1320 2075 1314" stroke="#ece8dd" strokeWidth={2.6} />
+        <path d={MOUSE_CABLE} stroke={PLATINUM.cable} strokeWidth={7} />
+        <path d={MOUSE_CABLE} stroke={PLATINUM.highlight} strokeOpacity={0.7} strokeWidth={2.2} transform="translate(-0.8 -1.6)" />
       </g>
 
-      {/* The keyboard's coiled lead, ribbed by a dash of its lighter colour. */}
+      {/* The keyboard's coiled lead: a tube of rings, each catching light along its
+          top and shaded underneath, with the gaps between them in shadow. */}
       <g fill="none">
-        <path d={COILED_LEAD} filter="url(#mac-blur-near)" stroke={SHADOW} strokeOpacity={0.36} strokeWidth={30} transform="translate(10 22)" />
-        <path d={COILED_LEAD} stroke="#6f6b62" strokeWidth={30} />
-        <path d={COILED_LEAD} stroke="#c9c4b7" strokeDasharray="10 4.5" strokeWidth={28} />
-        <path d="M1944 1256C1978 1172 1856 1092 1648 1090" stroke="#f3f0e7" strokeDasharray="10 4.5" strokeOpacity={0.75} strokeWidth={8} />
+        <path d={COILED_LEAD} filter="url(#mac-blur-near)" stroke={SHADOW} strokeOpacity={0.32} strokeWidth={30} transform="translate(10 22)" />
+        <path d={COILED_LEAD} stroke="#a39b8b" strokeWidth={28} />
+        <path d={COILED_LEAD} stroke={PLATINUM.cable} strokeDasharray={COIL_DASH} strokeWidth={26} />
+        {/* Along each ring: lit where it turns towards the light, shaded where it
+            turns away. On the lead's own path, so they stay on their ring. */}
+        <g filter="url(#mac-blur-soft)">
+          <path d={COILED_LEAD} stroke={PLATINUM.highlight} strokeDasharray="3 8" strokeOpacity={0.55} strokeWidth={24} />
+          <path d={COILED_LEAD} stroke={PLATINUM.edge} strokeDasharray="2.5 8.5" strokeDashoffset={-5.5} strokeOpacity={0.3} strokeWidth={24} />
+        </g>
+        {/* Across the tube: round, so lit along its top and shaded beneath. */}
+        <path d={COILED_LEAD} filter="url(#mac-blur-edge)" stroke="#fff" strokeOpacity={0.35} strokeWidth={8} transform="translate(0 -5)" />
+        <path d={COILED_LEAD} filter="url(#mac-blur-edge)" stroke="#6f685a" strokeOpacity={0.25} strokeWidth={8} transform="translate(0 8)" />
       </g>
 
       <Monitor />
       <MacKeyboard />
-      <Mouse />
+      <MacMouse />
     </svg>
   );
 }

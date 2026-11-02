@@ -3028,12 +3028,16 @@ html:has(.image-lightbox[open]) {
   font-family: var(--font-jersey), var(--font-family-mono);
 }
 
-/* The glass, darkening into its corners, with the recess's shadow along the top. */
+/* The glass: a soft glare off its curve at the top left, darkening into its
+   corners, and the recess's shadow along the top. */
 .mac-crt::after {
   position: absolute;
   inset: 0;
   z-index: 1;
   border-radius: inherit;
+  background:
+    linear-gradient(160deg, rgb(255 255 255 / 0.24) 0%, rgb(255 255 255 / 0.07) 28%, transparent 46%),
+    radial-gradient(ellipse 120% 95% at 50% 50%, transparent 58%, rgb(2 24 34 / 0.2) 100%);
   box-shadow:
     inset 0 calc(var(--mac-p) * 22) calc(var(--mac-p) * 26) calc(var(--mac-p) * -10) rgb(2 24 34 / 0.42),
     inset 0 0 calc(var(--mac-p) * 18) rgb(4 40 60 / 0.22);
@@ -3063,7 +3067,10 @@ html:has(.image-lightbox[open]) {
 }
 
 .mac-paint {
-  --mac-hello-start: 500ms;
+  /* Start-up first: dark, then power on, and the happy Mac. */
+  --mac-boot-on: 300ms;
+  --mac-boot-end: 1500ms;
+  --mac-hello-start: calc(var(--mac-boot-end) + 150ms);
   --mac-hello-stem: 420ms;
   --mac-hello-body: 1150ms;
   --mac-hello-flick: 120ms;
@@ -3136,6 +3143,128 @@ html:has(.image-lightbox[open]) {
 
 .mac-start[data-hello="true"] .mac-paint-click {
   animation: mac-click-in var(--motion-duration-normal) steps(3) calc(var(--mac-hello-erase-start) + var(--mac-hello-erase)) backwards;
+}
+
+/* At rest the start-up is gone, so whatever stops its animation leaves MacPaint. */
+.mac-boot {
+  visibility: hidden;
+}
+
+.mac-boot-beam,
+.mac-boot-static,
+.mac-boot-roll {
+  opacity: 0;
+}
+
+/* The page as served holds the screen dark, with nothing running, until its
+   script is there to cue the start-up's sounds. Then everything starts afresh. */
+.mac-start[data-hello="waiting"] .mac-boot {
+  visibility: visible;
+}
+
+.mac-start[data-hello="waiting"] .mac-paint * {
+  animation: none;
+}
+
+.mac-start[data-hello="true"] .mac-boot {
+  animation: mac-boot-shown var(--mac-boot-end) linear;
+}
+
+.mac-start[data-hello="true"] .mac-boot-dark {
+  animation: mac-boot-off 1ms linear var(--mac-boot-on) forwards;
+}
+
+/* A thin line across the middle opens to the full height, then gives way to the
+   picture underneath, the way a tube warms up. */
+.mac-start[data-hello="true"] .mac-boot-beam {
+  animation: mac-boot-beam 420ms var(--motion-ease-standard) var(--mac-boot-on) forwards;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* Grain that flickers hard at power-on and dies away onto the happy Mac. */
+.mac-start[data-hello="true"] .mac-boot-static {
+  animation: mac-boot-static 900ms linear var(--mac-boot-on) forwards;
+}
+
+.mac-start[data-hello="true"] .mac-boot-roll {
+  animation: mac-boot-roll 450ms linear var(--mac-boot-on) 2;
+}
+
+@keyframes mac-boot-static {
+  0% {
+    opacity: 0.9;
+  }
+
+  8% {
+    opacity: 0.45;
+  }
+
+  16% {
+    opacity: 0.85;
+  }
+
+  28% {
+    opacity: 0.5;
+  }
+
+  40% {
+    opacity: 0.7;
+  }
+
+  58% {
+    opacity: 0.3;
+  }
+
+  76% {
+    opacity: 0.4;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes mac-boot-roll {
+  from {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0.35;
+    transform: translateY(443px);
+  }
+}
+
+@keyframes mac-boot-shown {
+  from,
+  to {
+    visibility: visible;
+  }
+}
+
+@keyframes mac-boot-off {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes mac-boot-beam {
+  from {
+    opacity: 1;
+    transform: scaleY(0.008);
+  }
+
+  40% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: scaleY(1);
+  }
 }
 
 @keyframes mac-hello-write {
