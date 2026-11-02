@@ -98,18 +98,69 @@ function bitmapPath(hex: string) {
   return path;
 }
 
+// The happy Mac the Macintosh II shows as it starts, a 14×20 bitmap.
+const HAPPY_MAC = [
+  ".############.",
+  "#............#",
+  "#.##########.#",
+  "#.#........#.#",
+  "#.#..#..#..#.#",
+  "#.#..#..#..#.#",
+  "#.#........#.#",
+  "#.#....#...#.#",
+  "#.#...##...#.#",
+  "#.#........#.#",
+  "#.#.#....#.#.#",
+  "#.#..####..#.#",
+  "#.#........#.#",
+  "#.##########.#",
+  "#............#",
+  "#............#",
+  "#.......####.#",
+  "#............#",
+  ".############.",
+  "##############",
+];
+const HAPPY_SCALE = 5;
+
+/** Draws a bitmap of rows as a path: one square per "#". */
+function rowsPath(rows: string[], x: number, y: number, scale: number) {
+  return rows
+    .flatMap((row, rowIndex) =>
+      Array.from(row).map((pixel, column) =>
+        pixel === "#"
+          ? `M${x + column * scale} ${y + rowIndex * scale}h${scale}v${scale}h${-scale}z`
+          : "",
+      ),
+    )
+    .join("");
+}
+
+const HAPPY_MAC_PATH = rowsPath(
+  HAPPY_MAC,
+  256 - (HAPPY_MAC[0].length * HAPPY_SCALE) / 2,
+  186 - (HAPPY_MAC.length * HAPPY_SCALE) / 2,
+  HAPPY_SCALE,
+);
+
 interface MacPaintProps {
+  /** Called as the screen powers on. */
+  onPowerOn: () => void;
+  /** Called as the start-up hands over to MacPaint. */
+  onStarted: () => void;
   /** Called as the pen touches down on the first stroke of "hello.". */
   onHello: () => void;
 }
 
 /**
  * The screen at rest: MacPaint, where "hello." is written on the page and then
- * wiped away for the Click button. All of that timing is in CSS (.mac-paint-*),
- * so it needs no script, and anything that stops it, such as reduced motion,
- * leaves the button in place.
+ * wiped away for the Click button. Before that the screen starts up the way a
+ * Macintosh II does: dark, a line of light opening into the picture, then the
+ * happy Mac on the desktop. All of that timing is in CSS (.mac-paint-*). It
+ * starts once the page's script is running, which then hears every cue, and
+ * anything that stops it, such as reduced motion, leaves the button in place.
  */
-export function MacPaint({ onHello }: MacPaintProps) {
+export function MacPaint({ onHello, onPowerOn, onStarted }: MacPaintProps) {
   return (
     <svg aria-hidden="true" className="mac-paint" viewBox="0 0 512 373">
       <defs>
@@ -223,6 +274,56 @@ export function MacPaint({ onHello }: MacPaintProps) {
         <text className="mac-paint-click-label" textAnchor="middle" x={289} y={214}>
           Click
         </text>
+      </g>
+
+
+      {/* Start-up, over everything. Only its animation ever shows it. */}
+      <g
+        className="mac-boot"
+        onAnimationEnd={(event) => {
+          // Its children's animations end inside it too; this is the start-up's.
+          if (event.target === event.currentTarget) {
+            onStarted();
+          }
+        }}
+      >
+        <rect fill={PAPER} height={373} width={512} />
+        <rect fill="url(#mac-pattern-3)" height={373} opacity={0.32} width={512} />
+        <path d={HAPPY_MAC_PATH} fill={INK} shapeRendering="crispEdges" />
+        <rect className="mac-boot-dark" fill="#071016" height={373} width={512} />
+        <rect
+          className="mac-boot-beam"
+          fill="var(--mac-paper)"
+          height={373}
+          onAnimationStart={onPowerOn}
+          width={512}
+        />
+        {/* Static as the tube settles: fresh grain several times a second, and a
+            band of light rolling down. */}
+        <filter height="100%" id="mac-boot-static" width="100%" x="0" y="0">
+          <feTurbulence baseFrequency="0.45" numOctaves={1} seed={1} type="fractalNoise">
+            <animate
+              attributeName="seed"
+              calcMode="discrete"
+              dur="0.3s"
+              repeatCount="indefinite"
+              values="1;7;13;19;25;31"
+            />
+          </feTurbulence>
+          <feColorMatrix type="saturate" values="0" />
+          <feComponentTransfer>
+            <feFuncR slope={3.4} intercept={-1.1} type="linear" />
+            <feFuncG slope={3.4} intercept={-1.1} type="linear" />
+            <feFuncB slope={3.4} intercept={-1.1} type="linear" />
+          </feComponentTransfer>
+        </filter>
+        <rect className="mac-boot-static" filter="url(#mac-boot-static)" height={373} width={512} />
+        <linearGradient id="mac-boot-roll-fill" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0" stopColor="var(--mac-paper)" stopOpacity={0} />
+          <stop offset="0.5" stopColor="var(--mac-paper)" />
+          <stop offset="1" stopColor="var(--mac-paper)" stopOpacity={0} />
+        </linearGradient>
+        <rect className="mac-boot-roll" fill="url(#mac-boot-roll-fill)" height={70} width={512} y={-70} />
       </g>
     </svg>
   );
