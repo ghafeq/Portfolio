@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Link, ScrollReveal, StaggerReveal } from "../components";
 
 const heading =
-  "Hey! I’m a Design Engineer based in KL. Weekdays, I turn messy data into screens people enjoy reading. Weekends, I’m usually somewhere with trees.";
+  "Hey! I’m a Designer who codes based in KL. Weekdays, I turn messy data into screens people enjoy reading. Weekends, I’m usually somewhere with trees.";
 const story = [
   "I was born in Klang, and my family moved to Sibu when I was 9. My childhood was pure kampung. Main mercun, street soccer on the road, and evening bike rides around the neighbourhood with stray dogs chasing me half the time. To this day, I pedal faster the moment I hear barking.",
   "So yeah, I’m a kampung boy for life. Crowded malls on a Saturday? Hard pass. KL is where I work, but nature is where I feel most like myself.",
