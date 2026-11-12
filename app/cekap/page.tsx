@@ -3,6 +3,7 @@ import {
   CaseStudyFeature,
   CaseStudyHero,
   CaseStudyIndex,
+  CaseStudyNext,
   CaseStudyMeta,
   CaseStudySection,
   CaseStudyStat,
@@ -195,11 +196,6 @@ export default function CekapPage() {
           </div>
         </CaseStudySection>
 
-        <CaseStudySection
-          copy="The prototype is built in Figma and Expo. It is not yet tested with travellers, but it is ready for user testing and iteration."
-          title="The prototype, in Figma and in code."
-        />
-
         <CaseStudySection title="Metrics. What I would measure, and what I have.">
           <div className="grid gap-4 sm:grid-cols-2">
             {metrics.map(({ value, title, body, emphasis }) => (
@@ -219,6 +215,7 @@ export default function CekapPage() {
           title="What is next, and what could sink it."
         />
       </div>
+      <CaseStudyNext current="/cekap" />
       <CaseStudyIndex />
     </main>
   );

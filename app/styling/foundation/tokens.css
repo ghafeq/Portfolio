@@ -196,15 +196,6 @@
     --code-orange: #ffa657;
     --code-purple: #d2a8ff;
 
-    /* Sampled from the Five Petroleum cover, for the pixels on the home page, with
-       lilac and orchid as its lighter tints. */
-    --five-ink: #08061c;
-    --five-navy: #1c1599;
-    --five-indigo: #2117af;
-    --five-violet: #6c1fda;
-    --five-orchid: #a66bff;
-    --five-lilac: #d9c7ff;
-
     /* The Macintosh's screen, a cyan phosphor with a dark ink, and the six stripes
        of its badge. The hardware's shading lives with the drawing, in mac-art.tsx. */
     --mac-phosphor: #06d6ea;

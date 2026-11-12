@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import {
+  CaseStudyCard,
   CaseStudyFeature,
   CaseStudyHero,
   CaseStudyIndex,
+  CaseStudyNext,
   CaseStudyMeta,
   CaseStudySection,
   CaseStudyStat,
@@ -25,10 +27,21 @@ const meta: [string, string][] = [
   ["Status", "In production since 2025"],
 ];
 
-const steps = [
+const delivered = [
   {
-    title: "Pick the vehicle, then prove it",
-    body: "The driver selects a registered plate, then enters that vehicle’s PIN. Verification is scoped to the vehicle rather than the person, so it holds for whoever is driving it that day.",
+    title: "A 7-step purchase flow",
+    body: "Select vehicle, verify, check quota, enter details, choose payment, authorise, receive invoice. Each step is one screen with one decision on it.",
+  },
+  {
+    title: "2 payment paths",
+    body: "Five Wallet pays on the phone. Pay at Counter hands the sale to the cashier. Both end with a digital invoice on the driver’s phone.",
+  },
+];
+
+const struggles = [
+  {
+    title: "External: the driver doesn’t own the vehicle",
+    body: "Drivers rotate between company trucks, so a personal login proves nothing about which vehicle is being fuelled. I tied verification to the vehicle: the driver picks a registered plate and enters that vehicle’s PIN. 1 PIN per vehicle works for any driver on any shift.",
     image: {
       ...SCREEN,
       src: asset("Vehicle Verification.png"),
@@ -36,8 +49,8 @@ const steps = [
     },
   },
   {
-    title: "Quota on screen before the amount field",
-    body: "Available quota, balance and company details load before the driver enters an odometer reading or a fuel amount, so the decision happens with the numbers already visible rather than after a rejection.",
+    title: "External: a limit the driver couldn’t see",
+    body: "The quota belongs to the company, and drivers found out they were over it only when a purchase was refused. I moved quota, balance and company details above the amount field. The driver sees the limit before typing a single number.",
     image: {
       ...SCREEN,
       src: asset("Quota Check.png"),
@@ -45,8 +58,8 @@ const steps = [
     },
   },
   {
-    title: "Two ways to pay, one with a person in it",
-    body: "Five Wallet settles on the phone. Pay at Counter hands authorisation to the cashier, who enters their own name and station PIN into the driver’s device. Either way the driver leaves with a digital invoice.",
+    title: "Internal: drivers without a wallet balance",
+    body: "Not every driver has Five Wallet funded, and stations still needed a way to close the sale. Pay at Counter has the cashier enter their own name and station PIN on the driver’s phone, so the station signs off on the sale and the record carries 2 names.",
     image: {
       ...SCREEN,
       src: asset("Payment Options.png"),
@@ -55,26 +68,26 @@ const steps = [
   },
 ];
 
-const numbers = [
+const results = [
   {
     value: "7",
-    title: "Steps in the purchase flow",
-    body: "Select vehicle, verify, check quota, enter details, choose payment, authorise, receive invoice.",
+    title: "Steps from app to pump",
+    body: "The whole Company mode purchase, verification and payment included.",
+  },
+  {
+    value: "0",
+    title: "Numbers typed before quota is shown",
+    body: "Quota loads first, so a driver can’t enter an amount the company can’t cover without seeing it.",
   },
   {
     value: "2",
     title: "Ways to pay",
-    body: "Five Wallet or Pay at Counter, chosen after quota is confirmed.",
-  },
-  {
-    value: "1",
-    title: "Person authorising on someone else’s phone",
-    body: "At the counter, a cashier enters their own credentials into the driver’s device to complete the sale.",
+    body: "Five Wallet or Pay at Counter, both ending in the same digital invoice.",
   },
   {
     value: "0",
-    title: "Pump-side failure states designed",
-    body: "Denied purchase, exhausted quota, dead connection, forgotten PIN. None shipped.",
+    title: "Failure states shipped",
+    body: "Denied purchase, exhausted quota, lost connection and forgotten PIN were designed but left out of the release. This is the gap I’d close next.",
   },
 ];
 
@@ -90,14 +103,19 @@ export default function FiveCompanyModePage() {
 
         <CaseStudyMeta items={meta} />
 
-        <CaseStudySection
-          copy="A fleet driver at a pump is spending a company quota, against a vehicle they may not own, with a limit they cannot see. Seven steps sit between opening the app and fuel in the tank, and most of them exist to make that safe without making it slow."
-          title="Buying fuel you do not pay for."
-        />
+        <CaseStudySection copy="Company mode for the Five Petroleum app, designed in Figma: the screens a fleet driver uses to buy subsidised diesel on a company quota. Live since 2025." title="What I delivered">
+          <div className="grid gap-6">
+            {delivered.map(({ title, body }) => (
+              <CaseStudyCard key={title} title={title}>
+                {body}
+              </CaseStudyCard>
+            ))}
+          </div>
+        </CaseStudySection>
 
-        <CaseStudySection title="How a purchase actually works.">
+        <CaseStudySection copy="A fleet driver at the pump spends company money, in a vehicle they may not own, against a limit they can’t see. Each problem below came from one of those three facts." title="Struggles and solutions">
           <div className="grid gap-4">
-            {steps.map(({ title, body, image }) => (
+            {struggles.map(({ title, body, image }) => (
               <CaseStudyFeature image={image} key={title} title={title}>
                 {body}
               </CaseStudyFeature>
@@ -105,9 +123,9 @@ export default function FiveCompanyModePage() {
           </div>
         </CaseStudySection>
 
-        <CaseStudySection title="The numbers that shaped it." wide>
+        <CaseStudySection title="Results">
           <div className="grid gap-4 sm:grid-cols-2">
-            {numbers.map(({ value, title, body }) => (
+            {results.map(({ value, title, body }) => (
               <CaseStudyStat key={title} title={title} value={value}>
                 {body}
               </CaseStudyStat>
@@ -115,6 +133,7 @@ export default function FiveCompanyModePage() {
           </div>
         </CaseStudySection>
       </div>
+      <CaseStudyNext current="/five-company-mode" />
       <CaseStudyIndex />
     </main>
   );

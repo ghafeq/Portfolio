@@ -15,7 +15,7 @@ type Folder = "disk" | "work" | "about" | "trash";
 type View = "icon" | "name";
 
 const DISK_NAME = "Shafiq's HD";
-const RESUME_HREF = `/resume/${encodeURIComponent("Shafiq Effendy - Product Designer.pdf")}`;
+const RESUME_HREF = `/resume/${encodeURIComponent("Shafiq Effendy - Senior Product Designer.pdf")}`;
 // One press of a scroll arrow, in lines of the window's text.
 const SCROLL_STEP_EM = 3;
 

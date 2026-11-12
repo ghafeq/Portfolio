@@ -23,8 +23,9 @@ export const projectAsset = (folder: string, file: string) =>
 // ratio, so wide and square marks sit at the same visual weight.
 const LOGO_HEIGHT = 80;
 
-// Images inside the reading measure never render wider than the wrapper.
-const MEASURE_SIZES = "(max-width: 660px) 100vw, 600px";
+// Images inside the reading measure never render wider than the wrapper,
+// which grows to 880px.
+const MEASURE_SIZES = "(max-width: 880px) 100vw, 880px";
 
 export interface CaseStudyHeroProps {
   /** Left out for self-initiated work with no client mark. */

@@ -23,7 +23,7 @@ const isInternalRoute = (href: string) => href.startsWith("/") && !href.startsWi
 // Written out plainly and encoded here, rather than hand-encoding the URL: the
 // spaces still need escaping for hosts that do not normalise them, but the name
 // stays readable and can be checked against the file on disk at a glance.
-const RESUME_FILE = "Shafiq Effendy - Product Designer.pdf";
+const RESUME_FILE = "Shafiq Effendy - Senior Product Designer.pdf";
 const RESUME_HREF = `/resume/${encodeURIComponent(RESUME_FILE)}`;
 
 const defaultLinks: TopNavigationLink[] = [

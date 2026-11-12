@@ -4,6 +4,7 @@ import {
   CaseStudyFeature,
   CaseStudyHero,
   CaseStudyIndex,
+  CaseStudyNext,
   CaseStudyMeta,
   CaseStudySection,
   CaseStudyStat,
@@ -26,25 +27,25 @@ const meta: [string, string][] = [
   ["Status", "In production since 2025"],
 ];
 
-const registers = [
+const delivered = [
   {
-    title: "Vehicles",
-    body: "Plate, sector, type, two expiry dates, status, and the quota that caps how much fuel the vehicle can draw. Added, updated and inspected from one toolbar.",
+    title: "3 registers on 1 pattern",
+    body: "Vehicles, drivers and points, each with the same create, update and disable actions behind one toolbar. Learn one register and the other two work the same way.",
   },
   {
-    title: "Drivers",
-    body: "Added, updated, disabled, and checked against the vehicles they hold. Disabling is a first-class action rather than a delete, because the transaction history has to survive the person leaving.",
+    title: "Vehicle records with compliance dates",
+    body: "Plate, sector, type, quota, road tax expiry and SKDS expiry on every vehicle. Each date shows one of 3 states, so a lapsing vehicle stands out in the list.",
   },
   {
-    title: "Points",
-    body: "The corporate balance, its expiry date, and every transfer out to a driver held in one ledger, filterable by transaction type.",
+    title: "Driver records that survive offboarding",
+    body: "Drivers are disabled, not deleted. Their transaction history stays in the ledger after they leave.",
   },
 ];
 
-const shipped = [
+const struggles = [
   {
-    title: "Usage capped on the vehicle",
-    body: "Every vehicle carries its own quota, editable from the vehicle record. A pooled balance with no per-vehicle ceiling gives an administrator nothing to control with.",
+    title: "Internal: one pooled balance, no control",
+    body: "The subsidy lands as a single corporate balance, so one truck could spend what the whole fleet was given. I put a quota on each vehicle record, editable by the fleet admin. Spending is capped per vehicle, not per fleet.",
     image: {
       ...SCREEN,
       src: asset("Update Vehicle.png"),
@@ -52,8 +53,8 @@ const shipped = [
     },
   },
   {
-    title: "Points expire, so the portal shows the clock",
-    body: "Expiry sits on the balance card as a link into the dated breakdown, next to transfers out. Unspent subsidy is a loss, and a ledger that only shows a total hides it.",
+    title: "External: points expire without warning",
+    body: "Unspent subsidy is lost at expiry, and the old view showed only a total. The expiry date now sits on the balance card and links to a dated breakdown next to transfers out, so admins can see what lapses and when.",
     image: {
       ...SCREEN,
       src: asset("Points Account.png"),
@@ -61,9 +62,8 @@ const shipped = [
     },
   },
   {
-    title: "Mobile number as the identity key",
-    body: "Drivers link to their FIVE mobile app account by phone number, and corporate points transfer to that number. One person, one identity, two products.",
-    // The ledger is the proof: each transfer out is addressed to a mobile number.
+    title: "External: two products, two identities",
+    body: "Drivers buy fuel in the Five mobile app, but admins assign vehicles and points in the portal. I used the driver’s mobile number as the shared key. Points transfer to that number, and the driver sees them in the app with no second account.",
     image: {
       ...SCREEN,
       src: asset("Points Account.png"),
@@ -72,26 +72,26 @@ const shipped = [
   },
 ];
 
-const numbers = [
+const results = [
   {
     value: "3",
-    title: "Registers in one portal",
-    body: "Vehicles, drivers and points, each with the same create, update and disable pattern behind one toolbar.",
-  },
-  {
-    value: "Per vehicle",
-    title: "Where usage is capped",
-    body: "Quota lives on the vehicle record rather than the fleet, so one truck cannot spend what everything else was allocated.",
-  },
-  {
-    value: "2",
-    title: "Expiry clocks to watch",
-    body: "Road tax and SKDS on every vehicle, each in three states, plus the expiry date sitting on the points balance itself.",
+    title: "Registers, 1 interaction pattern",
+    body: "Vehicles, drivers and points share the same toolbar and actions.",
   },
   {
     value: "1",
-    title: "Identity across two products",
-    body: "The driver’s mobile number links portal to mobile app, so assignment and purchase share one account rather than two.",
+    title: "Quota per vehicle",
+    body: "No single vehicle can draw down the fleet’s whole allocation.",
+  },
+  {
+    value: "3",
+    title: "Expiry dates tracked",
+    body: "Road tax and SKDS on every vehicle, plus the expiry on the points balance.",
+  },
+  {
+    value: "1",
+    title: "Identity across 2 products",
+    body: "The mobile number links the portal and the app, so assignment and purchase share one account.",
   },
 ];
 
@@ -107,14 +107,9 @@ export default function FiveFleetPortalPage() {
 
         <CaseStudyMeta items={meta} />
 
-        <CaseStudySection
-          copy="The subsidy arrives as a corporate points balance. It gets spent at a pump by individual drivers in individual vehicles, and it expires while it sits there. Without a limit on the vehicle itself, one truck can drain what the whole fleet was allocated."
-          title="A pooled quota, spent one vehicle at a time."
-        />
-
-        <CaseStudySection title="Three registers, one pattern.">
+        <CaseStudySection copy="A web portal for fleet operators in Malaysia’s subsidised diesel scheme (SKDS and SKPS). I designed it in Figma and built the front end in ASP.NET on Azure. Live since 2025." title="What I delivered">
           <div className="grid gap-6">
-            {registers.map(({ title, body }) => (
+            {delivered.map(({ title, body }) => (
               <CaseStudyCard key={title} title={title}>
                 {body}
               </CaseStudyCard>
@@ -122,9 +117,9 @@ export default function FiveFleetPortalPage() {
           </div>
         </CaseStudySection>
 
-        <CaseStudySection title="What shipped, and why it matters.">
+        <CaseStudySection copy="The subsidy arrives as one corporate points balance, is spent at the pump by individual drivers in individual vehicles, and expires while it sits unused." title="Struggles and solutions">
           <div className="grid gap-4">
-            {shipped.map(({ title, body, image }) => (
+            {struggles.map(({ title, body, image }) => (
               <CaseStudyFeature image={image} key={title} title={title}>
                 {body}
               </CaseStudyFeature>
@@ -132,9 +127,9 @@ export default function FiveFleetPortalPage() {
           </div>
         </CaseStudySection>
 
-        <CaseStudySection title="The numbers that shaped it." wide>
+        <CaseStudySection title="Results">
           <div className="grid gap-4 sm:grid-cols-2">
-            {numbers.map(({ value, title, body }) => (
+            {results.map(({ value, title, body }) => (
               <CaseStudyStat key={title} title={title} value={value}>
                 {body}
               </CaseStudyStat>
@@ -142,6 +137,7 @@ export default function FiveFleetPortalPage() {
           </div>
         </CaseStudySection>
       </div>
+      <CaseStudyNext current="/five-fleet-portal" />
       <CaseStudyIndex />
     </main>
   );

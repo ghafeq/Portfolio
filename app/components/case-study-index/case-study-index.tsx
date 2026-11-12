@@ -20,9 +20,13 @@ const SETTLE_MS = 150;
  * A floating index of the page's case study headings: a rail of ticks that
  * opens into their titles on hover or focus. The current section is marked,
  * and choosing one scrolls to it. Reads the headings from the page, so every
- * CaseStudySection is listed without being passed in.
+ * CaseStudySection is listed without being passed in. A heading can name
+ * itself shorter in the index with data-index-label.
+ *
+ * The sidebar variant keeps every title on show in the left margin instead,
+ * for long pages where the reader wants to see the whole shape at once.
  */
-export function CaseStudyIndex() {
+export function CaseStudyIndex({ variant = "rail" }: { variant?: "rail" | "sidebar" }) {
   const [sections, setSections] = useState<Section[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   // The section chosen from the index, held as current until the scroll it
@@ -108,7 +112,12 @@ export function CaseStudyIndex() {
     // frames pause in a background tab, and the list should be ready the
     // moment the tab is shown.
     const initial = window.setTimeout(() => {
-      setSections(headings.map(({ id, textContent }) => ({ id, title: textContent ?? "" })));
+      setSections(
+        headings.map(({ id, dataset, textContent }) => ({
+          id,
+          title: dataset.indexLabel ?? textContent ?? "",
+        })),
+      );
       update();
     }, 0);
 
@@ -155,7 +164,10 @@ export function CaseStudyIndex() {
   }
 
   return (
-    <nav aria-label="On this page" className="case-study-index">
+    <nav
+      aria-label="On this page"
+      className={`case-study-index${variant === "sidebar" ? " case-study-index-sidebar" : ""}`}
+    >
       <ol className="case-study-index-list">
         {sections.map(({ id, title }) => (
           <li key={id}>

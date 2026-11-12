@@ -1,6 +1,7 @@
 import { ArrowRight, ClockFading, FolderGit2, Layers, PackageCheck, Sparkle } from "lucide-react";
 import Image from "next/image";
 import type { CSSProperties } from "react";
+import { work } from "./projects";
 import {
   Card,
   CardDeck,
@@ -33,79 +34,6 @@ const introduction = [
     value: "engineers",
     label: "Engineers",
     body: "I design with code in mind. ASP.NET, React, TypeScript strict mode, monorepo with CI gates. I build on that stack, so my design system ships as real components, not Figma mockups.",
-  },
-];
-
-const work = [
-  {
-    href: "/cekap",
-    title: "CEKAP",
-    description:
-      "Smart Flight Companion. A calm, checkpoint-based support layer for stressed travellers at KLIA",
-    cover: "/projects/Cekap/Cover.png",
-    info: "Concept" as const,
-    // Spaces in the filenames are percent-encoded so the URLs survive hosts
-    // that do not normalise them.
-    mockups: [
-      
-      "/mobile-mockups/Rest%20Window%20-%20Move%20now%201.png",
-      "/mobile-mockups/Rest%20Window%20-%20Narrowing%201.png",
-      "/mobile-mockups/Rest%20Window%20-%20Comfortable%201.png",
-      "/mobile-mockups/Rest%20Window%20-%20Narrowing%202.png",
-      "/mobile-mockups/Rest%20Window%20-%20Move%20now%202.png",
-      
-    ],
-    inProgress: true,
-    // The fanned mockups are laid out for a wide banner.
-    aspect: 8 / 5,
-  },
-    {
-    href: "https://goshi-nu.vercel.app/",
-    title: "Gōshi",
-    description:
-      "Interactive blocks and micro-interactions from the Gōshi Design System, built as working code",
-    // A snapshot of the live block grid, captured at twice the banner's size.
-    cover: "/projects/Goshi/Cover.png",
-    info: "Concept" as const,
-    inProgress: true,
-    aspect: 2640 / 1156,
-  },
-    {
-    href: "/gain-secure",
-    title: "Gain Secure Corporate Identity",
-    description:
-      "A mark for an AI-driven company, built on the “://” every web address shares, with its colour and type system",
-    cover: "/projects/Gain-Secure/Cover.png",
-    info: "Professional" as const,
-    aspect: 1440 / 758,
-  },
-    {
-    href: "/five-company-mode",
-    title: "Company Mode on Five Petroleum App",
-    description:
-      "Buying subsidised diesel against a company-held quota, from vehicle to invoice in seven steps",
-    // Portrait, with the phones stacked top to bottom.
-    cover: "/projects/Five-App/Cover.png",
-    info: "Professional" as const,
-    aspect: 1212 / 1575,
-  },
-  {
-    href: "/vstecs-billing",
-    title: "CSP Reseller Billing at VSTECS",
-    description:
-      "Monthly cloud subscription billing for VSTECS and its reseller network, designed and built front end in ASP.NET MVC",
-    cover: "/projects/Vstecs/Shared%20Partial%20View.png",
-    info: "Professional" as const,
-    aspect: 4096 / 2023,
-  },
-  {
-    href: "/five-fleet-portal",
-    title: "SKDS & SKPS at Five Petroleum",
-    description:
-      "A web portal for fleet operators in Malaysia’s subsidised diesel scheme. Vehicles, drivers and subsidy points in one place",
-    cover: "/projects/Five-Portal/Update%20Vehicle.png",
-    info: "Professional" as const,
-    aspect: 4096 / 2023,
   },
 ];
 
@@ -167,6 +95,7 @@ export default function HomePage() {
         </div> */}
       </section>
 
+      {/* Principles section hidden
       <section className="mt-16">
         <ScrollReveal>
           <h2 className="title-02">Principles I ship by</h2>
@@ -183,6 +112,7 @@ export default function HomePage() {
           ))}
         </CardDeck>
       </section>
+      */}
 
       <Tabs
         className="work-index"
@@ -217,6 +147,7 @@ export default function HomePage() {
                           description={item.description}
                           href={item.href}
                           info={item.info}
+                          meta={`${item.info === "Professional" ? "Shipped" : item.info} ${item.year}`}
                           tag={
                             item.inProgress ? (
                               <Tag

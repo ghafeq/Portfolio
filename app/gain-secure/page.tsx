@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import {
   CaseStudyIndex,
+  CaseStudyNext,
   CaseStudyMeta,
   CaseStudySection,
   ImageLightbox,
@@ -87,6 +88,7 @@ export default function GainSecurePage() {
           />
         </CaseStudySection>
       </div>
+      <CaseStudyNext current="/gain-secure" />
       <CaseStudyIndex />
     </main>
   );

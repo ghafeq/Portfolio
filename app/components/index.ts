@@ -3,12 +3,22 @@ export { Card, CardDeck } from "./card";
 export type { CardDeckProps, CardProps } from "./card";
 export {
   CaseStudyCard,
+  CaseStudyChapter,
   CaseStudyClip,
+  CaseStudyFacts,
   CaseStudyFeature,
   CaseStudyHero,
   CaseStudyMeta,
+  CaseStudyNext,
+  CaseStudyPoints,
+  CaseStudyPullQuote,
+  CaseStudyRow,
   CaseStudySection,
   CaseStudyStat,
+  CaseStudyStatement,
+  CaseStudyStoryFigure,
+  CaseStudyTable,
+  CaseStudyTopic,
   projectAsset,
 } from "./case-study";
 export type { CaseStudyClipVideo, CaseStudyImage } from "./case-study";
