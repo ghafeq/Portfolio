@@ -451,9 +451,6 @@
 /* ─── Tile ─────────────────────────────────────────────────────────────── */
 
 .tile {
-  background: var(--layer-1-background);
-  border-radius: var(--radius-normal);
-  box-shadow: var(--shadow-sm);
   display: flex;
   flex-direction: column;
   justify-self: stretch;
@@ -464,6 +461,9 @@
 .tile-banner {
   aspect-ratio: 660 / 289;
   background: var(--layer-2-background);
+  border-radius: var(--radius-normal);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
   flex: 0 0 auto;
   position: relative;
   width: 100%;
@@ -505,7 +505,7 @@
   flex-direction: column;
   min-width: 0;
   gap: var(--spacing-1);
-  padding: var(--spacing-5);
+  padding-top: var(--spacing-3);
 }
 
 .tile-title {
@@ -516,6 +516,11 @@
   letter-spacing: 0%;
   line-height: var(--lh-auto);
   margin: 0;
+}
+
+.tile-meta {
+  color: var(--text-secondary);
+  font-weight: var(--fw-medium);
 }
 
 .tile-description {
@@ -552,8 +557,9 @@
 /* Fills the space beside the 660px text column and no further: the mask reaches
    nothing at the box's left and bottom edges, so the pattern is gone by the text.
    Narrower screens have no such space, and it would sit behind the nav links. */
+/* Hidden for now; drop this rule's !important to bring the corner back. */
 .home-corner {
-  display: none;
+  display: none !important;
 }
 
 @media (min-width: 1000px) {
@@ -647,6 +653,15 @@
     gap: var(--spacing-6);
     min-width: 0;
   }
+}
+
+/* The home grid shows only the title line. */
+.work-index .tile-description {
+  display: none;
+}
+
+.work-index .tile-title {
+  font-size: var(--fs-4);
 }
 
 /* Covers keep their own proportions, so the columns fall unevenly. */
@@ -1782,6 +1797,26 @@
   overflow-x: clip;
 }
 
+/* The shared .wrapper is a fixed 660px, which leaves long-form case studies
+   cramped once its padding comes off. Case studies get a column that grows
+   with the screen instead: full width on phones, then a wider reading
+   measure on tablets and desktops. */
+.case-study .wrapper {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .case-study .wrapper {
+    width: 760px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .case-study .wrapper {
+    width: 880px;
+  }
+}
+
 /* <main> is not the whole page: the top navigation sits above it, on the body
    background. Matching the body to the case study keeps the two from meeting
    in a seam, and keys off the page itself so every case study gets it. */
@@ -2060,7 +2095,7 @@ html:has(.image-lightbox[open]) {
 /* Open: hovering the rail, or tabbing into it, swaps the ticks for a card of
    titles. Anchored to the right edge, so the card grows away from the pointer
    and never slides out from under it. */
-.case-study-index:is(:hover, :focus-within) .case-study-index-list {
+.case-study-index:not(.case-study-index-sidebar):is(:hover, :focus-within) .case-study-index-list {
   animation: case-study-index-open var(--motion-duration-normal) var(--motion-ease-standard) both;
   background: var(--layer-1-background);
   border-radius: var(--radius-normal);
@@ -2070,16 +2105,16 @@ html:has(.image-lightbox[open]) {
   padding: var(--spacing-5);
 }
 
-.case-study-index:is(:hover, :focus-within) .case-study-index-link {
+.case-study-index:not(.case-study-index-sidebar):is(:hover, :focus-within) .case-study-index-link {
   gap: var(--spacing-3);
   justify-content: flex-start;
 }
 
-.case-study-index:is(:hover, :focus-within) .case-study-index-tick {
+.case-study-index:not(.case-study-index-sidebar):is(:hover, :focus-within) .case-study-index-tick {
   display: none;
 }
 
-.case-study-index:is(:hover, :focus-within) .case-study-index-label {
+.case-study-index:not(.case-study-index-sidebar):is(:hover, :focus-within) .case-study-index-label {
   clip-path: none;
   height: auto;
   overflow: visible;
@@ -2101,6 +2136,325 @@ html:has(.image-lightbox[open]) {
 
 .case-study-index-link[aria-current="location"] {
   color: var(--link-enabled);
+}
+
+/* ─── Case study: story template ──────────────────────────────────────── */
+
+/* A fluid 12-column grid with 16px gutters and 16px page margins, 24px
+   from 1200px. The page content
+   spans the middle 8 columns from 1200px, leaving the outer 2 on the left for
+   the sidebar index, and every column below that. Text and images sit in the
+   full width of those 8 (capped at 880px) from 768px; the cover takes all 8. Measured against the
+   page itself, so a scrollbar never throws the columns off. */
+.case-study-story {
+  container-type: inline-size;
+}
+
+.case-study-story-wrapper {
+  --story-gutter: 16px;
+  --story-margin: 16px;
+  --story-page: min(100cqw - 2 * var(--story-margin), 1800px);
+  --story-main: var(--story-page);
+  --story-text: var(--story-main);
+  margin-inline: auto;
+  width: var(--story-text);
+}
+
+@media (min-width: 768px) {
+  .case-study-story-wrapper {
+    /* The whole main column, capped so lines stay readable on wide tablets. */
+    --story-text: min(var(--story-main), 880px);
+  }
+}
+
+@media (min-width: 1200px) {
+  .case-study-story-wrapper {
+    --story-margin: 24px;
+    --story-main: calc((var(--story-page) - 11 * var(--story-gutter)) / 12 * 8 + 7 * var(--story-gutter));
+  }
+}
+
+/* Small, quiet labels: a chapter's eyebrow, the project name, the fact terms. */
+.case-study-eyebrow {
+  color: var(--text-secondary);
+  font-family: var(--font-family-sans);
+  font-size: 0.9375rem;
+  font-weight: var(--fw-regular);
+  letter-spacing: 0%;
+  line-height: 1.5;
+}
+
+.case-study-story-cover {
+  margin-inline: calc((100% - var(--story-main)) / 2);
+  width: var(--story-main);
+}
+
+.case-study-story-cover .case-study-story-frame {
+  border-radius: 0;
+}
+
+.case-study-story-figure {
+  margin-top: var(--spacing-6);
+}
+
+.case-study-story-figure figure {
+  margin: 0;
+}
+
+/* A hairline edge, so a white illustration still reads as a frame on white. */
+.case-study-story-frame {
+  background: var(--app-layer-background);
+  border: var(--border-width-1) solid var(--layer-1-border);
+  overflow: hidden;
+}
+
+.case-study-story-frame img {
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+.case-study-statement {
+  margin-top: 2.5rem;
+}
+
+.case-study-statement-title {
+  color: var(--text-primary);
+  font-family: var(--font-family-serif);
+  font-size: 2rem;
+  font-weight: var(--fw-semibold);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-top: var(--spacing-1);
+  text-wrap: balance;
+}
+
+@media (min-width: 1200px) {
+  .case-study-statement-title {
+    font-size: 2.25rem;
+  }
+}
+
+.case-study-facts {
+  margin-top: var(--spacing-7);
+}
+
+.case-study-fact-value {
+  color: var(--text-primary);
+  font-family: var(--font-family-sans);
+  font-size: 0.9375rem;
+  font-weight: var(--fw-regular);
+  letter-spacing: 0%;
+  line-height: 1.5;
+}
+
+.case-study-fact-value a {
+  color: var(--link-enabled);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* A chapter opens on a hairline across the column, the way a new part of an
+   argument would start on a new page. */
+.case-study-chapter {
+  border-top: var(--border-width-1) solid var(--layer-1-border);
+  display: block;
+  margin-top: 4rem;
+  padding-top: var(--spacing-5);
+}
+
+.case-study-chapter .case-study-heading {
+  font-size: 1.75rem;
+  font-weight: var(--fw-semibold);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin-top: 1.25rem;
+  /* Lands the eyebrow in view too, not only the heading under it. */
+  scroll-margin-top: 4.5rem;
+  text-wrap: balance;
+}
+
+.case-study-chapter .case-study-copy {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.case-study-chapter .case-study-heading + .case-study-copy {
+  margin-top: 1.25rem;
+}
+
+.case-study-chapter .case-study-copy + .case-study-copy {
+  margin-top: var(--spacing-5);
+}
+
+.case-study-chapter .case-study-subhead {
+  font-size: 1.125rem;
+  line-height: 1.5;
+}
+
+.case-study-chapter .case-study-subhead + .case-study-copy {
+  margin-top: var(--spacing-2);
+}
+
+.case-study-topic {
+  margin-top: var(--spacing-7);
+}
+
+.case-study-block {
+  margin-top: var(--spacing-6);
+}
+
+.case-study-topic > .case-study-block:first-child {
+  margin-top: 0;
+}
+
+.case-study-points {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.case-study-point-title {
+  color: var(--text-primary);
+  font-family: var(--font-family-sans);
+  font-size: 0.9375rem;
+  font-weight: var(--fw-medium);
+  letter-spacing: 0%;
+  line-height: 1.5;
+}
+
+.case-study-point-body {
+  color: var(--text-secondary);
+  font-family: var(--font-family-sans);
+  font-size: 0.9375rem;
+  font-weight: var(--fw-regular);
+  letter-spacing: 0%;
+  line-height: 1.5;
+}
+
+.case-study-point-body a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.case-study-point-body a:hover {
+  color: var(--text-primary);
+}
+
+/* Image first at three fifths of the column, the note beside it. Stacked on
+   a phone. */
+.case-study-row {
+  display: grid;
+  gap: var(--spacing-5);
+  margin-top: var(--spacing-7);
+}
+
+@media (min-width: 640px) {
+  .case-study-row {
+    align-items: center;
+    gap: var(--spacing-6);
+    grid-template-columns: minmax(0, 413fr) minmax(0, 251fr);
+  }
+}
+
+.case-study-pull-quote {
+  border-left: 2px solid var(--text-primary);
+  color: var(--text-primary);
+  font-family: var(--font-family-serif);
+  font-size: 1.125rem;
+  font-style: italic;
+  font-weight: var(--fw-medium);
+  letter-spacing: 0%;
+  line-height: 1.5;
+  margin: 0;
+  padding-left: var(--spacing-5);
+}
+
+.case-study-table-frame {
+  overflow-x: auto;
+}
+
+.case-study-table {
+  border-collapse: collapse;
+  font-family: var(--font-family-sans);
+  font-size: var(--fs-6);
+  line-height: 1.5;
+  min-width: 520px;
+  width: 100%;
+}
+
+.case-study-table th {
+  border-bottom: var(--border-width-1) solid var(--layer-1-border-strong);
+  color: var(--text-secondary);
+  font-weight: var(--fw-medium);
+  padding: 0 var(--spacing-4) var(--spacing-3) 0;
+  text-align: left;
+}
+
+.case-study-table td {
+  border-bottom: var(--border-width-1) solid var(--layer-1-border);
+  color: var(--text-primary);
+  padding: var(--spacing-4) var(--spacing-4) var(--spacing-4) 0;
+  vertical-align: top;
+}
+
+/* Sidebar index: every chapter named in the left two columns, the current
+   one marked with a dot as well as darker text. Hidden until 1200px, where
+   the grid first leaves those columns free. */
+@media (min-width: 1024px) and (max-width: 1199px) {
+  .case-study-index-sidebar {
+    display: none;
+  }
+}
+
+@media (min-width: 1200px) {
+  .case-study-index-sidebar {
+    left: var(--spacing-6);
+    max-width: 11rem;
+    right: auto;
+    top: 240px;
+    transform: none;
+  }
+}
+
+.case-study-index-sidebar .case-study-index-list {
+  gap: var(--spacing-4);
+}
+
+.case-study-index-sidebar .case-study-index-link {
+  font-size: 0.9375rem;
+  gap: var(--spacing-3);
+  justify-content: flex-start;
+  line-height: 1;
+  padding-block: 0;
+}
+
+.case-study-index-sidebar .case-study-index-tick {
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-pill);
+  flex: 0 0 auto;
+  height: 5px;
+  width: 5px;
+}
+
+.case-study-index-sidebar .case-study-index-link[aria-current="location"] {
+  color: var(--text-primary);
+}
+
+.case-study-index-sidebar .case-study-index-link[aria-current="location"] .case-study-index-tick {
+  background: var(--link-enabled);
+  width: 5px;
+}
+
+.case-study-index-sidebar .case-study-index-label {
+  clip-path: none;
+  height: auto;
+  overflow: visible;
+  position: static;
+  white-space: normal;
+  width: auto;
 }
 
 /* ─── Figma embed ──────────────────────────────────────────────────────── */
@@ -3914,4 +4268,28 @@ html:has(.image-lightbox[open]) {
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* "Next project": closes every case study with the next one, set as the same
+   tile as .case-study-feature, with no divider above it. */
+.case-study-next {
+  margin-top: var(--spacing-8);
+}
+
+.case-study-next-link {
+  color: inherit;
+  display: block;
+  text-decoration: none;
+}
+
+/* display: block wins over .tooltip-wrap's inline-block, which comes earlier. */
+.case-study-next-image {
+  background: var(--app-layer-background);
+  display: block;
+  overflow: hidden;
+  position: relative;
+}
+
+.case-study-next-image img {
+  object-fit: cover;
 }

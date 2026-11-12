@@ -4,6 +4,7 @@ import {
   CaseStudyFeature,
   CaseStudyHero,
   CaseStudyIndex,
+  CaseStudyNext,
   CaseStudyMeta,
   CaseStudySection,
   CaseStudyStat,
@@ -11,7 +12,7 @@ import {
 } from "../components";
 
 export const metadata: Metadata = {
-  title: "CSP Reseller Billing at VSTECS — Shafiq Efféndy",
+  title: "VSTECS Reseller Billing — Shafiq Efféndy",
 };
 
 const asset = (file: string) => projectAsset("Vstecs", file);
@@ -20,27 +21,46 @@ const asset = (file: string) => projectAsset("Vstecs", file);
 const SCREEN = { width: 4096, height: 2023 };
 
 const meta: [string, string][] = [
-  ["Role", "Sole Designer and front end build"],
-  ["Users", "Resellers who pay, internal ops who collect"],
+  ["Role", "Sole designer and front end build"],
+  ["I owned", "Workflow, UI, design system, prototype, front end"],
+  ["Team owned", "Discovery, integration, QA, release"],
+  ["Users", "VSTECS resellers settling their own invoices"],
   ["Stack", "Figma, ASP.NET MVC"],
   ["Status", "In production since 2025"],
 ];
 
-const workflows = [
+const BEFORE = {
+  src: asset("Billing Warning Redacted.png"),
+  width: 862,
+  height: 931,
+  alt: "The billing warning email: an urgent notice that the account is at critical level, with credit limit, utilisation, aging buckets from current to over 60 days, and bank details to pay into.",
+};
+
+const delivered = [
   {
-    title: "For Resellers",
-    body: "Displays a single account view that pinpoints exact overdue amounts and enables users to select and settle specific invoices on demand.",
+    title: "Reseller account view",
+    body: "One screen per reseller showing the balance owed, split by aging bucket. Resellers tick the invoices they want to clear and pay them in one checkout.",
   },
   {
-    title: "For Internal Ops",
-    body: "Provides macro-level visibility across every reseller account, sorting by days overdue to shift the team from reactive chasing to prioritised collecting.",
+    title: "Invoices and Activity pages",
+    body: "Resellers search, sort and filter every open, paid and cancelled invoice, and see each payment they made. Finance keeps managing accounts in the existing internal portal.",
   },
 ];
 
-const decisions = [
+const struggles = [
   {
-    title: "MFA Authentication",
-    body: "Finance staff share physical workstations. Removing traditional passwords eliminated credential leaks and password-reset support overhead.",
+    title: "External: one screen trying to serve two audiences",
+    body: "Resellers only need their own balance, not Finance’s view of every account. I gave them an Account Statement with credit, status, aging and invoices to pay.",
+    image: {
+      src: asset("Account Statement.webp"),
+      width: 2000,
+      height: 988,
+      alt: "The reseller's Account Statement: approved and available credit, credit status, outstanding credit by aging bucket, and the invoices to pay.",
+    },
+  },
+  {
+    title: "Internal: shared workstations, shared passwords",
+    body: "Staff share workstations, so passwords leaked and needed resets. Email plus an authenticator code left 0 passwords to store.",
     image: {
       ...SCREEN,
       src: asset("MFA Authentication.png"),
@@ -48,8 +68,8 @@ const decisions = [
     },
   },
   {
-    title: "FPX Payment Redirects",
-    body: "Offloaded payment processing to FPX redirects instead of capturing card details, keeping the application entirely out of PCI compliance scope.",
+    title: "External: taking payment without holding card data",
+    body: "Holding card details would bring PCI DSS audits. FPX redirects take the payment, so 0 card data reaches our database.",
     image: {
       ...SCREEN,
       src: asset("FPX Payment Redirects.png"),
@@ -57,8 +77,8 @@ const decisions = [
     },
   },
   {
-    title: "DRY Code Base",
-    body: "Rendered both Invoices and Activity pages from a single ASP.NET MVC partial view, allowing sorting, filtering, and paging updates to ship across both pages in a single deployment.",
+    title: "External: two tables drifting apart",
+    body: "Invoices and Activity had the same table logic but drifted apart. One shared partial view now means 1 edit and 1 deploy for both.",
     image: {
       ...SCREEN,
       src: asset("Shared Partial View.png"),
@@ -70,23 +90,23 @@ const decisions = [
 const results = [
   {
     value: "100%",
-    title: "Self-Serve Visibility",
-    body: "Transformed reactive manual chasing into full transparency across all aging buckets for both resellers and internal ops teams.",
+    title: "Of aging buckets visible",
+    body: "Resellers see their balance in every aging bucket themselves. Before launch, they had to ask Finance.",
   },
   {
     value: "0",
-    title: "Password Liability with MFA",
-    body: "Zero stored passwords to leak and zero password-reset support tickets generated across shared workstations by enforcing Email + TOTP MFA.",
+    title: "Stored passwords",
+    body: "Email and TOTP sign-in left nothing to leak on shared machines and nothing to reset.",
   },
   {
     value: "0",
-    title: "PCI Scope Overhead",
-    body: "Zero cardholder data touches the codebase by leveraging FPX payment redirects.",
+    title: "Card fields in the codebase",
+    body: "FPX handles the payment, which keeps the app out of PCI DSS scope.",
   },
   {
-    value: "2-for-1",
-    title: "Front-End Maintenance",
-    body: "1 shared partial view powers 2 core application pages, cutting UI table maintenance in half.",
+    value: "1 → 2",
+    title: "Partial view, pages served",
+    body: "One table component renders both Invoices and Activity, halving the table code to maintain.",
   },
 ];
 
@@ -95,21 +115,19 @@ export default function VstecsBillingPage() {
     <main className="case-study flex-1 bg-(--white) text-(--text-primary)">
       <div className="wrapper px-6 pt-16 pb-16 sm:px-10">
         <CaseStudyHero
-          lede="Monthly cloud subscription billing for VSTECS and its reseller network. I designed the product, then built the front end in ASP.NET MVC."
+          lede="Before this, Finance wrote each reseller a billing warning email with their credit limit, utilisation and aging window, from current to over 60 days, plus bank details to pay into. The email didn’t say which invoices were overdue, so resellers had to go back to Finance to settle."
           logo={{ src: asset("Logo.png"), alt: "VSTECS", width: 748, height: 350 }}
-          title="CSP Reseller Billing at VSTECS"
+          title="A web app for resellers to see and settle outstanding invoices in one view"
         />
 
         <CaseStudyMeta items={meta} />
 
         <CaseStudySection
-          copy="Outstanding credit sat in aging buckets, but neither resellers nor internal finance teams had visibility into where specific funds belonged. As a result, overdue balances went unnoticed until an internal team member manually chased them."
-          title="Nobody could see what was overdue."
-        />
-
-        <CaseStudySection title="Tailored Role-Based Workflows">
+          copy="A self-service billing app for VSTECS resellers, designed in Figma and built by me in ASP.NET MVC. Live in production since 2025."
+          title="What I delivered"
+        >
           <div className="grid gap-6">
-            {workflows.map(({ title, body }) => (
+            {delivered.map(({ title, body }) => (
               <CaseStudyCard key={title} title={title}>
                 {body}
               </CaseStudyCard>
@@ -117,9 +135,23 @@ export default function VstecsBillingPage() {
           </div>
         </CaseStudySection>
 
-        <CaseStudySection title="Key Product & Architectural Decisions">
+        <CaseStudySection
+          copy="Resellers needed to know what they owed, which invoices were overdue and what they could pay. Finance needed to know which accounts needed attention and how overdue they were. The warning email answered neither."
+          title="Before: a warning email and a bank transfer"
+        >
+          <CaseStudyFeature image={BEFORE} title="The billing warning resellers received">
+            It showed the totals in each aging bucket, from current to over 60 days, but no invoice
+            numbers and no way to pay. Every payment was a manual bank transfer that Finance then
+            had to match to invoices.
+          </CaseStudyFeature>
+        </CaseStudySection>
+
+        <CaseStudySection
+          copy="Overdue credit sat in aging buckets that no reseller and no one in finance could see. A balance was only noticed when someone on the team chased it by hand. These are the problems I hit while fixing that, inside the team and outside it."
+          title="Struggles and solutions"
+        >
           <div className="grid gap-4">
-            {decisions.map(({ title, body, image }) => (
+            {struggles.map(({ title, body, image }) => (
               <CaseStudyFeature image={image} key={title} title={title}>
                 {body}
               </CaseStudyFeature>
@@ -127,7 +159,7 @@ export default function VstecsBillingPage() {
           </div>
         </CaseStudySection>
 
-        <CaseStudySection title="The Impact & Results" wide>
+        <CaseStudySection title="Results">
           <div className="grid gap-4 sm:grid-cols-2">
             {results.map(({ value, title, body }) => (
               <CaseStudyStat key={title} title={title} value={value}>
@@ -137,6 +169,7 @@ export default function VstecsBillingPage() {
           </div>
         </CaseStudySection>
       </div>
+      <CaseStudyNext current="/vstecs-billing" />
       <CaseStudyIndex />
     </main>
   );

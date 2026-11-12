@@ -2,15 +2,15 @@ import Image from "next/image";
 import { Link, ScrollReveal, StaggerReveal } from "../components";
 
 const heading =
-  "I design and ship interfaces end to end, from the first Figma frame to production code. Meetups taught me both. Not many back in the kampung, so I moved from Sibu, Sarawak to KL in 2023.";
-// const bio =
-//   "I moved to Kuala Lumpur from Sibu, Sarawak in 2023 and currently work at Gain Secure, where I work on design systems and build interfaces for vendor led projects.";
-const bio2 =
-  "Dieter Rams gave me the rule I work by: less, but better. People reach for the one feature they need and ignore everything else, so whatever I add beyond that lands on them.";
-const bio3 =
-  "AI made that rule harder to keep. Anyone ships a screen in a minute now and feature creep costs nothing, so most of my time goes to what I take out. On my last design system, that meant one component covering five cases instead of five components covering one each.";
-const bio4 =
-  "Deleting is slower than adding. I still think it's the better use of my time.";
+  "Hey! I’m a Design Engineer based in KL. Weekdays, I turn messy data into screens people enjoy reading. Weekends, I’m usually somewhere with trees.";
+const story = [
+  "I was born in Klang, and my family moved to Sibu when I was 9. My childhood was pure kampung. Main mercun, street soccer on the road, and evening bike rides around the neighbourhood with stray dogs chasing me half the time. To this day, I pedal faster the moment I hear barking.",
+  "So yeah, I’m a kampung boy for life. Crowded malls on a Saturday? Hard pass. KL is where I work, but nature is where I feel most like myself.",
+  "Hiking is how I recharge. I pack light, leave the laptop at home and walk until my head goes quiet. Whatever stressed me out during the week feels pretty small from the top of a hill.",
+  "I’m also a massive Godzilla fan. I grew up watching monsters nuke cities on TV, and I never miss a new movie. I caught Godzilla Minus Zero recently, and the first 10 minutes still give me goosebumps. Every time I play the soundtrack, I start running like King Ghidorah is right behind me.",
+  "And yes, I support Tottenham Hotspur. Street soccer got me into football, and Spurs taught me heartbreak. Every season I get my hopes up, we lose in the most creative ways, and I’m back the next week anyway.",
+  "Into hiking, giant monsters, or want to talk about Spurs’ latest heartbreak? Say hi. I’m always up for a chat.",
+];
 const elsewhere = [
   { label: "LinkedIn", href: "https://www.linkedin.com/in/shafiq-effendy/" },
   { label: "ghafeq@gmail.com", href: "mailto:ghafeq@gmail.com" },
@@ -42,13 +42,11 @@ export default function AboutPage() {
           </span>
 
           <h1 className="intro mt-12">{heading}</h1>
-          {/* <p className="body-01 mt-5">{bio}</p> */}
-          <br />
-          <p className="body-01">{bio2}</p>
-          <br />
-          <p className="body-01">{bio3}</p>
-          <br />
-          <p className="body-01">{bio4}</p>
+          {story.map((paragraph) => (
+            <p className="body-01 mt-6" key={paragraph}>
+              {paragraph}
+            </p>
+          ))}
         </ScrollReveal>
 
         <div className="about-elsewhere mt-12">

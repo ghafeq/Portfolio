@@ -3,6 +3,7 @@ import {
   CaseStudyClip,
   CaseStudyHero,
   CaseStudyIndex,
+  CaseStudyNext,
   CaseStudyMeta,
   CaseStudySection,
   CaseStudyStat,
@@ -162,6 +163,7 @@ export default function WalletHoldPage() {
           title="What is next, and what could sink it."
         />
       </div>
+      <CaseStudyNext current="/wallet-hold" />
       <CaseStudyIndex />
     </main>
   );

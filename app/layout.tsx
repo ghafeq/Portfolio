@@ -32,7 +32,7 @@ const robotoMono = Roboto_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Shafiq Efféndy — Product Designer",
+  title: "Shafiq Effendy | Product Designer",
   description: "Self-taught Product Designer. Figma to shipped code, one person, whole pipeline.",
 };
 

@@ -143,24 +143,14 @@ const HAPPY_MAC_PATH = rowsPath(
   HAPPY_SCALE,
 );
 
-interface MacPaintProps {
-  /** Called as the screen powers on. */
-  onPowerOn: () => void;
-  /** Called as the start-up hands over to MacPaint. */
-  onStarted: () => void;
-  /** Called as the pen touches down on the first stroke of "hello.". */
-  onHello: () => void;
-}
-
 /**
  * The screen at rest: MacPaint, where "hello." is written on the page and then
  * wiped away for the Click button. Before that the screen starts up the way a
  * Macintosh II does: dark, a line of light opening into the picture, then the
  * happy Mac on the desktop. All of that timing is in CSS (.mac-paint-*). It
- * starts once the page's script is running, which then hears every cue, and
- * anything that stops it, such as reduced motion, leaves the button in place.
+ * starts once the page's script is running, and anything that stops it, such as reduced motion, leaves the button in place.
  */
-export function MacPaint({ onHello, onPowerOn, onStarted }: MacPaintProps) {
+export function MacPaint() {
   return (
     <svg aria-hidden="true" className="mac-paint" viewBox="0 0 512 373">
       <defs>
@@ -257,7 +247,6 @@ export function MacPaint({ onHello, onPowerOn, onStarted }: MacPaintProps) {
           <path
             className="mac-paint-stroke mac-paint-stem"
             d={HELLO_STEM}
-            onAnimationStart={onHello}
             pathLength={1}
           />
           <path className="mac-paint-stroke mac-paint-body" d={HELLO_BODY} pathLength={1} />
@@ -278,15 +267,7 @@ export function MacPaint({ onHello, onPowerOn, onStarted }: MacPaintProps) {
 
 
       {/* Start-up, over everything. Only its animation ever shows it. */}
-      <g
-        className="mac-boot"
-        onAnimationEnd={(event) => {
-          // Its children's animations end inside it too; this is the start-up's.
-          if (event.target === event.currentTarget) {
-            onStarted();
-          }
-        }}
-      >
+      <g className="mac-boot">
         <rect fill={PAPER} height={373} width={512} />
         <rect fill="url(#mac-pattern-3)" height={373} opacity={0.32} width={512} />
         <path d={HAPPY_MAC_PATH} fill={INK} shapeRendering="crispEdges" />
@@ -295,7 +276,6 @@ export function MacPaint({ onHello, onPowerOn, onStarted }: MacPaintProps) {
           className="mac-boot-beam"
           fill="var(--mac-paper)"
           height={373}
-          onAnimationStart={onPowerOn}
           width={512}
         />
         {/* Static as the tube settles: fresh grain several times a second, and a

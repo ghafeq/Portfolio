@@ -3,6 +3,7 @@ import Image from "next/image";
 import {
   CaseStudyHero,
   CaseStudyIndex,
+  CaseStudyNext,
   CaseStudyMeta,
   CaseStudySection,
   FigmaEmbed,
@@ -212,6 +213,7 @@ export default function GoshiDesignSystemPage() {
           title="What is next."
         />
       </div>
+      <CaseStudyNext current="/goshi-design-system/case-study" />
       <CaseStudyIndex />
     </main>
   );

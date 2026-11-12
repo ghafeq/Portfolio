@@ -84,7 +84,7 @@ function lightAt(x: number, y: number, seconds: number) {
   return 0.5 + 0.5 * Math.sin(across + 1.6 * Math.sin(along));
 }
 
-/** The moving pixel field in the home page's corner, in the Five banner's colours. */
+/** The moving pixel field in the home page's corner, in the design system's black. */
 export function HomeCorner() {
   const sharpRef = useRef<HTMLCanvasElement>(null);
   const softRef = useRef<HTMLCanvasElement>(null);
@@ -101,13 +101,15 @@ export function HomeCorner() {
 
     const color = (name: string) =>
       getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    // The design system's accent is black (--gray-100, as in the pixel wipe), so
+    // the field runs from it out to the lightest greys.
     const colors = {
-      indigo: color("--five-indigo"),
-      ink: color("--five-ink"),
-      lilac: color("--five-lilac"),
-      navy: color("--five-navy"),
-      orchid: color("--five-orchid"),
-      violet: color("--five-violet"),
+      ink: color("--gray-100"),
+      navy: color("--gray-90"),
+      deep: color("--gray-80"),
+      primary: color("--gray-60"),
+      light: color("--gray-40"),
+      tint: color("--gray-20"),
     };
     const squares = createSquares();
 
@@ -120,9 +122,9 @@ export function HomeCorner() {
 
     const squareFill = context.createRadialGradient(SIZE, 0, 0, SIZE, 0, REACH);
 
-    squareFill.addColorStop(0.12, colors.lilac);
-    squareFill.addColorStop(0.48, colors.orchid);
-    squareFill.addColorStop(0.8, colors.violet);
+    squareFill.addColorStop(0.12, colors.tint);
+    squareFill.addColorStop(0.48, colors.light);
+    squareFill.addColorStop(0.8, colors.primary);
 
     // The glow never changes, so it is painted once and copied.
     const glow = document.createElement("canvas");
@@ -133,11 +135,11 @@ export function HomeCorner() {
     glow.height = SIZE;
     glowFill.addColorStop(0, colors.ink);
     glowFill.addColorStop(0.18, colors.navy);
-    glowFill.addColorStop(0.38, colors.indigo);
+    glowFill.addColorStop(0.38, colors.deep);
     // Hex alpha: 72%, 30% and none.
-    glowFill.addColorStop(0.62, `${colors.violet}b8`);
-    glowFill.addColorStop(0.82, `${colors.lilac}4d`);
-    glowFill.addColorStop(1, `${colors.lilac}00`);
+    glowFill.addColorStop(0.62, `${colors.primary}b8`);
+    glowFill.addColorStop(0.82, `${colors.tint}4d`);
+    glowFill.addColorStop(1, `${colors.tint}00`);
     glowContext.fillStyle = glowFill;
     glowContext.fillRect(0, 0, SIZE, SIZE);
 

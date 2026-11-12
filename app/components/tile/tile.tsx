@@ -30,11 +30,13 @@ export interface TileProps {
   tag?: ReactNode;
   /** Whether the work was shipped professionally or is a self-directed concept. */
   info?: TileInfo;
+  /** Shown after the title, muted, e.g. "Concept 2025". */
+  meta?: string;
   href?: string;
   className?: string;
 }
 
-export function Tile({ title, description, banner, tag, info, href, className }: TileProps) {
+export function Tile({ title, description, banner, tag, info, meta, href, className }: TileProps) {
   const revealRef = useStaggerReveal();
 
   const content = (
@@ -70,7 +72,10 @@ export function Tile({ title, description, banner, tag, info, href, className }:
         )}
       </div>
       <div className="tile-content">
-        <h3 className="tile-title stagger-line stagger-line--2">{title}</h3>
+        <h3 className="tile-title stagger-line stagger-line--2">
+          {title}
+          {meta && <span className="tile-meta"> / {meta}</span>}
+        </h3>
         <p className="tile-description stagger-line stagger-line--3">{description}</p>
       </div>
     </>
