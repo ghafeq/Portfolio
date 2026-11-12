@@ -2,14 +2,14 @@ import Image from "next/image";
 import { Link, ScrollReveal, StaggerReveal } from "../components";
 
 const heading =
-  "Hi there. I’m a Design Engineer living in Kuala Lumpur. By day I turn messy data into clean, friendly screens. By weekend you’ll find me somewhere with trees.";
+  "Hey! I’m a Design Engineer based in KL. Weekdays, I turn messy data into screens people enjoy reading. Weekends, I’m usually somewhere with trees.";
 const story = [
-  "I was born in Klang and moved to Sibu, Sarawak, at 9. My childhood was main mercun, street soccer on the road and evening bike rides around the kampung, usually with a stray dog chasing me. I still pedal faster when I hear barking.",
-  "Those years made me a kampung boy for life. Give me a quiet trail over a packed mall any day. The city pays the bills, but nature is where I feel like myself.",
-  "Hiking is my reset button. I pack light, leave the laptop behind and walk until my head goes quiet. The worst problem from the week looks tiny from the top of a hill.",
-  "I’m also a proud fan of Godzilla and Ultraman. I grew up watching giant monsters nuke cities and a silver hero fly in to stop them before his colour timer ran out. I still line up for every new film and series. My bet always goes to Ultraman Tiga.",
-  "And yes, I support Tottenham Hotspur. Street soccer started the love, and Spurs taught me heartbreak. Being a fan means hoping big, losing in creative ways and coming back next week anyway.",
-  "If you love hiking, giant monsters or want to talk about Spurs’ next heartbreak, say hello. I’m always up for a chat.",
+  "I was born in Klang, and my family moved to Sibu when I was 9. My childhood was pure kampung. Main mercun, street soccer on the road, and evening bike rides around the neighbourhood with stray dogs chasing me half the time. To this day, I pedal faster the moment I hear barking.",
+  "So yeah, I’m a kampung boy for life. Crowded malls on a Saturday? Hard pass. KL is where I work, but nature is where I feel most like myself.",
+  "Hiking is how I recharge. I pack light, leave the laptop at home and walk until my head goes quiet. Whatever stressed me out during the week feels pretty small from the top of a hill.",
+  "I’m also a massive Godzilla fan. I grew up watching monsters nuke cities on TV, and I never miss a new movie. I caught Godzilla Minus Zero recently, and the first 10 minutes still give me goosebumps. Every time I play the soundtrack, I start running like King Ghidorah is right behind me.",
+  "And yes, I support Tottenham Hotspur. Street soccer got me into football, and Spurs taught me heartbreak. Every season I get my hopes up, we lose in the most creative ways, and I’m back the next week anyway.",
+  "Into hiking, giant monsters, or want to talk about Spurs’ latest heartbreak? Say hi. I’m always up for a chat.",
 ];
 const elsewhere = [
   { label: "LinkedIn", href: "https://www.linkedin.com/in/shafiq-effendy/" },
