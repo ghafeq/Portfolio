@@ -79,7 +79,7 @@ export function CaseStudyClip({ title, video, children }: CaseStudyClipProps) {
         </video>
       </div>
       <div className="case-study-feature-body">
-        <h3 className="case-study-subhead">{title}</h3>
+        <h3 className="case-study-card-title">{title}</h3>
         <p className="case-study-copy">{children}</p>
       </div>
     </ScrollReveal>

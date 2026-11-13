@@ -31,7 +31,7 @@ export function CaseStudyNext({ current }: CaseStudyNextProps) {
           </span>
         </div>
         <div className="case-study-feature-body">
-          <h3 className="case-study-subhead">{project.title}</h3>
+          <h3 className="case-study-card-title">{project.title}</h3>
           <p className="case-study-copy">{project.description}</p>
         </div>
       </NextLink>

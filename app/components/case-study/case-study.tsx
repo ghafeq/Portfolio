@@ -107,7 +107,7 @@ export function CaseStudySection({ title, copy, wide = false, children }: CaseSt
           {title}
         </h2>
         {paragraphs.map((paragraph) => (
-          <p className="case-study-copy mt-6" key={paragraph}>
+          <p className="case-study-copy mt-2" key={paragraph}>
             {paragraph}
           </p>
         ))}
@@ -153,7 +153,7 @@ export function CaseStudyFeature({ title, image, children }: CaseStudyFeaturePro
         </div>
       )}
       <div className="case-study-feature-body">
-        <h3 className="case-study-subhead">{title}</h3>
+        <h3 className="case-study-card-title">{title}</h3>
         <p className="case-study-copy">{children}</p>
       </div>
     </ScrollReveal>

@@ -91,7 +91,7 @@ export function CaseStudyTopic({
   return (
     <div className="case-study-topic">
       <ScrollReveal>
-        <h3 className="case-study-subhead">{title}</h3>
+        <h3 className="case-study-card-title">{title}</h3>
         {paragraphsOf(copy).map((paragraph) => (
           <p className="case-study-copy" key={paragraph}>
             {paragraph}
