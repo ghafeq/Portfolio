@@ -97,7 +97,7 @@ const results = [
 
 export default function FiveFleetPortalPage() {
   return (
-    <main className="case-study flex-1 bg-(--white) text-(--text-primary)">
+    <main className="case-study flex-1 bg-(--app-layer-background) text-(--text-primary)">
       <div className="wrapper px-6 pt-16 pb-16 sm:px-10">
         <CaseStudyHero
           lede="A web portal for fleet operators in Malaysia’s subsidised diesel scheme. Register vehicles under the programme, keep them compliant, hold subsidy points, and assign vehicles to the drivers who buy the fuel."

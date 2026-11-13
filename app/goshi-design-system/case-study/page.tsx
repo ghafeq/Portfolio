@@ -128,7 +128,7 @@ function MarkdownSpec({ file, lines }: { file: string; lines: SpecLine[] }) {
 
 export default function GoshiDesignSystemPage() {
   return (
-    <main className="case-study flex-1 bg-(--white) text-(--text-primary)">
+    <main className="case-study flex-1 bg-(--app-layer-background) text-(--text-primary)">
       {/* Outside the wrapper, so the cover runs the full width of the page. */}
       <GoshiCover className="goshi-cover-banner" preload />
 

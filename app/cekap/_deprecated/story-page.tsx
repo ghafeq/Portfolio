@@ -136,7 +136,7 @@ const confidence = (level: Confidence) => (
 
 export default function CekapPage() {
   return (
-    <main className="case-study case-study-story flex-1 bg-(--white) text-(--text-primary)">
+    <main className="case-study case-study-story flex-1 bg-(--app-layer-background) text-(--text-primary)">
       <div className="case-study-story-wrapper pt-6 pb-16">
         <ScrollReveal className="case-study-story-cover">
           <div className="case-study-story-frame">

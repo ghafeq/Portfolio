@@ -114,7 +114,7 @@ const results = [
 
 export default function VstecsBillingPage() {
   return (
-    <main className="case-study flex-1 bg-(--white) text-(--text-primary)">
+    <main className="case-study flex-1 bg-(--app-layer-background) text-(--text-primary)">
       <div className="wrapper px-6 pt-16 pb-16 sm:px-10">
         <CaseStudyHero
           logo={{ src: asset("Logo.png"), alt: "VSTECS", width: 748, height: 350 }}

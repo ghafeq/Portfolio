@@ -93,7 +93,7 @@ const numbers = [
 
 export default function WalletHoldPage() {
   return (
-    <main className="case-study flex-1 bg-(--white) text-(--text-primary)">
+    <main className="case-study flex-1 bg-(--app-layer-background) text-(--text-primary)">
       <div className="wrapper px-6 pt-16 pb-16 sm:px-10">
         <CaseStudyHero
           lede="What a wallet owes you after it freezes your money by mistake."

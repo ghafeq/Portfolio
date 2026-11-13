@@ -1676,12 +1676,13 @@
   line-height: var(--lh-auto);
 }
 
+/* White on the grey page, like cards elsewhere on the site. */
 .case-study-card {
-  background: var(--layer-muted-background);
+  background: var(--layer-1-background);
   border-radius: var(--radius-normal);
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-4);
+  gap: var(--spacing-1);
   padding: var(--spacing-5);
 }
 
@@ -1719,6 +1720,7 @@
 /* A screenshot and its note as one bordered unit, so the caption cannot be
    mistaken for the next row's. */
 .case-study-feature {
+  background: var(--layer-1-background);
   border: var(--border-width-1) solid var(--layer-1-border);
   border-radius: var(--radius-normal);
   overflow: hidden;
@@ -1815,13 +1817,6 @@
   .case-study .wrapper {
     width: 880px;
   }
-}
-
-/* <main> is not the whole page: the top navigation sits above it, on the body
-   background. Matching the body to the case study keeps the two from meeting
-   in a seam, and keys off the page itself so every case study gets it. */
-body:has(.case-study) {
-  background: var(--white);
 }
 
 /* Edge to edge at every width. The scrollbar's share of 100vw is hidden by the

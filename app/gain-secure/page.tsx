@@ -34,7 +34,7 @@ const palette = [
 
 export default function GainSecurePage() {
   return (
-    <main className="case-study flex-1 bg-(--white) text-(--text-primary)">
+    <main className="case-study flex-1 bg-(--app-layer-background) text-(--text-primary)">
       <div className="wrapper px-6 pt-16 pb-16 sm:px-10">
         {/* The wordmark is the title, so it breaks out as wide as the design
             sets it and carries the page's heading through its alt text. */}
