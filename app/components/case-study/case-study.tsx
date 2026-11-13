@@ -131,12 +131,14 @@ export interface CaseStudyFeatureProps {
   /** Left out while a screenshot is still being made; the slot stays open and
       is labelled, so it reads as reserved rather than broken. */
   image?: CaseStudyImage;
+  /** Sets the image beside the text from 640px, smaller, for tall shots. */
+  side?: boolean;
   children: ReactNode;
 }
 
-export function CaseStudyFeature({ title, image, children }: CaseStudyFeatureProps) {
+export function CaseStudyFeature({ title, image, side = false, children }: CaseStudyFeatureProps) {
   return (
-    <ScrollReveal className="case-study-feature">
+    <ScrollReveal className={`case-study-feature${side ? " case-study-feature-side" : ""}`}>
       {image ? (
         <ImageLightbox
           alt={image.alt}

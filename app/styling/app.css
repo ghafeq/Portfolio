@@ -1969,12 +1969,15 @@
 /* Qualified by element as well as class: the dialog sits inside the media
    frame in the DOM, and the frame's own img rules would otherwise stretch the
    full-screen copy to the frame's fixed width. */
+/* Takes the whole padded area and letterboxes the picture inside it, so every
+   image grows to fill the screen, small screenshots included, without being
+   cropped or stretched. */
 dialog.image-lightbox img.image-lightbox-image {
-  height: auto;
+  height: 100%;
   max-height: 100%;
   max-width: 100%;
   object-fit: contain;
-  width: auto;
+  width: 100%;
 }
 
 .image-lightbox-close {
@@ -4309,4 +4312,14 @@ html:has(.image-lightbox[open]) {
   display: block;
   height: auto;
   width: 100%;
+}
+
+/* A feature with its image beside the text: the image takes the narrower
+   column and the text is centred against it. Stacked below 640px. */
+@media (min-width: 640px) {
+  .case-study-feature-side {
+    align-items: center;
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  }
 }

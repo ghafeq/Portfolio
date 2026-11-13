@@ -158,7 +158,7 @@ export default function VstecsBillingPage() {
           copy="Resellers needed to know what they owed, which invoices were overdue and what they could pay. Finance needed to know which accounts needed attention and how overdue they were. The warning email answered neither."
           title="Before: a warning email and a bank transfer"
         >
-          <CaseStudyFeature image={BEFORE} title="The billing warning resellers received">
+          <CaseStudyFeature image={BEFORE} side title="The billing warning resellers received">
             It showed the totals in each aging bucket, from current to over 60 days, but no invoice
             numbers and no way to pay. Every payment was a manual bank transfer that Finance then
             had to match to invoices.
