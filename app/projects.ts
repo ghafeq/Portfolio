@@ -54,10 +54,10 @@ export const work = [
     title: "Company Mode on Five Petroleum App",
     description:
       "Buying subsidised diesel against a company-held quota, from vehicle to invoice in seven steps",
-    // The phones from the portrait cover, set smaller on a widened background.
-    cover: "/projects/Five-App/Cover-wide.jpg",
+    // Three stacked phones (map, purchase summary, quota) on the gradient.
+    cover: "/projects/Five-App/Cover-wide.webp",
     info: "Professional" as const,
-    aspect: 8 / 5,
+    aspect: 2000 / 988,
   },
   {
     href: "/five-fleet-portal",

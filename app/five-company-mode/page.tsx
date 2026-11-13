@@ -8,7 +8,9 @@ import {
   CaseStudyMeta,
   CaseStudySection,
   CaseStudyStat,
+  ImageLightbox,
   projectAsset,
+  ScrollReveal,
 } from "../components";
 
 export const metadata: Metadata = {
@@ -29,7 +31,7 @@ const meta: [string, string][] = [
 
 const delivered = [
   {
-    title: "A 7-step purchase flow",
+    title: "7-step purchase flow",
     body: "Select vehicle, verify, check quota, enter details, choose payment, authorise, receive invoice. Each step is one screen with one decision on it.",
   },
   {
@@ -41,7 +43,7 @@ const delivered = [
 const struggles = [
   {
     title: "External: the driver doesn’t own the vehicle",
-    body: "Drivers rotate between company trucks, so a personal login proves nothing about which vehicle is being fuelled. I tied verification to the vehicle: the driver picks a registered plate and enters that vehicle’s PIN. 1 PIN per vehicle works for any driver on any shift.",
+    body: "Drivers swap trucks, so a personal login can’t prove which vehicle is being fuelled. Verification is tied to the vehicle instead: pick a registered plate, enter its PIN. One PIN per vehicle works for any driver on any shift.",
     image: {
       ...SCREEN,
       src: asset("Vehicle Verification.png"),
@@ -50,7 +52,7 @@ const struggles = [
   },
   {
     title: "External: a limit the driver couldn’t see",
-    body: "The quota belongs to the company, and drivers found out they were over it only when a purchase was refused. I moved quota, balance and company details above the amount field. The driver sees the limit before typing a single number.",
+    body: "Drivers only learned they were over the company quota when a purchase was refused. Quota, balance and company details now sit above the amount field, so the limit shows before they type a number.",
     image: {
       ...SCREEN,
       src: asset("Quota Check.png"),
@@ -59,7 +61,7 @@ const struggles = [
   },
   {
     title: "Internal: drivers without a wallet balance",
-    body: "Not every driver has Five Wallet funded, and stations still needed a way to close the sale. Pay at Counter has the cashier enter their own name and station PIN on the driver’s phone, so the station signs off on the sale and the record carries 2 names.",
+    body: "Not every driver has a funded Five Wallet. With Pay at Counter, the cashier enters their name and station PIN on the driver’s phone, so the station signs off and the record carries both names.",
     image: {
       ...SCREEN,
       src: asset("Payment Options.png"),
@@ -96,10 +98,27 @@ export default function FiveCompanyModePage() {
     <main className="case-study flex-1 bg-(--white) text-(--text-primary)">
       <div className="wrapper px-6 pt-16 pb-16 sm:px-10">
         <CaseStudyHero
-          lede="A mobile app for buying diesel at government-subsidised rates. This case study covers Company mode, where a fleet driver selects a vehicle, verifies it, checks a company-held quota, and pays, in seven steps."
+          hideTitle
           logo={{ src: projectAsset("Five", "Logo.png"), alt: "FIVE", width: 803, height: 438 }}
           title="Company Mode on Five Petroleum App"
         />
+
+        {/* Between the title and the lede, as on VSTECS. Shown at its own
+            2000 × 988, uncropped. The title is hidden since the banner carries it. */}
+        <ScrollReveal className="case-study-header-banner mt-6">
+          <ImageLightbox
+            alt="Three Five Petroleum app screens stacked: a station map in Company mode, a purchase summary for 50 litres of UltraMaxx Diesel, and a company quota balance of 500.67 litres. Beside them: Company Mode on Five Petroleum App."
+            height={988}
+            preload
+            sizes="(max-width: 880px) 100vw, 880px"
+            src={asset("Banner.webp")}
+            width={2000}
+          />
+        </ScrollReveal>
+
+        <p className="case-study-copy mt-6">
+          A mobile app for buying diesel at government-subsidised rates. This case study covers Company mode, where a fleet driver selects a vehicle, verifies it, checks a company-held quota, and pays, in seven steps.
+        </p>
 
         <CaseStudyMeta items={meta} />
 
