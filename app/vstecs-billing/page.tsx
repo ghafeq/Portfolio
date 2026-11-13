@@ -8,7 +8,9 @@ import {
   CaseStudyMeta,
   CaseStudySection,
   CaseStudyStat,
+  ImageLightbox,
   projectAsset,
+  ScrollReveal,
 } from "../components";
 
 export const metadata: Metadata = {
@@ -115,10 +117,27 @@ export default function VstecsBillingPage() {
     <main className="case-study flex-1 bg-(--white) text-(--text-primary)">
       <div className="wrapper px-6 pt-16 pb-16 sm:px-10">
         <CaseStudyHero
-          lede="Before this, Finance wrote each reseller a billing warning email with their credit limit, utilisation and aging window, from current to over 60 days, plus bank details to pay into. The email didn’t say which invoices were overdue, so resellers had to go back to Finance to settle."
           logo={{ src: asset("Logo.png"), alt: "VSTECS", width: 748, height: 350 }}
-          title="A web app for resellers to see and settle outstanding invoices in one view"
+          hideTitle
+          title="VSTECS Payment"
         />
+
+        {/* Between the title and the lede. Shown at its own 2000 × 988,
+            uncropped, so the corner footnote stays. */}
+        <ScrollReveal className="case-study-header-banner mt-6">
+          <ImageLightbox
+            alt="The VSTECS account statement: approved and available credit, outstanding credit by aging window, and a list of invoices to select and pay. Beside it: CSP resellers see and settle invoices in one view."
+            height={988}
+            preload
+            sizes="(max-width: 880px) 100vw, 880px"
+            src={asset("Banner.webp")}
+            width={2000}
+          />
+        </ScrollReveal>
+
+        <p className="case-study-copy mt-6">
+          Before this, Finance wrote each reseller a billing warning email with their credit limit, utilisation and aging window, from current to over 60 days, plus bank details to pay into. The email didn’t say which invoices were overdue, so resellers had to go back to Finance to settle.
+        </p>
 
         <CaseStudyMeta items={meta} />
 

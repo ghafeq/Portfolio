@@ -31,10 +31,14 @@ export interface CaseStudyHeroProps {
   /** Left out for self-initiated work with no client mark. */
   logo?: CaseStudyImage;
   title: string;
-  lede: string;
+  /** Left out when the page sets the lede itself, e.g. below a header banner. */
+  lede?: string;
+  /** Hides the title on screen when a banner already carries it; it stays
+      for screen readers and as the page's heading. */
+  hideTitle?: boolean;
 }
 
-export function CaseStudyHero({ logo, title, lede }: CaseStudyHeroProps) {
+export function CaseStudyHero({ logo, title, lede, hideTitle = false }: CaseStudyHeroProps) {
   return (
     <header>
       {logo && (
@@ -47,8 +51,8 @@ export function CaseStudyHero({ logo, title, lede }: CaseStudyHeroProps) {
           width={Math.round((logo.width * LOGO_HEIGHT) / logo.height)}
         />
       )}
-      <h1 className="display">{title}</h1>
-      <p className="case-study-lede mt-2">{lede}</p>
+      <h1 className={hideTitle ? "sr-only" : "display"}>{title}</h1>
+      {lede && <p className="case-study-lede mt-2">{lede}</p>}
     </header>
   );
 }

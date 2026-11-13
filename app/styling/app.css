@@ -4293,3 +4293,16 @@ html:has(.image-lightbox[open]) {
 .case-study-next-image img {
   object-fit: cover;
 }
+
+/* A header banner shown whole at its own proportions, unlike the cropped
+   .case-study-cover. */
+.case-study-header-banner {
+  border-radius: var(--radius-normal);
+  overflow: hidden;
+}
+
+.case-study-header-banner img {
+  display: block;
+  height: auto;
+  width: 100%;
+}
