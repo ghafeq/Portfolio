@@ -60,16 +60,6 @@ export const work = [
     aspect: 2000 / 988,
   },
   {
-    href: "/five-fleet-portal",
-    year: 2025,
-    title: "SKDS & SKPS at Five Petroleum",
-    description:
-      "A web portal for fleet operators in Malaysia’s subsidised diesel scheme. Vehicles, drivers and subsidy points in one place",
-    cover: "/projects/Five-Portal/Update%20Vehicle.png",
-    info: "Professional" as const,
-    aspect: 4096 / 2023,
-  },
-  {
     href: "/gain-secure",
     year: 2025,
     title: "Gain Secure Corporate Identity",
@@ -78,6 +68,16 @@ export const work = [
     cover: "/projects/Gain-Secure/Cover.png",
     info: "Professional" as const,
     aspect: 1440 / 758,
+  },
+  {
+    href: "/five-fleet-portal",
+    year: 2025,
+    title: "SKDS & SKPS at Five Petroleum",
+    description:
+      "A web portal for fleet operators in Malaysia’s subsidised diesel scheme. Vehicles, drivers and subsidy points in one place",
+    cover: "/projects/Five-Portal/Update%20Vehicle.png",
+    info: "Professional" as const,
+    aspect: 4096 / 2023,
   },
 ];
 

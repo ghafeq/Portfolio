@@ -32,6 +32,12 @@ const palette = [
   { code: "419 C", description: "near black" },
 ];
 
+const symbolVariations = [
+  { file: "Symbol Colour.png", alt: "The Gain Secure symbol in full colour: blue colon and slash, green slash, on white." },
+  { file: "Symbol Black.png", alt: "The Gain Secure symbol in solid black on white." },
+  { file: "Symbol Reversed.png", alt: "The Gain Secure symbol reversed in white on black." },
+];
+
 export default function GainSecurePage() {
   return (
     <main className="case-study flex-1 bg-(--app-layer-background) text-(--text-primary)">
@@ -58,6 +64,50 @@ export default function GainSecurePage() {
           copy="It is signifying the bridge between human insight and machine intelligence. The vibrant blue and green reflect innovation, connectivity, and growth. Paired with Plus Jakarta Sans in bold black, the design embodies our identity as a modern, AI-driven company committed to shaping a human-centred technological future."
           title="The mark is built on “://”, the part of a URL nobody reads and everybody recognises."
         />
+
+        <CaseStudySection
+          copy="Both lockups are set on a unit, a. The symbol sits in a 6a square, and the full logo adds a 28.5a wordmark beside it. Each keeps 1a of clear space on every side."
+          title="Construction grid"
+        >
+          {/* Columns sized by each image's ratio, so the two lockups share a
+              height side by side. Stacked on phones. */}
+          <div className="grid items-end gap-4 sm:grid-cols-[1520fr_384fr]">
+            <ImageLightbox
+              alt="Construction grid for the full Gain Secure logo: the symbol in a 6a square, the wordmark across 28.5a, with 1a of clear space around both."
+              height={384}
+              sizes="(max-width: 640px) 100vw, 640px"
+              src={asset("Construction Grid Full.png")}
+              width={1520}
+            />
+            <ImageLightbox
+              alt="Construction grid for the Gain Secure symbol alone: the colon and two slashes in a 6a square, with 1a of clear space on every side."
+              height={400}
+              sizes="(max-width: 640px) 100vw, 200px"
+              src={asset("Construction Grid Symbol.png")}
+              width={400}
+            />
+          </div>
+        </CaseStudySection>
+
+        <CaseStudySection
+          copy="The symbol stands alone in full colour, in black for one-colour print, and reversed in white on black for dark backgrounds."
+          title="Symbol-only lock-up variations"
+        >
+          {/* Three across at every width. */}
+          <ul className="grid grid-cols-3 gap-4">
+            {symbolVariations.map(({ file, alt }) => (
+              <li className="case-study-swatch-tile" key={file}>
+                <ImageLightbox
+                  alt={alt}
+                  height={400}
+                  sizes="(max-width: 640px) 33vw, 260px"
+                  src={asset(file)}
+                  width={400}
+                />
+              </li>
+            ))}
+          </ul>
+        </CaseStudySection>
 
         <CaseStudySection title="Colour palette" wide>
           {/* Butted together with no gap, as one strip, so the colours read

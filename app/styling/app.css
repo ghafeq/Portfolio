@@ -1719,9 +1719,9 @@
 
 /* A screenshot and its note as one bordered unit, so the caption cannot be
    mistaken for the next row's. */
+/* White on the grey page, without an outline. */
 .case-study-feature {
   background: var(--layer-1-background);
-  border: var(--border-width-1) solid var(--layer-1-border);
   border-radius: var(--radius-normal);
   overflow: hidden;
 }
@@ -1758,7 +1758,6 @@
 
 .case-study-clip-screen {
   background: var(--app-layer-background);
-  border-bottom: var(--border-width-1) solid var(--layer-1-border);
   display: flex;
   justify-content: center;
   padding: var(--spacing-6);
@@ -1785,8 +1784,6 @@
 
   .case-study-clip-screen {
     align-self: stretch;
-    border-bottom: 0;
-    border-right: var(--border-width-1) solid var(--layer-1-border);
   }
 }
 
@@ -4297,6 +4294,18 @@ html:has(.image-lightbox[open]) {
 }
 
 .case-study-header-banner img {
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+/* A logo tile on the grey page, with rounded corners and no outline. */
+.case-study-swatch-tile {
+  border-radius: var(--radius-normal);
+  overflow: hidden;
+}
+
+.case-study-swatch-tile img {
   display: block;
   height: auto;
   width: 100%;

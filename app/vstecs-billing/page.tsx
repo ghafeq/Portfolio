@@ -145,7 +145,7 @@ export default function VstecsBillingPage() {
           copy="A self-service billing app for VSTECS resellers, designed in Figma and built by me in ASP.NET MVC. Live in production since 2025."
           title="What I delivered"
         >
-          <div className="grid gap-6">
+          <div className="grid gap-4 sm:grid-cols-2">
             {delivered.map(({ title, body }) => (
               <CaseStudyCard key={title} title={title}>
                 {body}
