@@ -600,6 +600,135 @@
   }
 }
 
+/* ─── Pull cord ────────────────────────────────────────────────────────── */
+
+/* A lamp hanging from the top of the home page, centred in the right-hand gutter
+   beside the text. Only shown where that gutter is wide enough to hold it. */
+.pull-cord {
+  display: none;
+}
+
+@media (min-width: 1000px) {
+  .pull-cord {
+    display: block;
+    position: absolute;
+    right: calc((100vw - 660px) / 4 - 80px);
+    top: 0;
+    width: 160px;
+    z-index: 1;
+  }
+}
+
+.pull-cord-lamp {
+  display: block;
+  height: auto;
+  overflow: visible;
+  pointer-events: none;
+  width: 100%;
+}
+
+.pull-cord-wire,
+.pull-cord-string {
+  stroke: var(--gray-50);
+  stroke-linecap: round;
+  stroke-width: 3;
+}
+
+.pull-cord-string {
+  stroke-width: 2.5;
+}
+
+.pull-cord-cap {
+  fill: var(--gray-50);
+}
+
+.pull-cord-shade {
+  fill: var(--gray-20);
+}
+
+.pull-cord-bulb {
+  fill: var(--gray-30);
+  transition: fill 0.15s ease;
+}
+
+:root:not([data-theme="dark"]) .pull-cord-bulb {
+  fill: var(--yellow-20);
+}
+
+.pull-cord-glow {
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+:root:not([data-theme="dark"]) .pull-cord-glow {
+  opacity: 1;
+}
+
+.pull-cord-handle {
+  cursor: grab;
+  outline: none;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.pull-cord-handle:active {
+  cursor: grabbing;
+}
+
+.pull-cord-knob {
+  fill: var(--text-primary);
+}
+
+.pull-cord-handle:focus-visible .pull-cord-knob {
+  stroke: var(--layer-1-border-focus);
+  stroke-width: 3;
+}
+
+/* ─── Dark theme fixes ─────────────────────────────────────────────────── */
+
+/* Rules that name a raw grey or white, which would vanish against the dark page.
+   Light keeps its exact values above. */
+:root[data-theme="dark"] {
+  & .card-icon,
+  & .case-study-placeholder-icon {
+    color: var(--text-secondary);
+  }
+
+  & .tag-neutral {
+    background: var(--layer-2-background);
+    border-color: var(--layer-2-background);
+    color: var(--text-primary);
+  }
+
+  & .tag-info {
+    background: var(--blue-90);
+    color: var(--blue-30);
+  }
+
+  & .tag-success {
+    color: var(--green-40);
+  }
+
+  & .image-lightbox-close {
+    background: var(--layer-1-background);
+  }
+
+  & .case-study-clip-screen video {
+    background: var(--layer-1-background);
+  }
+
+  /* Slides are designed on a light page and stay that way. */
+  & .deck {
+    color-scheme: light;
+    --app-layer-background: var(--gray-10);
+    --layer-1-background: var(--white);
+    --layer-1-border: color-mix(in srgb, var(--gray-10) 50%, var(--gray-20));
+    --layer-2-background: var(--gray-20);
+    --text-primary: var(--gray-90);
+    --text-secondary: var(--gray-50);
+  }
+}
+
 /* ─── Work index ───────────────────────────────────────────────────────── */
 
 /* Wider than the text above it, centred on the page however wide that gets. The

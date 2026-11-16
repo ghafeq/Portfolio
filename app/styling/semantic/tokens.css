@@ -102,6 +102,56 @@
   --motion-transition-transform: transform var(--motion-duration-fast) var(--motion-ease-standard);
 }
 
+/* ─── Dark theme ───
+   Set on <html> by the theme script and the home page's pull cord. Only the
+   colours change; every other token carries over from :root. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --app-layer-background: var(--gray-100);
+  --layer-1-background: var(--gray-90);
+  --layer-1-background-hover: var(--gray-90-hover);
+  --layer-2-background: var(--gray-80);
+  --layer-2-background-hover: var(--gray-80-hover);
+  --layer-muted-background: var(--cool-gray-90);
+  --danger-subtle-background: var(--red-90);
+  --success-subtle-background: var(--green-90);
+
+  --layer-1-border: color-mix(in srgb, var(--gray-90) 50%, var(--gray-80));
+  --layer-1-border-hover: var(--gray-80-hover);
+  --layer-1-border-strong: var(--gray-80);
+  --layer-1-border-focus: var(--blue-40);
+  --layer-2-border-focus: var(--blue-40);
+
+  --text-primary: var(--gray-10);
+  --text-primary-hover: var(--gray-10-hover);
+  --text-secondary: var(--gray-40);
+  --text-disabled: var(--gray-70);
+  --text-danger: var(--red-40);
+
+  --link-enabled: var(--blue-40);
+  --link-hover: var(--blue-30);
+  --link-disabled: var(--gray-60);
+
+  --shadow-sm: 0 2px 4px 0 rgb(0 0 0 / 0.4);
+  --shadow-md: 0 4px 8px 0 rgb(0 0 0 / 0.4);
+}
+
+/* Colours ease across while the theme changes, then go back to their own
+   transitions. */
+:root.theme-fade,
+:root.theme-fade *,
+:root.theme-fade *::before,
+:root.theme-fade *::after {
+  transition:
+    background-color 400ms var(--motion-ease-standard),
+    border-color 400ms var(--motion-ease-standard),
+    color 400ms var(--motion-ease-standard),
+    fill 400ms var(--motion-ease-standard),
+    opacity 400ms var(--motion-ease-standard),
+    stroke 400ms var(--motion-ease-standard) !important;
+}
+
 /* ───────────────────────────────────────────────────────────────────────────
    Typography scale. Property order is identical in every class: family, size,
    weight, letter-spacing, line-height, then colour where the style carries one.

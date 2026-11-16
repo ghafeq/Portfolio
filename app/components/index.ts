@@ -37,6 +37,7 @@ export { Link } from "./link";
 export type { LinkProps, LinkState, LinkType } from "./link";
 export { Mac, MacIntro } from "./mac";
 export { PixelSplash } from "./pixel-splash";
+export { PullCord } from "./pull-cord";
 export { PresentationCover } from "./presentation-cover";
 export {
   CEKAP_SCREENS,
@@ -64,6 +65,8 @@ export { ScrollReveal, StaggerReveal, useStaggerReveal } from "./stagger-reveal"
 export type { ScrollRevealProps, StaggerRevealProps } from "./stagger-reveal";
 export { StreamText } from "./stream-text";
 export type { StreamTextProps } from "./stream-text";
+export { setTheme, ThemeScript, useTheme } from "./theme";
+export type { Theme } from "./theme";
 export { Tabs } from "./tabs";
 export type { TabItem, TabsProps, TabsSize } from "./tabs";
 export { Tag } from "./tags";

@@ -7,6 +7,7 @@ import {
   CardDeck,
   DeviceMockups,
   HomeCorner,
+  PullCord,
   Link,
   ScrollReveal,
   Tabs,
@@ -75,6 +76,7 @@ export default function HomePage() {
   return (
     <main className="flex-1 wrapper bg-(--app-layer-background) px-6 py-16 text-(--text-primary) sm:px-10">
       <HomeCorner />
+      <PullCord />
       <section>
         <Tabs
           className="mt-6"

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useTheme } from "../theme";
 
 // Drawn at a fixed size and never scaled, so every square lands on whole pixels.
 const SIZE = 804;
@@ -86,6 +87,7 @@ function lightAt(x: number, y: number, seconds: number) {
 
 /** The moving pixel field in the home page's corner, in the design system's black. */
 export function HomeCorner() {
+  const theme = useTheme();
   const sharpRef = useRef<HTMLCanvasElement>(null);
   const softRef = useRef<HTMLCanvasElement>(null);
 
@@ -102,15 +104,14 @@ export function HomeCorner() {
     const color = (name: string) =>
       getComputedStyle(document.documentElement).getPropertyValue(name).trim();
     // The design system's accent is black (--gray-100, as in the pixel wipe), so
-    // the field runs from it out to the lightest greys.
-    const colors = {
-      ink: color("--gray-100"),
-      navy: color("--gray-90"),
-      deep: color("--gray-80"),
-      primary: color("--gray-60"),
-      light: color("--gray-40"),
-      tint: color("--gray-20"),
-    };
+    // the field runs from it out to the lightest greys. On the dark page the ramp
+    // turns over and glows from white into the dark.
+    const ramp =
+      theme === "dark"
+        ? ["--gray-10", "--gray-20", "--gray-30", "--gray-50", "--gray-60", "--gray-80"]
+        : ["--gray-100", "--gray-90", "--gray-80", "--gray-60", "--gray-40", "--gray-20"];
+    const [ink, navy, deep, primary, light, tint] = ramp.map(color);
+    const colors = { ink, navy, deep, primary, light, tint };
     const squares = createSquares();
 
     // One canvas pixel to a CSS pixel on every screen: the squares sit on whole
@@ -237,7 +238,7 @@ export function HomeCorner() {
       resizeObserver.disconnect();
       cancelAnimationFrame(animation);
     };
-  }, []);
+  }, [theme]);
 
   return (
     <div aria-hidden="true" className="home-corner">

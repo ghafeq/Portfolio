@@ -8,6 +8,7 @@ import {
   PixelSplash,
   SmoothScroll,
   TopNavigation,
+  ThemeScript,
 } from "./components";
 
 const inter = Inter({
@@ -41,7 +42,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       className={`${inter.variable} ${plusJakartaSans.variable} ${robotoMono.variable} h-full antialiased`}
+      // The theme script below sets data-theme before React hydrates.
+      suppressHydrationWarning
     >
+      <head>
+        <ThemeScript />
+      </head>
       <body className="min-h-full flex flex-col">
         <TopNavigation />
         {children}
