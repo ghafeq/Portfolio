@@ -38,6 +38,26 @@ const introduction = [
   },
 ];
 
+// Client companies whose projects I have worked on, in one row like a client
+// wall. Each logo is the company's own artwork, trimmed to its ink so they sit
+// level. A client without a logo file yet shows its name in the same slot.
+const clients: {
+  name: string;
+  logo?: { src: string; width: number; height: number };
+  /** A mark taller than it is wide, given more height to carry equal weight. */
+  tall?: boolean;
+  /** Shrinks a heavy wordmark that fills its box, so it sits level. */
+  scale?: number;
+}[] = [
+  { name: "VSTECS", logo: { src: "/clients/vstecs.png", width: 610, height: 210 } },
+  { name: "FIVE Petroleum", logo: { src: "/clients/five.png", width: 770, height: 262 } },
+  { name: "Konfx", logo: { src: "/clients/konfx.png", width: 330, height: 83 }, scale: 0.82 },
+  { name: "7-Eleven", logo: { src: "/clients/7-eleven.svg", width: 45, height: 60 }, tall: true },
+  // The EcoWarehouse project was for Eco-Shop, so it carries their mark.
+  { name: "Eco-Shop", logo: { src: "/clients/eco-shop.png", width: 777, height: 417 } },
+  { name: "Daikin", logo: { src: "/clients/daikin.png", width: 370, height: 79 } },
+];
+
 const categories = [
   { value: "all", label: "All" },
   { value: "Concept", label: "Concept" },
@@ -174,6 +194,31 @@ export default function HomePage() {
         size="small"
         stream={false}
       />
+
+      <section className="client-logos">
+        <h2 className="title-02">Work delivered for</h2>
+        <ul className="client-logos-row">
+          {clients.map(({ name, logo, tall, scale }) => (
+            <li className="client-logos-slot" key={name}>
+              {logo ? (
+                <Image
+                  alt={name}
+                  className={tall ? "client-logos-image is-tall" : "client-logos-image"}
+                  height={logo.height}
+                  // Logos are flat colour and hard edges, which break up at 75.
+                  quality={90}
+                  sizes="160px"
+                  src={logo.src}
+                  style={scale ? { scale } : undefined}
+                  width={logo.width}
+                />
+              ) : (
+                <span className="client-logos-name">{name}</span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </section>
     </main>
   );
 }

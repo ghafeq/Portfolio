@@ -798,6 +798,93 @@
   aspect-ratio: var(--work-aspect);
 }
 
+/* ─── Client logos ─────────────────────────────────────────────────────── */
+
+/* As wide as the work index above it, so the two line up. */
+.client-logos {
+  --client-logos-width: min(100vw - 2 * var(--spacing-6), 1140px);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+  margin-inline: calc((100% - var(--client-logos-width)) / 2);
+  margin-top: var(--spacing-8);
+}
+
+/* Bare logos on the page, an equal slot each: three to a row on a phone, all
+   in one row from tablet up. */
+.client-logos-row {
+  display: grid;
+  gap: var(--spacing-6) var(--spacing-5);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (min-width: 640px) {
+  .client-logos-row {
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+    grid-template-columns: none;
+  }
+}
+
+.client-logos-slot {
+  align-items: center;
+  display: flex;
+  height: 3rem;
+  justify-content: center;
+}
+
+/* Capped by height and width both, so a wide wordmark and a tall mark carry
+   about the same weight. Qualified by element: next/image sets its own width
+   and height. */
+img.client-logos-image {
+  height: auto;
+  max-height: 2.25rem;
+  max-width: 85%;
+  width: auto;
+}
+
+img.client-logos-image.is-tall {
+  max-height: 3rem;
+}
+
+/* Stands in until the client's logo file is added. */
+.client-logos-name {
+  color: var(--text-secondary);
+  font-size: var(--fs-3);
+  font-weight: var(--fw-semibold);
+  text-align: center;
+  white-space: nowrap;
+}
+
+@media (max-width: 639px) {
+  .client-logos-slot {
+    height: 2.5rem;
+  }
+
+  img.client-logos-image {
+    max-height: 1.75rem;
+  }
+
+  img.client-logos-image.is-tall {
+    max-height: 2.5rem;
+  }
+
+  .client-logos-name {
+    font-size: var(--fs-6);
+  }
+}
+
+/* The logos are drawn for a light page; on the dark one they turn to white
+   silhouettes rather than lose their navy and black ink to the background. */
+:root[data-theme="dark"] img.client-logos-image {
+  filter: brightness(0) invert(1);
+  opacity: 0.88;
+}
+
 /* ─── Tooltip ──────────────────────────────────────────────────────────── */
 
 /* The wrapper is the hover target, not the trigger, so the pointer can drift
