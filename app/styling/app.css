@@ -2052,8 +2052,14 @@
   outline-offset: 3px;
 }
 
+/* The full-screen copy has flown out of this spot and back. */
+.image-lightbox-trigger.is-lifted img {
+  opacity: 0;
+}
+
 /* Fills the viewport rather than sizing to the image, so a click anywhere
-   around the picture lands on the dialog and closes it. */
+   around the picture lands on the dialog and closes it. The image flies in on
+   its own, so the dialog itself stays put. */
 .image-lightbox {
   background: none;
   border: 0;
@@ -2062,12 +2068,8 @@
   margin: 0;
   max-height: none;
   max-width: none;
-  opacity: 0;
+  overflow: hidden;
   padding: var(--spacing-8) var(--spacing-6);
-  transform: scale(0.96);
-  transition:
-    opacity var(--motion-duration-slow) var(--motion-ease-emphasized),
-    transform var(--motion-duration-slow) var(--motion-ease-emphasized);
   width: 100vw;
 }
 
@@ -2080,33 +2082,32 @@
 .image-lightbox::backdrop {
   background: rgb(0 0 0 / 0.88);
   opacity: 0;
-  transition: opacity var(--motion-duration-slow) var(--motion-ease-emphasized);
+  /* Matches the close flight, so the page is back as the image lands. */
+  transition: opacity 420ms var(--motion-ease-standard);
 }
 
-.image-lightbox.is-open,
 .image-lightbox.is-open::backdrop {
   opacity: 1;
-  transform: none;
-}
-
-/* Shorter than the open, so dismissing never feels like waiting. */
-.image-lightbox.is-closing,
-.image-lightbox.is-closing::backdrop {
-  transition-duration: var(--motion-duration-normal);
+  transition-duration: 560ms;
 }
 
 /* Qualified by element as well as class: the dialog sits inside the media
    frame in the DOM, and the frame's own img rules would otherwise stretch the
    full-screen copy to the frame's fixed width. */
-/* Takes the whole padded area and letterboxes the picture inside it, so every
+/* As large as the padded area allows at the image's own proportions, so every
    image grows to fill the screen, small screenshots included, without being
-   cropped or stretched. */
+   cropped or stretched. Its box is exactly the picture, which is what the
+   flight measures. The background is the inline file, shown until the
+   full-size one arrives. */
 dialog.image-lightbox img.image-lightbox-image {
-  height: 100%;
-  max-height: 100%;
-  max-width: 100%;
-  object-fit: contain;
-  width: 100%;
+  aspect-ratio: var(--lightbox-aspect);
+  background-size: 100% 100%;
+  flex: none;
+  height: auto;
+  max-height: none;
+  max-width: none;
+  transform-origin: 50% 50%;
+  width: min(100%, (100dvh - 2 * var(--spacing-8)) * var(--lightbox-aspect));
 }
 
 .image-lightbox-close {
@@ -2127,6 +2128,77 @@ dialog.image-lightbox img.image-lightbox-image {
 .image-lightbox-close:focus-visible {
   outline: 3px solid var(--layer-1-border-focus);
   outline-offset: 3px;
+}
+
+/* A point the pointer drags around: JavaScript moves it with translate, and
+   the label grows out of that point. "View" sits on the page, "Close" inside
+   the open dialog. */
+.lightbox-cursor {
+  display: none;
+  height: 0;
+  left: 0;
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  width: 0;
+  z-index: 60;
+}
+
+.lightbox-cursor-label {
+  background: var(--gray-100);
+  border-radius: var(--radius-pill);
+  /* A faint ring keeps the dark label visible over dark screenshots. */
+  box-shadow:
+    0 0 0 1px rgb(255 255 255 / 0.16),
+    0 4px 12px rgb(0 0 0 / 0.2);
+  color: var(--white);
+  font-size: var(--fs-6);
+  font-weight: var(--fw-semibold);
+  left: 0;
+  line-height: 1;
+  opacity: 0;
+  padding: var(--spacing-3) var(--spacing-5);
+  position: absolute;
+  top: 0;
+  transform: translate(-50%, -50%) scale(0.4);
+  transition:
+    opacity var(--motion-duration-normal) var(--motion-ease-standard),
+    transform var(--motion-duration-slow) cubic-bezier(0.32, 0.72, 0, 1);
+  white-space: nowrap;
+}
+
+.lightbox-cursor.is-close .lightbox-cursor-label {
+  background: var(--white);
+  color: var(--gray-90);
+}
+
+.lightbox-cursor.is-visible .lightbox-cursor-label {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* With a mouse, the label stands in for the arrow, and for the close button
+   unless the keyboard brings it into focus. */
+@media (hover: hover) and (pointer: fine) {
+  .lightbox-cursor {
+    display: block;
+  }
+
+  .image-lightbox-trigger,
+  .image-lightbox,
+  .image-lightbox-close {
+    cursor: none;
+  }
+
+  .image-lightbox-close:not(:focus-visible) {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbox-cursor-label {
+    transition: none;
+  }
 }
 
 /* The dialog makes the page inert but not still; this stops the scroll wheel
